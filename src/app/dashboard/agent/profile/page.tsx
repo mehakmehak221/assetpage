@@ -433,7 +433,7 @@ export default function AgentProfilePage() {
                     <div className="max-w-[980px]">
                         <SupportTicketComposer
                             key={email || "agent-support"}
-                            title="Need support?"
+                            title="Need Help?"
                             defaultEmail={email}
                             compact
                         />

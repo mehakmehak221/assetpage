@@ -548,8 +548,8 @@ export default function PartnerPropertiesPage() {
                                                 tabIndex={0}
                                                 onClick={() => setSelectedReportAssetId(item.assetId)}
                                                 className={`w-full cursor-pointer rounded-2xl border p-3 text-left transition ${String(selectedShareReportAssetId) === String(item.assetId)
-                                                        ? "border-[var(--color-primary-300)]/30 bg-[var(--color-primary-300)]/8"
-                                                        : "border-[var(--sidebar-border)] bg-[var(--background)]/70 hover:border-[var(--color-primary-300)]/20"
+                                                    ? "border-[var(--color-primary-300)]/30 bg-[var(--color-primary-300)]/8"
+                                                    : "border-[var(--sidebar-border)] bg-[var(--background)]/70 hover:border-[var(--color-primary-300)]/20"
                                                     }`}
                                             >
                                                 <div className="flex items-start justify-between gap-3">
@@ -669,13 +669,15 @@ export default function PartnerPropertiesPage() {
                                                     </div>
                                                     <button
                                                         type="button"
-                                                        onClick={(event) => {
+                                                        onClick={async (event) => {
                                                             event.stopPropagation();
-                                                            copyToClipboard(link.shareUrl);
+                                                            await copyToClipboard(link.shareUrl);
+                                                            setCopiedShareId(link.id);
+                                                            setTimeout(() => setCopiedShareId(null), 2000);
                                                         }}
                                                         className="inline-flex h-9 shrink-0 items-center justify-center rounded-full border border-[var(--sidebar-border)] bg-[var(--background)] px-3 text-[10px] font-bold uppercase tracking-wider text-[var(--foreground)] transition hover:border-[var(--sidebar-active-text)]/30"
                                                     >
-                                                        Copy
+                                                        {copiedShareId === link.id ? "Copied" : "Copy"}
                                                     </button>
                                                 </div>
                                             </div>

@@ -249,7 +249,7 @@ export default function PartnerAccountPage() {
                         <div className="max-w-[980px]">
                             <SupportTicketComposer
                                 key={profileData?.email || "partner-support"}
-                                title="Partner Support"
+                                title="Need Help?"
                                 subtitle="Raise a request directly from your partner account."
                                 description="Use this form for KYB issues, property publishing help, payment queries, or technical problems."
                                 defaultEmail={profileData?.email || ""}

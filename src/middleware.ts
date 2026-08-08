@@ -11,6 +11,15 @@ export function middleware(request: NextRequest) {
     return NextResponse.redirect(redirectUrl);
   }
 
+  const hasForceClear = request.nextUrl.searchParams.get("clear") === "true";
+
+  if (hasForceClear) {
+    const response = NextResponse.next();
+    response.cookies.delete("access_token");
+    response.cookies.delete("isLoggedIn");
+    return response;
+  }
+
   const accessToken = request.cookies.get("access_token")?.value;
   const isLoggedIn = request.cookies.get("isLoggedIn")?.value;
 

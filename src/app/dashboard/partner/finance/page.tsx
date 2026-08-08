@@ -45,6 +45,24 @@ export default function FinancePage() {
         skip: activeTab !== "Payouts"
     });
 
+    const [commissionPage, setCommissionPage] = useState(1);
+    const [payoutPage, setPayoutPage] = useState(1);
+    const itemsPerPage = 5;
+
+    const commissionList = commissionHistory?.data || [];
+    const payoutList = payoutHistory?.data || [];
+
+    const paginatedCommissions = commissionList.slice(
+        (commissionPage - 1) * itemsPerPage,
+        commissionPage * itemsPerPage
+    );
+    const paginatedPayouts = payoutList.slice(
+        (payoutPage - 1) * itemsPerPage,
+        payoutPage * itemsPerPage
+    );
+
+    const totalCommissionPages = Math.ceil(commissionList.length / itemsPerPage);
+    const totalPayoutPages = Math.ceil(payoutList.length / itemsPerPage);
 
     return (
         <div className="p-4 sm:p-6 lg:p-8 max-w-[1200px] mx-auto min-h-screen">
@@ -58,7 +76,11 @@ export default function FinancePage() {
                     {TABS.map((tab) => (
                         <button
                             key={tab}
-                            onClick={() => setActiveTab(tab)}
+                            onClick={() => {
+                                setActiveTab(tab);
+                                setCommissionPage(1);
+                                setPayoutPage(1);
+                            }}
                             className={`flex-shrink-0 px-4 sm:px-6 py-2 rounded-md text-[11px] sm:text-[12px] font-medium font-montserrat transition-all relative cursor-pointer ${activeTab === tab
                                 ? "text-[var(--sidebar-active-text)] hover:scale-102"
                                 : "text-[var(--sidebar-text)] opacity-60 hover:opacity-100 hover:text-[var(--sidebar-active-text)] hover:scale-102"
@@ -119,35 +141,59 @@ export default function FinancePage() {
                                 {isLoadingCommissions && <div className="w-4 h-4 border-2 border-[var(--sidebar-active-text)]/20 border-t-[var(--sidebar-active-text)] rounded-full animate-spin" />}
                             </div>
 
-                            {!commissionHistory?.data?.length ? (
+                            {commissionList.length === 0 ? (
                                 <div className="py-12 text-center text-[var(--sidebar-text)] opacity-60 font-montserrat text-sm border border-dashed border-[var(--sidebar-border)] rounded-md">
                                     No commissions found.
                                 </div>
                             ) : (
-                                <div className="divide-y divide-[var(--sidebar-border)]">
-                                    {commissionHistory.data.map((item, i) => (
-                                        <motion.div
-                                            key={i}
-                                            initial={{ opacity: 0, y: 8 }}
-                                            animate={{ opacity: 1, y: 0 }}
-                                            transition={{ delay: i * 0.04 }}
-                                            className="flex items-center justify-between gap-3 py-3 sm:py-3.5 hover:bg-[var(--sidebar-active-bg)]/30 px-2 -mx-2 rounded-md transition-colors group"
-                                        >
-                                            <div className="min-w-0">
-                                                <h3 className="text-[13px] font-medium text-[var(--foreground)] opacity-90 font-montserrat group-hover:text-[var(--sidebar-active-text)] transition-colors truncate">{item.asset?.title || "Commission Payment"}</h3>
-                                                <p className="text-[10px] text-[var(--sidebar-text)] opacity-60 font-montserrat mt-0.5">
-                                                    {item.type || 'Sale'} · {(item.date || item.createdAt) ? new Date(item.date || item.createdAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric' }) : "-"}
-                                                </p>
-                                            </div>
-                                            <div className="text-right flex-shrink-0">
-                                                <p className="text-[13px] font-semibold text-[var(--sidebar-active-text)] font-montserrat">{formatCurrency(item.amount || 0)}</p>
-                                                <p className="text-[9px] font-bold font-montserrat mt-0.5 uppercase tracking-wider" style={{ color: item.status === "Paid" ? 'var(--sidebar-active-text)' : 'var(--color-status-warning)' }}>
-                                                    {item.status}
-                                                </p>
-                                            </div>
-                                        </motion.div>
-                                    ))}
-                                </div>
+                                <>
+                                    <div className="divide-y divide-[var(--sidebar-border)]">
+                                        {paginatedCommissions.map((item, i) => (
+                                            <motion.div
+                                                key={i}
+                                                initial={{ opacity: 0, y: 8 }}
+                                                animate={{ opacity: 1, y: 0 }}
+                                                transition={{ delay: i * 0.04 }}
+                                                className="flex items-center justify-between gap-3 py-3 sm:py-3.5 hover:bg-[var(--sidebar-active-bg)]/30 px-2 -mx-2 rounded-md transition-colors group"
+                                            >
+                                                <div className="min-w-0">
+                                                    <h3 className="text-[13px] font-medium text-[var(--foreground)] opacity-90 font-montserrat group-hover:text-[var(--sidebar-active-text)] transition-colors truncate">{item.asset?.title || "Commission Payment"}</h3>
+                                                    <p className="text-[10px] text-[var(--sidebar-text)] opacity-60 font-montserrat mt-0.5">
+                                                        {item.type || 'Sale'} · {(item.date || item.createdAt) ? new Date(item.date || item.createdAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric' }) : "-"}
+                                                    </p>
+                                                </div>
+                                                <div className="text-right flex-shrink-0">
+                                                    <p className="text-[13px] font-semibold text-[var(--sidebar-active-text)] font-montserrat">{formatCurrency(item.amount || 0)}</p>
+                                                    <p className="text-[9px] font-bold font-montserrat mt-0.5 uppercase tracking-wider" style={{ color: item.status === "Paid" ? 'var(--sidebar-active-text)' : 'var(--color-status-warning)' }}>
+                                                        {item.status}
+                                                    </p>
+                                                </div>
+                                            </motion.div>
+                                        ))}
+                                    </div>
+
+                                    {totalCommissionPages > 1 && (
+                                        <div className="flex items-center justify-between mt-6 pt-4 border-t border-[var(--sidebar-border)]">
+                                            <button
+                                                disabled={commissionPage === 1}
+                                                onClick={() => setCommissionPage(p => Math.max(p - 1, 1))}
+                                                className="px-4 py-2 rounded-lg text-xs font-semibold uppercase tracking-wider border border-[var(--sidebar-border)] bg-transparent text-[var(--sidebar-text)] disabled:opacity-40 hover:border-[var(--sidebar-active-text)]/30 disabled:cursor-not-allowed transition-all cursor-pointer"
+                                            >
+                                                Previous
+                                            </button>
+                                            <span className="text-xs font-bold text-[var(--sidebar-text)] opacity-60">
+                                                Page {commissionPage} of {totalCommissionPages}
+                                            </span>
+                                            <button
+                                                disabled={commissionPage === totalCommissionPages}
+                                                onClick={() => setCommissionPage(p => Math.min(p + 1, totalCommissionPages))}
+                                                className="px-4 py-2 rounded-lg text-xs font-semibold uppercase tracking-wider border border-[var(--sidebar-border)] bg-transparent text-[var(--sidebar-text)] disabled:opacity-40 hover:border-[var(--sidebar-active-text)]/30 disabled:cursor-not-allowed transition-all cursor-pointer"
+                                            >
+                                                Next
+                                            </button>
+                                        </div>
+                                    )}
+                                </>
                             )}
                         </div>
                     )}
@@ -159,35 +205,59 @@ export default function FinancePage() {
                                 {isLoadingPayouts && <div className="w-4 h-4 border-2 border-[var(--sidebar-active-text)]/20 border-t-[var(--sidebar-active-text)] rounded-full animate-spin" />}
                             </div>
 
-                            {!payoutHistory?.data?.length ? (
+                            {payoutList.length === 0 ? (
                                 <div className="py-12 text-center text-[var(--sidebar-text)] opacity-60 font-montserrat text-sm border border-dashed border-[var(--sidebar-border)] rounded-md">
                                     No payouts found.
                                 </div>
                             ) : (
-                                <div className="divide-y divide-[var(--sidebar-border)]">
-                                    {payoutHistory.data.map((item, i) => (
-                                        <motion.div
-                                            key={i}
-                                            initial={{ opacity: 0, y: 8 }}
-                                            animate={{ opacity: 1, y: 0 }}
-                                            transition={{ delay: i * 0.04 }}
-                                            className="flex items-center justify-between gap-3 py-3 sm:py-3.5 hover:bg-[var(--sidebar-active-bg)]/30 px-2 -mx-2 rounded-md transition-colors group"
-                                        >
-                                            <div className="min-w-0">
-                                                <h3 className="text-[13px] font-medium text-[var(--foreground)] opacity-90 font-montserrat group-hover:text-[var(--sidebar-active-text)] transition-colors truncate">{item.method || "Bank Transfer"}</h3>
-                                                <p className="text-[10px] text-[var(--sidebar-text)] opacity-60 font-montserrat mt-0.5">
-                                                    {(item.payoutDate || item.createdAt) ? new Date(item.payoutDate || item.createdAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' }) : "-"} · {item.reference || "Completed"}
-                                                </p>
-                                            </div>
-                                            <div className="text-right flex-shrink-0">
-                                                <p className="text-[13px] font-semibold text-[var(--sidebar-active-text)] font-montserrat">{formatCurrency(item.amount || 0)}</p>
-                                                <p className="text-[9px] font-bold font-montserrat mt-0.5 uppercase tracking-wider" style={{ color: item.status === "Completed" ? 'var(--sidebar-active-text)' : 'var(--color-status-warning)' }}>
-                                                    {item.status}
-                                                </p>
-                                            </div>
-                                        </motion.div>
-                                    ))}
-                                </div>
+                                <>
+                                    <div className="divide-y divide-[var(--sidebar-border)]">
+                                        {paginatedPayouts.map((item, i) => (
+                                            <motion.div
+                                                key={i}
+                                                initial={{ opacity: 0, y: 8 }}
+                                                animate={{ opacity: 1, y: 0 }}
+                                                transition={{ delay: i * 0.04 }}
+                                                className="flex items-center justify-between gap-3 py-3 sm:py-3.5 hover:bg-[var(--sidebar-active-bg)]/30 px-2 -mx-2 rounded-md transition-colors group"
+                                            >
+                                                <div className="min-w-0">
+                                                    <h3 className="text-[13px] font-medium text-[var(--foreground)] opacity-90 font-montserrat group-hover:text-[var(--sidebar-active-text)] transition-colors truncate">{item.method || "Bank Transfer"}</h3>
+                                                    <p className="text-[10px] text-[var(--sidebar-text)] opacity-60 font-montserrat mt-0.5">
+                                                        {(item.payoutDate || item.createdAt) ? new Date(item.payoutDate || item.createdAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' }) : "-"} · {item.reference || "Completed"}
+                                                    </p>
+                                                </div>
+                                                <div className="text-right flex-shrink-0">
+                                                    <p className="text-[13px] font-semibold text-[var(--sidebar-active-text)] font-montserrat">{formatCurrency(item.amount || 0)}</p>
+                                                    <p className="text-[9px] font-bold font-montserrat mt-0.5 uppercase tracking-wider" style={{ color: item.status === "Completed" ? 'var(--sidebar-active-text)' : 'var(--color-status-warning)' }}>
+                                                        {item.status}
+                                                    </p>
+                                                </div>
+                                            </motion.div>
+                                        ))}
+                                    </div>
+
+                                    {totalPayoutPages > 1 && (
+                                        <div className="flex items-center justify-between mt-6 pt-4 border-t border-[var(--sidebar-border)]">
+                                            <button
+                                                disabled={payoutPage === 1}
+                                                onClick={() => setPayoutPage(p => Math.max(p - 1, 1))}
+                                                className="px-4 py-2 rounded-lg text-xs font-semibold uppercase tracking-wider border border-[var(--sidebar-border)] bg-transparent text-[var(--sidebar-text)] disabled:opacity-40 hover:border-[var(--sidebar-active-text)]/30 disabled:cursor-not-allowed transition-all cursor-pointer"
+                                            >
+                                                Previous
+                                            </button>
+                                            <span className="text-xs font-bold text-[var(--sidebar-text)] opacity-60">
+                                                Page {payoutPage} of {totalPayoutPages}
+                                            </span>
+                                            <button
+                                                disabled={payoutPage === totalPayoutPages}
+                                                onClick={() => setPayoutPage(p => Math.min(p + 1, totalPayoutPages))}
+                                                className="px-4 py-2 rounded-lg text-xs font-semibold uppercase tracking-wider border border-[var(--sidebar-border)] bg-transparent text-[var(--sidebar-text)] disabled:opacity-40 hover:border-[var(--sidebar-active-text)]/30 disabled:cursor-not-allowed transition-all cursor-pointer"
+                                            >
+                                                Next
+                                            </button>
+                                        </div>
+                                    )}
+                                </>
                             )}
                         </div>
                     )}

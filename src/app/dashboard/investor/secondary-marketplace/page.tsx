@@ -253,7 +253,7 @@ function MarketplaceCard({ asset, onView }) {
     return (
         <motion.div
             variants={itemVariants}
-            className="group w-full sm:w-[92%] md:w-full mx-auto bg-[var(--marketplace-card-bg)] border border-[var(--marketplace-card-border)] rounded-md overflow-hidden flex flex-col transition-all duration-500 h-full shadow-[var(--marketplace-card-shadow)]"
+            className="group w-full sm:w-[92%] md:w-full mx-auto bg-[var(--marketplace-card-bg)] border border-[var(--marketplace-card-border)] rounded-md overflow-hidden flex flex-col transition-all duration-500 h-full shadow-[var(--marketplace-card-shadow)] select-none"
         >
             <div className="relative h-64 sm:h-72 overflow-hidden">
                 <Image
@@ -265,9 +265,9 @@ function MarketplaceCard({ asset, onView }) {
                 <div className="absolute inset-0" style={{ background: 'var(--marketplace-card-overlay)' }} />
 
                 <div className="absolute top-3 left-3">
-                    <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-sm text-[10px] font-bold uppercase tracking-wider text-[#D7FFF6] bg-gray-500  shadow-[0_4px_14px_rgba(0,218,175,0.25)]">
-                        <TrendingUpIcon className="w-3 h-3" />
-                        0.0% p.a.
+                    <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider text-[#00DAAF] bg-black/60 border border-[#00DAAF]/30 shadow-[0_4px_14px_rgba(0,218,175,0.15)] backdrop-blur-md">
+                        <TrendingUpIcon className="w-3.5 h-3.5" />
+                        {asset.change && asset.change !== "0%" ? (asset.change.endsWith("p.a.") ? asset.change : `${asset.change} p.a.`) : "0.0% p.a."}
                     </span>
                 </div>
 
