@@ -68,7 +68,7 @@ const VerifiedIllustration = () => (
 );
 
 /* ── upload item row ── */
-const KybUploadItem = ({ label, description, onUpload, value, isUploading }: any) => {
+const KybUploadItem = ({ label, description, onUpload, onRemove, value, isUploading }: any) => {
     const fileInputRef = useRef<HTMLInputElement>(null);
     return (
         <div className="rounded-xl p-4 mb-3 transition-all border border-[var(--sidebar-border)] bg-[var(--field-surface)] hover:border-[var(--color-primary-300)]/20">
@@ -99,7 +99,19 @@ const KybUploadItem = ({ label, description, onUpload, value, isUploading }: any
                     </div>
                 </div>
                 {value && (
-                    <span className="text-[10px] font-semibold text-[var(--color-primary-300)] bg-[var(--color-primary-300)]/10 px-2 py-1 rounded-md">UPLOADED</span>
+                    <div className="flex items-center gap-2">
+                        <span className="text-[10px] font-semibold text-[var(--color-primary-300)] bg-[var(--color-primary-300)]/10 px-2 py-1 rounded-md">UPLOADED</span>
+                        <button
+                            type="button"
+                            onClick={() => onRemove && onRemove()}
+                            className="w-6 h-6 rounded-full flex items-center justify-center bg-[var(--color-bg-nav)] text-[var(--color-text-muted)] hover:bg-red-500/10 hover:text-red-500 transition-all cursor-pointer border-0"
+                            aria-label="Remove uploaded document"
+                        >
+                            <svg width="12" height="12" viewBox="0 0 14 14" fill="none">
+                                <path d="M1 1L13 13M13 1L1 13" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+                            </svg>
+                        </button>
+                    </div>
                 )}
             </div>
         </div>
@@ -334,11 +346,12 @@ export default function KYBModal({ isOpen, onClose, onSubmit }: any) {
                         ) : (
                             <>
                                 {/* ── upload form ── */}
-                                <div className="flex flex-col gap-1">
+                                                                <div className="flex flex-col gap-1">
                                     <KybUploadItem
                                         label="Registration Certificate"
                                         description="Certificate of incorporation or trade license (PDF, JPG — MAX 10 MB)"
                                         onUpload={(file: File) => handleFileUpload(file, "registrationCertificateKey")}
+                                        onRemove={() => setFormData((prev) => ({ ...prev, registrationCertificateKey: "" }))}
                                         value={formData.registrationCertificateKey}
                                         isUploading={uploadField === "registrationCertificateKey"}
                                     />
@@ -346,6 +359,7 @@ export default function KYBModal({ isOpen, onClose, onSubmit }: any) {
                                         label="GST / Tax Certificate"
                                         description="Tax registration proof (optional) (PDF, JPG — MAX 10 MB)"
                                         onUpload={(file: File) => handleFileUpload(file, "gstTaxCertificateKey")}
+                                        onRemove={() => setFormData((prev) => ({ ...prev, gstTaxCertificateKey: "" }))}
                                         value={formData.gstTaxCertificateKey}
                                         isUploading={uploadField === "gstTaxCertificateKey"}
                                     />
@@ -353,6 +367,7 @@ export default function KYBModal({ isOpen, onClose, onSubmit }: any) {
                                         label="Memorandum of Association"
                                         description="Articles or partnership deed (optional) (PDF — MAX 10 MB)"
                                         onUpload={(file: File) => handleFileUpload(file, "memorandumKey")}
+                                        onRemove={() => setFormData((prev) => ({ ...prev, memorandumKey: "" }))}
                                         value={formData.memorandumKey}
                                         isUploading={uploadField === "memorandumKey"}
                                     />
@@ -360,6 +375,7 @@ export default function KYBModal({ isOpen, onClose, onSubmit }: any) {
                                         label="Director / Shareholder ID"
                                         description="Government ID of authorized director (PDF, JPG — MAX 5 MB)"
                                         onUpload={(file: File) => handleFileUpload(file, "directorIdKey")}
+                                        onRemove={() => setFormData((prev) => ({ ...prev, directorIdKey: "" }))}
                                         value={formData.directorIdKey}
                                         isUploading={uploadField === "directorIdKey"}
                                     />

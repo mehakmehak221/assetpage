@@ -217,7 +217,7 @@ function formDataToUpdatePayload(formData: ReturnType<typeof assetToFormData>): 
     };
 }
 
-const UploadArea = ({ label, onUpload, value, isUploading, required = false, optional = false }) => {
+const UploadArea = ({ label, onUpload, onRemove, value, isUploading, required = false, optional = false }) => {
     const fileInputRef = useRef(null);
 
     const handleFileChange = async (e) => {
@@ -235,7 +235,7 @@ const UploadArea = ({ label, onUpload, value, isUploading, required = false, opt
     return (
         <div
             onClick={() => !isUploading && fileInputRef.current?.click()}
-            className={`flex-1 min-w-[120px] h-28 lg:h-20 rounded-md border border-[var(--foreground)]/20 bg-[var(--background)] hover:shadow-md flex flex-col items-center justify-center p-3 transition-all cursor-pointer group ${value ? 'border-[var(--sidebar-active-text)]/40 bg-[var(--sidebar-active-bg)]' : 'hover:border-[var(--sidebar-active-text)]/20'
+            className={`relative flex-1 min-w-[120px] h-28 lg:h-20 rounded-md border border-[var(--foreground)]/20 bg-[var(--background)] hover:shadow-md flex flex-col items-center justify-center p-3 transition-all cursor-pointer group ${value ? 'border-[var(--sidebar-active-text)]/40 bg-[var(--sidebar-active-bg)]' : 'hover:border-[var(--sidebar-active-text)]/20'
                 }`}
         >
             <input
@@ -244,6 +244,18 @@ const UploadArea = ({ label, onUpload, value, isUploading, required = false, opt
                 ref={fileInputRef}
                 onChange={handleFileChange}
             />
+            {value && onRemove && (
+                <button
+                    type="button"
+                    onClick={(e) => { e.preventDefault(); e.stopPropagation(); onRemove(); }}
+                    className="absolute top-1.5 right-1.5 w-5 h-5 rounded-full flex items-center justify-center bg-[var(--background)] text-[var(--sidebar-text)]/50 hover:bg-red-500/10 hover:text-red-500 transition-all cursor-pointer border border-[var(--foreground)]/10 z-10"
+                    aria-label="Remove uploaded file"
+                >
+                    <svg className="w-2.5 h-2.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            )}
             <div className="w-8 h-8 lg:w-7 lg:h-7 rounded-full flex items-center justify-center mb-2 lg:mb-1.5 group-hover:bg-[var(--sidebar-active-bg)] transition-colors">
                 {isUploading ? (
                     <LoadingSpinner className="w-4 h-4 text-[var(--sidebar-active-text)]" />
@@ -753,10 +765,11 @@ export default function NewListingForm({ onBack, editId, initialProperty = null 
                             </div>
                         </div>
 
-                        <div className="flex flex-wrap gap-4 mb-8">
+                                                <div className="flex flex-wrap gap-4 mb-8">
                             <UploadArea
                                 label="Ownership Proof / Backing Document"
                                 onUpload={(file) => handleFileUpload(file, 'titleDeedUrl')}
+                                onRemove={() => setFormData(prev => ({ ...prev, titleDeedUrl: "" }))}
                                 value={formData.titleDeedUrl}
                                 isUploading={uploadingField === 'titleDeedUrl'}
                                 required
@@ -764,6 +777,7 @@ export default function NewListingForm({ onBack, editId, initialProperty = null 
                             <UploadArea
                                 label="Valuation Report"
                                 onUpload={(file) => handleFileUpload(file, 'valuationReportUrl')}
+                                onRemove={() => setFormData(prev => ({ ...prev, valuationReportUrl: "" }))}
                                 value={formData.valuationReportUrl}
                                 isUploading={uploadingField === 'valuationReportUrl'}
                                 optional
@@ -771,6 +785,7 @@ export default function NewListingForm({ onBack, editId, initialProperty = null 
                             <UploadArea
                                 label="Legal Opinion"
                                 onUpload={(file) => handleFileUpload(file, 'legalOpinionUrl')}
+                                onRemove={() => setFormData(prev => ({ ...prev, legalOpinionUrl: "" }))}
                                 value={formData.legalOpinionUrl}
                                 isUploading={uploadingField === 'legalOpinionUrl'}
                                 optional
@@ -778,6 +793,7 @@ export default function NewListingForm({ onBack, editId, initialProperty = null 
                             <UploadArea
                                 label="Asset Image"
                                 onUpload={(file) => handleFileUpload(file, 'images')}
+                                onRemove={() => setFormData(prev => ({ ...prev, images: [] }))}
                                 value={formData.images[0]}
                                 isUploading={uploadingField === 'images'}
                                 required
