@@ -263,7 +263,21 @@ export default function KYCModal({ isOpen, onClose, onSubmit }) {
                                                             <p className="text-[11px] text-[var(--foreground)]/40 font-montserrat">Clear photo of front side</p>
                                                         </div>
                                                     </div>
-                                                    {idDocKey && <span className="text-[10px] font-bold text-[#00FFCC] bg-[#00FFCC]/10 px-3 py-1 rounded-full">UPLOADED</span>}
+                                                    {idDocKey && (
+                                                        <div className="flex items-center gap-2">
+                                                            <span className="text-[10px] font-bold text-[#00FFCC] bg-[#00FFCC]/10 px-3 py-1 rounded-full">UPLOADED</span>
+                                                            <button
+                                                                type="button"
+                                                                onClick={(e) => { e.preventDefault(); e.stopPropagation(); setIdDocKey(""); }}
+                                                                className="w-6 h-6 rounded-full flex items-center justify-center bg-[var(--foreground)]/5 text-[var(--foreground)]/40 hover:bg-red-500/10 hover:text-red-500 transition-all cursor-pointer border-0"
+                                                                aria-label="Remove uploaded document"
+                                                            >
+                                                                <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                                                                    <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                                                                </svg>
+                                                            </button>
+                                                        </div>
+                                                    )}
                                                 </div>
                                             </label>
 
@@ -279,7 +293,21 @@ export default function KYCModal({ isOpen, onClose, onSubmit }) {
                                                             <p className="text-[11px] text-[var(--foreground)]/40 font-montserrat">Utility Bill or Bank Statement</p>
                                                         </div>
                                                     </div>
-                                                    {addressKey && <span className="text-[10px] font-bold text-[#00FFCC] bg-[#00FFCC]/10 px-3 py-1 rounded-full">UPLOADED</span>}
+                                                    {addressKey && (
+                                                        <div className="flex items-center gap-2">
+                                                            <span className="text-[10px] font-bold text-[#00FFCC] bg-[#00FFCC]/10 px-3 py-1 rounded-full">UPLOADED</span>
+                                                            <button
+                                                                type="button"
+                                                                onClick={(e) => { e.preventDefault(); e.stopPropagation(); setAddressKey(""); }}
+                                                                className="w-6 h-6 rounded-full flex items-center justify-center bg-[var(--foreground)]/5 text-[var(--foreground)]/40 hover:bg-red-500/10 hover:text-red-500 transition-all cursor-pointer border-0"
+                                                                aria-label="Remove uploaded document"
+                                                            >
+                                                                <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                                                                    <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                                                                </svg>
+                                                            </button>
+                                                        </div>
+                                                    )}
                                                 </div>
                                             </label>
 
@@ -295,7 +323,21 @@ export default function KYCModal({ isOpen, onClose, onSubmit }) {
                                                             <p className="text-[11px] text-[var(--foreground)]/40 font-montserrat">Upload a photo holding your ID next to your face (Click to Upload)</p>
                                                         </div>
                                                     </div>
-                                                    {selfieKey && <span className="text-[10px] font-bold text-[#00FFCC] bg-[#00FFCC]/10 px-3 py-1 rounded-full">UPLOADED</span>}
+                                                    {selfieKey && (
+                                                        <div className="flex items-center gap-2">
+                                                            <span className="text-[10px] font-bold text-[#00FFCC] bg-[#00FFCC]/10 px-3 py-1 rounded-full">UPLOADED</span>
+                                                            <button
+                                                                type="button"
+                                                                onClick={(e) => { e.preventDefault(); e.stopPropagation(); setSelfieKey(""); }}
+                                                                className="w-6 h-6 rounded-full flex items-center justify-center bg-[var(--foreground)]/5 text-[var(--foreground)]/40 hover:bg-red-500/10 hover:text-red-500 transition-all cursor-pointer border-0"
+                                                                aria-label="Remove uploaded document"
+                                                            >
+                                                                <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                                                                    <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                                                                </svg>
+                                                            </button>
+                                                        </div>
+                                                    )}
                                                 </div>
                                             </label>
 
@@ -341,7 +383,21 @@ export default function KYCModal({ isOpen, onClose, onSubmit }) {
                                                                 <p className="text-[11px] text-[var(--foreground)]/40 font-montserrat">Upload PDF or JPEG</p>
                                                             </div>
                                                         </div>
-                                                        {reraDocKey && <span className="text-[10px] font-bold text-[#00FFCC] bg-[#00FFCC]/10 px-3 py-1 rounded-full">UPLOADED</span>}
+                                                        {reraDocKey && (
+                                                            <div className="flex items-center gap-2">
+                                                                <span className="text-[10px] font-bold text-[#00FFCC] bg-[#00FFCC]/10 px-3 py-1 rounded-full">UPLOADED</span>
+                                                                <button
+                                                                    type="button"
+                                                                    onClick={(e) => { e.preventDefault(); e.stopPropagation(); setReraDocKey(""); }}
+                                                                    className="w-6 h-6 rounded-full flex items-center justify-center bg-[var(--foreground)]/5 text-[var(--foreground)]/40 hover:bg-red-500/10 hover:text-red-500 transition-all cursor-pointer border-0"
+                                                                    aria-label="Remove uploaded document"
+                                                                >
+                                                                    <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                                                                        <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                                                                    </svg>
+                                                                </button>
+                                                            </div>
+                                                        )}
                                                     </div>
                                                 </label>
                                             </div>

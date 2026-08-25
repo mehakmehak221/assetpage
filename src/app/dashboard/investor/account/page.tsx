@@ -146,6 +146,18 @@ export default function AccountPage() {
                                                     </div>
                                                 )}
                                             </div>
+                                            {avatarUrl && !isUploading && (
+                                                <button
+                                                    type="button"
+                                                    onClick={() => { setAvatarUrl(""); avatarKeyRef.current = ""; }}
+                                                    className="absolute top-0 left-0 w-7 h-7 rounded-full bg-black/70 text-white flex items-center justify-center cursor-pointer border-0 hover:bg-red-500 transition-all shadow-lg"
+                                                    aria-label="Remove profile picture"
+                                                >
+                                                    <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                                                        <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                                                    </svg>
+                                                </button>
+                                            )}
                                             {isUploading && (
                                                 <div className="absolute inset-0 bg-black/60 rounded-full flex items-center justify-center">
                                                     <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-[var(--color-primary-300)]"></div>
