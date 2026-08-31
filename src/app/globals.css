@@ -352,8 +352,6 @@
     color: var(--foreground);
     font-family: var(--font-primary);
     line-height: 1.6;
-    overflow-x: hidden;
-    max-width: 100vw;
   }
 
   h1,
