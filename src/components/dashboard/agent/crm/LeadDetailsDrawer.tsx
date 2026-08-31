@@ -28,18 +28,21 @@ import {
   ArrowRight,
   Send,
   User,
+  Trash2,
 } from 'lucide-react';
 
 interface LeadDetailsDrawerProps {
   leadId: string | null;
   onClose: () => void;
   onLeadUpdated: () => void;
+  onDeleteLead?: (lead: Lead) => void;
 }
 
 export const LeadDetailsDrawer: React.FC<LeadDetailsDrawerProps> = ({
   leadId,
   onClose,
   onLeadUpdated,
+  onDeleteLead,
 }) => {
   const [lead, setLead] = useState<Lead | null>(null);
   const [notes, setNotes] = useState<LeadNote[]>([]);
@@ -152,12 +155,23 @@ export const LeadDetailsDrawer: React.FC<LeadDetailsDrawerProps> = ({
                   </div>
                   <p className="text-xs text-[var(--sidebar-text)] opacity-50 mt-0.5 truncate">Lead ID: {lead.id}</p>
                 </div>
-                <button
-                  onClick={onClose}
-                  className="w-8 h-8 rounded-md text-[var(--sidebar-text)] hover:text-[var(--foreground)] hover:bg-[var(--color-primary-300)]/10 flex items-center justify-center transition-colors cursor-pointer shrink-0"
-                >
-                  <X className="w-5 h-5" />
-                </button>
+                <div className="flex items-center gap-1.5 shrink-0">
+                  {onDeleteLead && (
+                    <button
+                      title="Delete Lead"
+                      onClick={() => onDeleteLead(lead)}
+                      className="w-8 h-8 rounded-md text-[var(--sidebar-text)] hover:text-rose-500 hover:bg-rose-500/10 flex items-center justify-center transition-colors cursor-pointer"
+                    >
+                      <Trash2 className="w-4.5 h-4.5" />
+                    </button>
+                  )}
+                  <button
+                    onClick={onClose}
+                    className="w-8 h-8 rounded-md text-[var(--sidebar-text)] hover:text-[var(--foreground)] hover:bg-[var(--color-primary-300)]/10 flex items-center justify-center transition-colors cursor-pointer"
+                  >
+                    <X className="w-5 h-5" />
+                  </button>
+                </div>
               </div>
 
               {/* Status & Transition Actions */}

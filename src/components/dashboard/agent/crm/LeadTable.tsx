@@ -2,12 +2,14 @@
 
 import React from 'react';
 import { Lead, LeadStatus } from '@/types/crm';
-import { Phone, Mail, ChevronRight, Clock, AlertCircle, Pencil } from 'lucide-react';
+import { Phone, Mail, ChevronRight, Clock, AlertCircle, Pencil, Trash2 } from 'lucide-react';
+import { useI18n } from '@/providers/LocaleProvider';
 
 interface LeadTableProps {
   leads: Lead[];
   onSelectLead: (lead: Lead) => void;
   onEditLead: (lead: Lead) => void;
+  onDeleteLead?: (lead: Lead) => void;
   isLoading?: boolean;
 }
 
@@ -45,12 +47,13 @@ export const getPriorityBadgeClass = (priority?: string) => {
   }
 };
 
-export const LeadTable: React.FC<LeadTableProps> = ({ leads, onSelectLead, onEditLead, isLoading }) => {
+export const LeadTable: React.FC<LeadTableProps> = ({ leads, onSelectLead, onEditLead, onDeleteLead, isLoading }) => {
+  const { t } = useI18n();
   if (isLoading) {
     return (
       <div className="bg-[var(--card-surface)] border border-[var(--sidebar-border)] rounded-md p-8 text-center">
         <div className="inline-block animate-spin rounded-full h-8 w-8 border-4 border-[var(--color-primary-300)] border-t-transparent mb-3" />
-        <p className="text-sm text-[var(--sidebar-text)] opacity-60 font-montserrat">Fetching assigned leads...</p>
+        <p className="text-sm text-[var(--sidebar-text)] opacity-60 font-montserrat">{t("Fetching assigned leads...")}</p>
       </div>
     );
   }
@@ -61,9 +64,9 @@ export const LeadTable: React.FC<LeadTableProps> = ({ leads, onSelectLead, onEdi
         <div className="w-12 h-12 rounded-full bg-[var(--sidebar-border)] flex items-center justify-center mx-auto mb-4 text-[var(--sidebar-text)] opacity-65">
           <AlertCircle className="w-6 h-6" />
         </div>
-        <h3 className="text-base font-bold text-[var(--foreground)] mb-1">No Leads Found</h3>
+        <h3 className="text-base font-bold text-[var(--foreground)] mb-1">{t("No Leads Found")}</h3>
         <p className="text-xs text-[var(--sidebar-text)] opacity-60 max-w-sm mx-auto">
-          No leads are currently assigned to you or match your active filter criteria.
+          {t("No leads are currently assigned to you or match your active filter criteria.")}
         </p>
       </div>
     );
@@ -75,13 +78,13 @@ export const LeadTable: React.FC<LeadTableProps> = ({ leads, onSelectLead, onEdi
         <table className="w-full text-left border-collapse">
           <thead>
             <tr className="border-b border-[var(--sidebar-border)] bg-[var(--background)]/20">
-              <th className="px-5 py-4 text-[10px] font-bold uppercase tracking-wider text-[var(--sidebar-text)] opacity-65">Lead Info</th>
-              <th className="px-5 py-4 text-[10px] font-bold uppercase tracking-wider text-[var(--sidebar-text)] opacity-65">Contact</th>
-              <th className="px-5 py-4 text-[10px] font-bold uppercase tracking-wider text-[var(--sidebar-text)] opacity-65">Source</th>
-              <th className="px-5 py-4 text-[10px] font-bold uppercase tracking-wider text-[var(--sidebar-text)] opacity-65">Priority</th>
-              <th className="px-5 py-4 text-[10px] font-bold uppercase tracking-wider text-[var(--sidebar-text)] opacity-65">Status</th>
-              <th className="px-5 py-4 text-[10px] font-bold uppercase tracking-wider text-[var(--sidebar-text)] opacity-65">Last Updated</th>
-              <th className="px-5 py-4 text-right text-[10px] font-bold uppercase tracking-wider text-[var(--sidebar-text)] opacity-65">Actions</th>
+              <th className="px-5 py-4 text-[10px] font-bold uppercase tracking-wider text-[var(--sidebar-text)] opacity-65">{t("Lead Info")}</th>
+              <th className="px-5 py-4 text-[10px] font-bold uppercase tracking-wider text-[var(--sidebar-text)] opacity-65">{t("Contact")}</th>
+              <th className="px-5 py-4 text-[10px] font-bold uppercase tracking-wider text-[var(--sidebar-text)] opacity-65">{t("Source")}</th>
+              <th className="px-5 py-4 text-[10px] font-bold uppercase tracking-wider text-[var(--sidebar-text)] opacity-65">{t("Priority")}</th>
+              <th className="px-5 py-4 text-[10px] font-bold uppercase tracking-wider text-[var(--sidebar-text)] opacity-65">{t("Status")}</th>
+              <th className="px-5 py-4 text-[10px] font-bold uppercase tracking-wider text-[var(--sidebar-text)] opacity-65">{t("Last Updated")}</th>
+              <th className="px-5 py-4 text-right text-[10px] font-bold uppercase tracking-wider text-[var(--sidebar-text)] opacity-65">{t("Actions")}</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-[var(--sidebar-border)]">
@@ -151,6 +154,15 @@ export const LeadTable: React.FC<LeadTableProps> = ({ leads, onSelectLead, onEdi
                     >
                       <Pencil className="w-3.5 h-3.5" />
                     </button>
+                    {onDeleteLead && (
+                      <button
+                        title="Delete Lead"
+                        onClick={(e) => { e.stopPropagation(); onDeleteLead(lead); }}
+                        className="inline-flex items-center justify-center w-7 h-7 rounded bg-[var(--background)]/60 border border-[var(--sidebar-border)] text-[var(--sidebar-text)] hover:text-rose-500 hover:border-rose-500/30 hover:bg-rose-500/10 transition-all cursor-pointer"
+                      >
+                        <Trash2 className="w-3.5 h-3.5" />
+                      </button>
+                    )}
                     <button
                       title="View Details"
                       onClick={(e) => { e.stopPropagation(); onSelectLead(lead); }}

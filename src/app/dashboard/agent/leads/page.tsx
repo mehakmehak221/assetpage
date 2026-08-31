@@ -7,7 +7,9 @@ import { LeadFilters } from '@/components/dashboard/agent/crm/LeadFilters';
 import { LeadTable } from '@/components/dashboard/agent/crm/LeadTable';
 import { CreateLeadModal } from '@/components/dashboard/agent/crm/CreateLeadModal';
 import { EditLeadModal } from '@/components/dashboard/agent/crm/EditLeadModal';
+import { DeleteLeadModal } from '@/components/dashboard/agent/crm/DeleteLeadModal';
 import { LeadDetailsDrawer } from '@/components/dashboard/agent/crm/LeadDetailsDrawer';
+import { CrmToast, ToastConfig } from '@/components/dashboard/agent/crm/CrmToast';
 import { Users, UserPlus, CheckCircle2, Clock, ChevronLeft, ChevronRight } from 'lucide-react';
 
 interface LeadStats {
@@ -34,6 +36,12 @@ export default function AgentLeadsPage() {
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [selectedLeadId, setSelectedLeadId] = useState<string | null>(null);
   const [leadForEdit, setLeadForEdit] = useState<Lead | null>(null);
+  const [leadForDelete, setLeadForDelete] = useState<Lead | null>(null);
+  const [toast, setToast] = useState<ToastConfig | null>(null);
+
+  const showToast = (message: string, type: 'success' | 'error') => {
+    setToast({ message, type });
+  };
 
 
   const fetchStats = useCallback(async () => {
@@ -99,6 +107,17 @@ export default function AgentLeadsPage() {
     if (!leadForEdit) return;
     await agentCrmApi.updateLead(leadForEdit.id, data);
     await Promise.all([fetchLeads(), fetchStats()]);
+  };
+
+  const handleDeleteLead = async () => {
+    if (!leadForDelete) return;
+    const deletedName = leadForDelete.name;
+    await agentCrmApi.deleteLead(leadForDelete.id);
+    if (selectedLeadId === leadForDelete.id) {
+      setSelectedLeadId(null);
+    }
+    await Promise.all([fetchLeads(), fetchStats()]);
+    showToast(`"${deletedName}" has been permanently deleted.`, 'success');
   };
 
   return (
@@ -181,6 +200,7 @@ export default function AgentLeadsPage() {
         isLoading={isLoading}
         onSelectLead={(lead) => setSelectedLeadId(lead.id)}
         onEditLead={(lead) => setLeadForEdit(lead)}
+        onDeleteLead={(lead) => setLeadForDelete(lead)}
       />
 
       {/* Pagination Controls */}
@@ -221,11 +241,21 @@ export default function AgentLeadsPage() {
         onSubmit={handleEditLead}
       />
 
+      <DeleteLeadModal
+        isOpen={leadForDelete !== null}
+        lead={leadForDelete}
+        onClose={() => setLeadForDelete(null)}
+        onConfirm={handleDeleteLead}
+      />
+
       <LeadDetailsDrawer
         leadId={selectedLeadId}
         onClose={() => setSelectedLeadId(null)}
         onLeadUpdated={fetchLeads}
+        onDeleteLead={(lead) => setLeadForDelete(lead)}
       />
+
+      <CrmToast toast={toast} onDismiss={() => setToast(null)} />
     </div>
   );
 }

@@ -586,6 +586,14 @@
     animation: scan 3s ease-in-out infinite;
   }
 
+  @keyframes shrink-x {
+    from { transform: scaleX(1); }
+    to   { transform: scaleX(0); }
+  }
+
+  .animate-shrink-x {
+    animation: shrink-x 4s linear forwards;
+  }
 
 
   .auth-left-panel {

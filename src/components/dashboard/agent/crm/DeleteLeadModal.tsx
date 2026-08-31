@@ -31,18 +31,17 @@ export const DeleteLeadModal: React.FC<DeleteLeadModalProps> = ({ isOpen, lead, 
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[var(--color-bg-dark)]/70 backdrop-blur-sm font-montserrat">
-      <div className="bg-[var(--form-surface)] border border-rose-500/20 rounded-md shadow-2xl w-full max-w-md overflow-hidden">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[var(--color-bg-dark)]/80 backdrop-blur-sm font-montserrat">
+      <div className="bg-[var(--form-surface)] border border-[var(--sidebar-border)] rounded-md shadow-2xl w-full max-w-md overflow-hidden">
 
-        {/* Header */}
         <div className="flex items-center justify-between px-6 py-4 border-b border-[var(--sidebar-border)]">
-          <div className="flex items-center gap-2.5">
-            <div className="w-9 h-9 rounded-md bg-rose-500/10 text-rose-400 flex items-center justify-center">
+          <div className="flex items-center gap-3">
+            <div className="w-9 h-9 rounded-md bg-[var(--color-status-error-bg)] text-[var(--color-error-500)] flex items-center justify-center border border-[var(--color-primary-300)]/20">
               <Trash2 className="w-4 h-4" />
             </div>
             <div>
-              <h3 className="text-base font-bold text-[var(--foreground)]">Delete Lead</h3>
-              <p className="text-xs text-[var(--sidebar-text)] opacity-60">This action cannot be undone</p>
+              <h3 className="text-[15px] font-bold text-[var(--foreground)] tracking-wide">Delete Lead</h3>
+              <p className="text-[11px] text-[var(--sidebar-text)] opacity-60 mt-0.5">This action cannot be undone</p>
             </div>
           </div>
           <button
@@ -54,14 +53,15 @@ export const DeleteLeadModal: React.FC<DeleteLeadModalProps> = ({ isOpen, lead, 
           </button>
         </div>
 
-        {/* Body */}
+
         <div className="px-6 py-5 space-y-4">
-          {/* Warning block */}
-          <div className="flex items-start gap-3 p-4 rounded-md bg-rose-500/8 border border-rose-500/20">
-            <AlertTriangle className="w-5 h-5 text-rose-400 shrink-0 mt-0.5" />
-            <div className="space-y-1">
-              <p className="text-sm font-semibold text-[var(--foreground)]">
-                Remove <span className="text-rose-400">{lead.name}</span>?
+
+
+          <div className="flex items-start gap-3 p-4 rounded-md bg-[var(--color-status-error-bg)] border border-[var(--color-status-error-border)]">
+            <AlertTriangle className="w-5 h-5 text-[var(--color-error-500)] shrink-0 mt-0.5" />
+            <div className="space-y-1.5">
+              <p className="text-sm font-bold text-[var(--foreground)]">
+                Remove <span className="text-[var(--color-error-500)]">{lead.name}</span>?
               </p>
               <p className="text-xs text-[var(--sidebar-text)] opacity-70 leading-relaxed">
                 All associated notes, follow-ups, and activity history for this lead will be permanently deleted and cannot be recovered.
@@ -69,36 +69,35 @@ export const DeleteLeadModal: React.FC<DeleteLeadModalProps> = ({ isOpen, lead, 
             </div>
           </div>
 
-          {/* Lead quick-info */}
-          <div className="bg-[var(--background)]/40 rounded-md border border-[var(--sidebar-border)] px-4 py-3 text-xs space-y-1">
-            <div className="flex items-center justify-between">
-              <span className="text-[var(--sidebar-text)] opacity-60 font-medium uppercase tracking-wider text-[10px]">Lead ID</span>
-              <span className="font-mono text-[var(--sidebar-text)] opacity-80">{lead.id.slice(-8)}</span>
+
+          <div className="bg-[var(--card-surface)] rounded-md border border-[var(--sidebar-border)] divide-y divide-[var(--sidebar-border)]">
+            <div className="flex items-center justify-between px-4 py-2.5">
+              <span className="text-[var(--sidebar-text)] opacity-60 font-bold uppercase tracking-wider text-[9px]">LEAD ID</span>
+              <span className="font-mono text-[11px] text-[var(--sidebar-text)]">{lead.id.slice(-8)}</span>
             </div>
-            <div className="flex items-center justify-between">
-              <span className="text-[var(--sidebar-text)] opacity-60 font-medium uppercase tracking-wider text-[10px]">Phone</span>
-              <span className="text-[var(--foreground)] font-semibold">{lead.phone}</span>
+            <div className="flex items-center justify-between px-4 py-2.5">
+              <span className="text-[var(--sidebar-text)] opacity-60 font-bold uppercase tracking-wider text-[9px]">PHONE</span>
+              <span className="text-[var(--foreground)] font-bold tracking-wide font-mono text-[13px]">{lead.phone}</span>
             </div>
-            <div className="flex items-center justify-between">
-              <span className="text-[var(--sidebar-text)] opacity-60 font-medium uppercase tracking-wider text-[10px]">Status</span>
-              <span className="text-[var(--foreground)] font-semibold">{lead.status.replace('_', ' ')}</span>
+            <div className="flex items-center justify-between px-4 py-2.5">
+              <span className="text-[var(--sidebar-text)] opacity-60 font-bold uppercase tracking-wider text-[9px]">STATUS</span>
+              <span className="text-[var(--foreground)] font-black uppercase text-[11px] tracking-wider">{lead.status.replace('_', ' ')}</span>
             </div>
           </div>
 
           {error && (
-            <div className="p-3 rounded-md bg-rose-500/10 border border-rose-500/20 text-rose-400 text-xs">
+            <div className="p-3.5 rounded-md bg-[var(--color-status-error-bg)] border border-[var(--color-status-error-border)] text-[var(--color-error-500)] text-xs font-mono break-all leading-normal">
               {error}
             </div>
           )}
         </div>
 
-        {/* Actions */}
-        <div className="flex items-center justify-end gap-3 px-6 py-4 border-t border-[var(--sidebar-border)]">
+        <div className="flex items-center justify-end gap-3 px-6 py-4 border-t border-[var(--sidebar-border)] bg-[var(--card-surface)]/40">
           <button
             type="button"
             onClick={onClose}
             disabled={isDeleting}
-            className="px-4 py-2.5 rounded-md text-xs font-bold text-[var(--sidebar-text)] hover:text-[var(--foreground)] hover:bg-[var(--color-primary-300)]/5 transition-colors cursor-pointer disabled:opacity-40"
+            className="px-4 py-2 rounded-md text-xs font-bold text-[var(--sidebar-text)] hover:text-[var(--foreground)] hover:bg-[var(--color-primary-300)]/8 transition-colors cursor-pointer disabled:opacity-40"
           >
             Cancel
           </button>
@@ -106,7 +105,7 @@ export const DeleteLeadModal: React.FC<DeleteLeadModalProps> = ({ isOpen, lead, 
             type="button"
             onClick={handleConfirm}
             disabled={isDeleting}
-            className="px-5 py-2.5 rounded-md bg-rose-500 hover:bg-rose-500/90 text-white text-xs font-bold flex items-center gap-2 transition-all cursor-pointer disabled:opacity-60 shadow-lg shadow-rose-500/20"
+            className="px-5 py-2.5 rounded-md bg-[var(--color-error-500)] hover:bg-[var(--color-error-500)]/90 text-white text-xs font-bold flex items-center gap-2 transition-all cursor-pointer disabled:opacity-60 shadow-lg shadow-[var(--color-error-500)]/25"
           >
             <Trash2 className="w-3.5 h-3.5" />
             {isDeleting ? 'Deleting...' : 'Delete Lead'}
