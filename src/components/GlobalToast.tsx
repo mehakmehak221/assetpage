@@ -19,11 +19,37 @@ export default function GlobalToast() {
             localStorage.removeItem("toastMessage");
             localStorage.removeItem("toastType");
             
-            setTimeout(() => {
+            const timer = setTimeout(() => {
                 setToast(prev => ({ ...prev, show: false }));
             }, 3000);
+            return () => clearTimeout(timer);
         }
     }, [pathname]);
+
+    useEffect(() => {
+        let timer: NodeJS.Timeout;
+        const handleShowToast = (e: Event) => {
+            const customEvent = e as CustomEvent<{ message: string; type?: string }>;
+            if (customEvent.detail) {
+                setToast({
+                    show: true,
+                    message: customEvent.detail.message,
+                    type: customEvent.detail.type || "success"
+                });
+                
+                if (timer) clearTimeout(timer);
+                timer = setTimeout(() => {
+                    setToast(prev => ({ ...prev, show: false }));
+                }, 3000);
+            }
+        };
+
+        window.addEventListener("show-toast", handleShowToast);
+        return () => {
+            window.removeEventListener("show-toast", handleShowToast);
+            if (timer) clearTimeout(timer);
+        };
+    }, []);
 
     return (
         <AnimatePresence>

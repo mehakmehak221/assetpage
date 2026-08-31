@@ -9,7 +9,6 @@ import { CreateLeadModal } from '@/components/dashboard/agent/crm/CreateLeadModa
 import { EditLeadModal } from '@/components/dashboard/agent/crm/EditLeadModal';
 import { DeleteLeadModal } from '@/components/dashboard/agent/crm/DeleteLeadModal';
 import { LeadDetailsDrawer } from '@/components/dashboard/agent/crm/LeadDetailsDrawer';
-import { CrmToast, ToastConfig } from '@/components/dashboard/agent/crm/CrmToast';
 import { Users, UserPlus, CheckCircle2, Clock, ChevronLeft, ChevronRight } from 'lucide-react';
 
 interface LeadStats {
@@ -37,11 +36,6 @@ export default function AgentLeadsPage() {
   const [selectedLeadId, setSelectedLeadId] = useState<string | null>(null);
   const [leadForEdit, setLeadForEdit] = useState<Lead | null>(null);
   const [leadForDelete, setLeadForDelete] = useState<Lead | null>(null);
-  const [toast, setToast] = useState<ToastConfig | null>(null);
-
-  const showToast = (message: string, type: 'success' | 'error') => {
-    setToast({ message, type });
-  };
 
 
   const fetchStats = useCallback(async () => {
@@ -117,7 +111,15 @@ export default function AgentLeadsPage() {
       setSelectedLeadId(null);
     }
     await Promise.all([fetchLeads(), fetchStats()]);
-    showToast(`"${deletedName}" has been permanently deleted.`, 'success');
+    
+    window.dispatchEvent(
+      new CustomEvent("show-toast", {
+        detail: {
+          message: `"${deletedName}" has been permanently deleted.`,
+          type: "success",
+        },
+      })
+    );
   };
 
   return (
@@ -254,8 +256,6 @@ export default function AgentLeadsPage() {
         onLeadUpdated={fetchLeads}
         onDeleteLead={(lead) => setLeadForDelete(lead)}
       />
-
-      <CrmToast toast={toast} onDismiss={() => setToast(null)} />
     </div>
   );
 }

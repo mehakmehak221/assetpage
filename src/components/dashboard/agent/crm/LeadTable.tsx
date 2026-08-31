@@ -3,7 +3,17 @@
 import React from 'react';
 import { Lead, LeadStatus } from '@/types/crm';
 import { Phone, Mail, ChevronRight, Clock, AlertCircle, Pencil, Trash2 } from 'lucide-react';
-import { useI18n } from '@/providers/LocaleProvider';
+// Fallback for translation hook if LocaleProvider is not present on this branch
+const useI18n = () => ({
+  t: (key: string, values?: Record<string, string | number>) => {
+    if (!values) return key;
+    let result = key;
+    Object.entries(values).forEach(([k, v]) => {
+      result = result.replace(`{${k}}`, String(v));
+    });
+    return result;
+  }
+});
 
 interface LeadTableProps {
   leads: Lead[];
