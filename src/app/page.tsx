@@ -17,7 +17,7 @@ import LandingReferralWidget from "@/components/sections/LandingReferralWidget/L
 
 export default function Home() {
   return (
-    <div className="landing-page w-full bg-white">
+    <div className="landing-page w-full bg-white overflow-x-hidden">
       <Navbar />
       <main className="w-full overflow-x-hidden">
         <HeroSection />
