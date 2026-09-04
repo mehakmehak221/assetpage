@@ -11,6 +11,7 @@ const baseQuery = fetchBaseQuery({
       'sendRegistrationOtp',
       'sendPhoneOtp',
       'verifyPhoneOtp',
+      'verifyPhoneOtpWidget',
       'verifyRegistrationOtp',
       'register',
       'registerAgent',

@@ -4,6 +4,7 @@ import {
   RegistrationOtpBody,
   SendPhoneOtpBody,
   VerifyPhoneOtpBody,
+  VerifyPhoneOtpWidgetBody,
   SendPhoneOtpResponse
 } from '@/types/auth';
 
@@ -26,6 +27,13 @@ export const authApi = baseApi.injectEndpoints({
     verifyPhoneOtp: builder.mutation<{ success: boolean }, VerifyPhoneOtpBody>({
       query: (body) => ({
         url: 'auth/register/verify-phone-otp',
+        method: 'POST',
+        body,
+      }),
+    }),
+    verifyPhoneOtpWidget: builder.mutation<{ success: boolean; message?: string }, VerifyPhoneOtpWidgetBody>({
+      query: (body) => ({
+        url: 'auth/register/verify-phone-otp-widget',
         method: 'POST',
         body,
       }),
@@ -124,6 +132,7 @@ export const {
   useSendRegistrationOtpMutation,
   useSendPhoneOtpMutation,
   useVerifyPhoneOtpMutation,
+  useVerifyPhoneOtpWidgetMutation,
   useVerifyRegistrationOtpMutation,
   useRegisterMutation,
   useRegisterAgentMutation,

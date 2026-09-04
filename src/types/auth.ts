@@ -28,3 +28,9 @@ export interface VerifyPhoneOtpBody {
   email: string;
   firebaseIdToken: string;
 }
+
+export interface VerifyPhoneOtpWidgetBody {
+  email: string;
+  accessToken: string;
+}
+

@@ -1,13 +1,19 @@
 "use client";
 
-import { startTransition, Suspense, useEffect, useRef, useState } from "react";
+import { startTransition, Suspense, useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { motion } from "framer-motion";
 import PhoneInput from "react-phone-number-input";
 import "react-phone-number-input/style.css";
-import { RecaptchaVerifier, signInWithPhoneNumber, ConfirmationResult } from "firebase/auth";
-import { firebaseAuth, ensureFirebasePhoneAuthReady, isFirebasePhoneAuthEnabled } from "@/lib/firebase";
+
+import {
+    sendMsg91Otp,
+    retryMsg91Otp,
+    verifyMsg91Otp,
+    extractMsg91ErrorMessage,
+    initMsg91Widget,
+} from "@/lib/msg91";
 import UserTypeToggle from "@/components/auth/UserTypeToggle";
 import RoleInsightCallout from "@/components/auth/RoleInsightCallout";
 import { ChevronLeftIcon, LoadingSpinner, EyeOpenIcon, EyeClosedIcon } from "@/components/VectorImages";
@@ -16,7 +22,7 @@ import {
     useRegisterAgentMutation,
     useSendRegistrationOtpMutation,
     useSendPhoneOtpMutation,
-    useVerifyPhoneOtpMutation,
+    useVerifyPhoneOtpWidgetMutation,
     useVerifyRegistrationOtpMutation,
 } from "@/store/api/authApi";
 import { setCookie } from "@/utils/cookieUtils";
@@ -47,18 +53,24 @@ function SignUpPageContent() {
     const [userType, setUserType] = useState<SignupRole>(() => parseRoleQuery(roleParam) ?? "Investor");
     const [step, setStep] = useState<SignUpStep>("DETAILS");
 
-    // Email OTP state
+
     const [otp, setOtp] = useState("");
     const [otpError, setOtpError] = useState("");
 
-    // Phone OTP state
     const [phoneCode, setPhoneCode] = useState("");
     const [phoneCodeError, setPhoneCodeError] = useState("");
-    const [confirmationResult, setConfirmationResult] = useState<ConfirmationResult | null>(null);
-    const recaptchaVerifierRef = useRef<RecaptchaVerifier | null>(null);
-    const recaptchaAttemptRef = useRef(0);
+    const [isSendingMsg91Otp, setIsSendingMsg91Otp] = useState(false);
+    const [isVerifyingMsg91Otp, setIsVerifyingMsg91Otp] = useState(false);
+
+
 
     const [successMsg, setSuccessMsg] = useState("");
+
+    useEffect(() => {
+        initMsg91Widget().catch((err) => {
+            console.warn("Pre-initializing MSG91 widget warning:", err);
+        });
+    }, []);
 
     useEffect(() => {
         const next = parseRoleQuery(roleParam);
@@ -92,11 +104,12 @@ function SignUpPageContent() {
 
     const [sendRegistrationOtp, { isLoading: isSendingOtp }] = useSendRegistrationOtpMutation();
     const [sendPhoneOtp, { isLoading: isSendingPhoneOtp }] = useSendPhoneOtpMutation();
-    const [verifyPhoneOtp, { isLoading: isVerifyingPhoneOtp }] = useVerifyPhoneOtpMutation();
+    // const [verifyPhoneOtp, { isLoading: isVerifyingPhoneOtp }] = useVerifyPhoneOtpMutation(); // Firebase
+    const [verifyPhoneOtpWidget, { isLoading: isVerifyingPhoneOtpWidget }] = useVerifyPhoneOtpWidgetMutation();
     const [verifyRegistrationOtp, { isLoading: isVerifyingOtp }] = useVerifyRegistrationOtpMutation();
     const [register, { isLoading: isRegistering }] = useRegisterMutation();
     const [registerAgent, { isLoading: isAgentRegistering }] = useRegisterAgentMutation();
-    const isLoading = isSendingOtp || isSendingPhoneOtp || isVerifyingPhoneOtp || isVerifyingOtp || isRegistering || isAgentRegistering;
+    const isLoading = isSendingOtp || isSendingPhoneOtp || isVerifyingPhoneOtpWidget || isSendingMsg91Otp || isVerifyingMsg91Otp || isVerifyingOtp || isRegistering || isAgentRegistering;
 
     useEffect(() => {
         if (
@@ -131,6 +144,8 @@ function SignUpPageContent() {
         phoneCodeError,
     ]);
 
+    /*
+    // [FIREBASE RECAPTCHA METHODS - COMMENTED OUT]
     const clearRecaptcha = () => {
         if (recaptchaVerifierRef.current) {
             try {
@@ -177,7 +192,7 @@ function SignUpPageContent() {
     useEffect(() => {
         return () => { clearRecaptcha(); };
     }, []);
-
+    */
 
     const handleUserTypeChange = (next: string) => {
         const nextRole = SIGNUP_ROLES.includes(next as SignupRole) ? (next as SignupRole) : null;
@@ -188,8 +203,10 @@ function SignUpPageContent() {
         setConfirmPasswordError(""); setReraError(""); setExpiryError(""); setReferralError("");
         setShowPassword(false); setShowConfirmPassword(false);
         setStep("DETAILS"); setOtp(""); setOtpError("");
-        setPhoneCode(""); setPhoneCodeError(""); setConfirmationResult(null);
-        setSuccessMsg(""); clearRecaptcha();
+        setPhoneCode(""); setPhoneCodeError("");
+        // setConfirmationResult(null); // Firebase
+        setSuccessMsg("");
+        // clearRecaptcha(); // Firebase
     };
 
     const clearFieldError = (k: keyof typeof form) => {
@@ -238,13 +255,14 @@ function SignUpPageContent() {
         router.push("/onboarding");
     };
 
-
     const proceedToEmailOtpStep = (message?: string) => {
         setSuccessMsg(message ?? `We sent a 6-digit code to ${form.email.trim()}.`);
         setStep("OTP");
-        clearRecaptcha();
+        // clearRecaptcha(); // Firebase
     };
 
+    /*
+    // [FIREBASE RECOVERABLE ERROR HELPER - COMMENTED OUT]
     const isRecoverableFirebasePhoneError = (err: unknown) => {
         const code = (err as { code?: string })?.code;
         return (
@@ -254,6 +272,7 @@ function SignUpPageContent() {
             code === "auth/quota-exceeded"
         );
     };
+    */
 
     const sendEmailOtp = async (transitionToOtpStep = true) => {
         const trimmedEmail = form.email.trim();
@@ -281,8 +300,9 @@ function SignUpPageContent() {
         }
     };
 
+    /*
     // ---------------------------------------------------------------------------
-    // Step 2a: Fetch phone from backend & trigger Firebase SMS
+    // [FIREBASE] Step 2a: Fetch phone from backend & trigger Firebase SMS - COMMENTED OUT
     // ---------------------------------------------------------------------------
     const initiatePhoneVerification = async () => {
         if (!firebaseAuth) return;
@@ -316,7 +336,7 @@ function SignUpPageContent() {
     };
 
     // ---------------------------------------------------------------------------
-    // Step 2b: Verify SMS code with Firebase → send token to backend
+    // [FIREBASE] Step 2b: Verify SMS code with Firebase → send token to backend - COMMENTED OUT
     // ---------------------------------------------------------------------------
     const verifyPhoneCode = async () => {
         if (!confirmationResult) throw new Error("No confirmation result — please resend.");
@@ -326,6 +346,7 @@ function SignUpPageContent() {
 
         await verifyPhoneOtp({ email: form.email.trim(), firebaseIdToken }).unwrap();
     };
+    */
 
     // ---------------------------------------------------------------------------
     // Resend email OTP handler (from OTP step)
@@ -348,15 +369,30 @@ function SignUpPageContent() {
     };
 
     // ---------------------------------------------------------------------------
-    // Resend phone SMS handler (from PHONE_OTP step)
+    // Resend phone SMS handler (from PHONE_OTP step) - MSG91 Widget
     // ---------------------------------------------------------------------------
     const handleResendPhoneSms = async () => {
         setErrorMsg(""); setPhoneCodeError(""); setSuccessMsg("");
+        setIsSendingMsg91Otp(true);
         try {
+            /*
+            // [FIREBASE RESEND - COMMENTED OUT]
             await initiatePhoneVerification();
+            */
+
+            // MSG91 Widget retryOtp / sendOtp
+            try {
+                await retryMsg91Otp();
+            } catch {
+                await sendMsg91Otp(form.phone.trim());
+            }
+            setSuccessMsg(`We resent a verification SMS to ${form.phone.trim()}.`);
         } catch (err: unknown) {
-            const apiErr = err as { status?: number; data?: { message?: string } };
-            setErrorMsg((apiErr?.data?.message) || "Failed to resend SMS. Please try again.");
+            console.error("handleResendPhoneSms failed:", err);
+            const msg = extractMsg91ErrorMessage(err);
+            setErrorMsg(msg || "Failed to resend SMS. Please try again.");
+        } finally {
+            setIsSendingMsg91Otp(false);
         }
     };
 
@@ -392,11 +428,30 @@ function SignUpPageContent() {
             // 1. Create PendingRegistration record on backend
             await sendEmailOtp(false);
 
-            // 2. Trigger Phone SMS via Firebase
+            /*
+            // [FIREBASE PHONE AUTH - COMMENTED OUT]
             if (isFirebasePhoneAuthEnabled) {
                 await initiatePhoneVerification();
             } else {
                 proceedToEmailOtpStep();
+            }
+            */
+
+            // 2. Trigger Phone SMS via MSG91 Widget
+            setIsSendingMsg91Otp(true);
+            try {
+                await sendMsg91Otp(form.phone.trim());
+                setPhoneCode("");
+                setPhoneCodeError("");
+                setSuccessMsg(`We sent a verification SMS to ${form.phone.trim()}.`);
+                setStep("PHONE_OTP");
+            } catch (msg91Err) {
+                console.error("MSG91 sendMsg91Otp error:", msg91Err);
+                setErrorMsg(extractMsg91ErrorMessage(msg91Err));
+                window.scrollTo({ top: 0, behavior: "smooth" });
+                return;
+            } finally {
+                setIsSendingMsg91Otp(false);
             }
         } catch (err: unknown) {
             console.error("handleDetailsSubmit caught error:", err);
@@ -419,33 +474,59 @@ function SignUpPageContent() {
     };
 
     // ---------------------------------------------------------------------------
-    // PHONE_OTP form submit → verify code → send Email OTP → move to OTP step
+    // PHONE_OTP form submit → verify code with MSG91 → verify accessToken on backend → move to OTP step
     // ---------------------------------------------------------------------------
     const handlePhoneOtpSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setErrorMsg(""); setPhoneCodeError(""); setSuccessMsg("");
 
         const code = phoneCode.trim();
-        if (code.length < 6) {
-            setPhoneCodeError("Please enter the 6-digit SMS code.");
+        if (code.length < 4) {
+            setPhoneCodeError("Please enter the verification SMS code.");
             window.scrollTo({ top: 0, behavior: "smooth" });
             return;
         }
 
+        setIsVerifyingMsg91Otp(true);
         try {
+            /*
+           
             await verifyPhoneCode();
             setStep("OTP");
             setSuccessMsg(`We sent a 6-digit verification code to ${form.email.trim()}.`);
             clearRecaptcha();
+            */
+
+            // 1. Verify OTP with MSG91 Widget -> returns MSG91 access token
+            const msg91AccessToken = await verifyMsg91Otp(code);
+            console.log("MSG91 OTP verified, received accessToken:", msg91AccessToken);
+
+            // 2. Verify accessToken with backend endpoint
+            await verifyPhoneOtpWidget({
+                email: form.email.trim(),
+                accessToken: msg91AccessToken,
+            }).unwrap();
+
+            // 3. Move to Email OTP step
+            setStep("OTP");
+            setSuccessMsg(`We sent a 6-digit verification code to ${form.email.trim()}.`);
         } catch (err: unknown) {
+            console.error("Phone OTP verification failed:", err);
             const apiErr = err as { status?: number; data?: { message?: string } };
-            const msg = (apiErr?.data?.message) || (err instanceof Error ? err.message : "");
-            if (msg.toLowerCase().includes("otp") || msg.toLowerCase().includes("invalid") || msg.toLowerCase().includes("expired")) {
+            const msg = (apiErr?.data?.message) || extractMsg91ErrorMessage(err);
+            if (
+                msg.toLowerCase().includes("otp") ||
+                msg.toLowerCase().includes("invalid") ||
+                msg.toLowerCase().includes("expired") ||
+                msg.toLowerCase().includes("token")
+            ) {
                 setPhoneCodeError("Invalid or expired SMS code. Please try again.");
             } else {
                 setErrorMsg(msg || "Phone verification failed. Please try again.");
             }
             window.scrollTo({ top: 0, behavior: "smooth" });
+        } finally {
+            setIsVerifyingMsg91Otp(false);
         }
     };
 
@@ -487,8 +568,8 @@ function SignUpPageContent() {
             transition={{ duration: 0.5, ease: "easeOut" }}
             className="flex flex-col"
         >
-            {/* Invisible reCAPTCHA mount point */}
-            <div id="recaptcha-mount" />
+
+            <div id="msg91-captcha" />
 
             <Link
                 href="/"
@@ -593,7 +674,7 @@ function SignUpPageContent() {
                         onClick={() => {
                             setStep("DETAILS");
                             setPhoneCode(""); setPhoneCodeError(""); setSuccessMsg(""); setErrorMsg("");
-                            clearRecaptcha();
+                            // clearRecaptcha(); // Firebase
                         }}
                         disabled={isLoading}
                         className="text-sm text-[var(--color-primary-500)] hover:text-[var(--color-primary-600)] transition-colors text-center disabled:opacity-50"
