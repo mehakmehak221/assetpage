@@ -425,11 +425,13 @@
     border-color: var(--color-primary-400);
   }
 
-  & select {
+  & select,
+  & .PhoneInputCountrySelect {
     background: transparent;
     color: var(--color-text-primary);
-    border: none;
-    outline: none;
+    border: none !important;
+    outline: none !important;
+    box-shadow: none !important;
     cursor: pointer;
   }
 
@@ -439,16 +441,31 @@
   }
 
   & .PhoneInputInput {
-    background: transparent;
-    border: none;
-    outline: none;
+    background: transparent !important;
+    border: none !important;
+    outline: none !important;
+    box-shadow: none !important;
     color: var(--color-text-primary);
     padding: 0.75rem 0;
     width: 100%;
 
+    &:focus,
+    &:focus-visible {
+      border: none !important;
+      outline: none !important;
+      box-shadow: none !important;
+    }
+
     &::placeholder {
       color: var(--color-text-muted);
     }
+  }
+
+  & .PhoneInputCountry {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    margin-right: 0.5rem;
   }
 
   & .PhoneInputCountryIcon {
@@ -459,12 +476,18 @@
     flex-shrink: 0;
   }
 
+  & .PhoneInputCountrySelectArrow {
+    opacity: 0.6;
+    color: var(--color-text-muted);
+    border-color: currentColor;
+  }
+
   & .PhoneInputInternationalIconPhone {
     display: none;
   }
 
   & .PhoneInputInternationalIconGlobe {
-    opacity: 0.5;
+    opacity: 0.6;
     color: var(--color-text-muted);
   }
 }
