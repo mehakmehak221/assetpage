@@ -422,8 +422,12 @@ export default function ExplorePage() {
                                                                 )}
                                                             </p>
                                                         </div>
-                                                        <div>
-                                                            <p className="text-[10px] font-bold text-neutral-400 mb-1">Potential Annual Return</p>
+                                                        <div className="relative group/tip min-w-0">
+                                                            <p className="text-[10px] font-bold text-neutral-400 mb-1 truncate cursor-default" title="Potential Annual Return">Potential Annual Return</p>
+                                                            <div className="absolute -top-8 left-1/2 -translate-x-1/2 hidden group-hover/tip:flex items-center px-2 py-0.5 bg-neutral-900 text-white text-[10px] font-semibold rounded shadow-xl border border-neutral-700 whitespace-nowrap z-30 pointer-events-none">
+                                                                Potential Annual Return
+                                                                <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1.5 h-1.5 bg-neutral-900 rotate-45 border-r border-b border-neutral-700" />
+                                                            </div>
                                                             <p className="text-[15px] font-extrabold text-[#00B28F]">{formattedYield}%</p>
                                                         </div>
                                                     </div>

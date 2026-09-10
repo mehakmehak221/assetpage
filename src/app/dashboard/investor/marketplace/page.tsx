@@ -486,11 +486,11 @@ export default function MarketplacePage() {
                                             <div className="bg-[var(--sidebar-bg)] border border-[var(--sidebar-border)] rounded-md p-4 mb-5 shadow-sm">
                                                 <div className="grid grid-cols-3 divide-x divide-[var(--sidebar-border)]/65 text-center">
                                                     <div className="min-w-0 px-1">
-                                                        <p className="text-[10px] font-bold text-[var(--color-text-muted)] mb-1 truncate">Valuation</p>
+                                                        <p className="text-[10px] font-bold text-[var(--color-text-muted)] mb-1 truncate" title="Valuation">Valuation</p>
                                                         <p className="text-[13px] font-extrabold text-[var(--header-text)] break-all leading-tight">{formatPrice(property.valuation, true)}</p>
                                                     </div>
                                                     <div className="min-w-0 px-1">
-                                                        <p className="text-[10px] font-bold text-[var(--color-text-muted)] mb-1 truncate">
+                                                        <p className="text-[10px] font-bold text-[var(--color-text-muted)] mb-1 truncate" title={property.saleType === 'WHOLE' ? 'Whole Price' : 'Per Fraction'}>
                                                             {property.saleType === 'WHOLE' ? 'Whole Price' : 'Per Fraction'}
                                                         </p>
                                                         <p className="text-[13px] font-extrabold text-[var(--header-text)] break-all leading-tight">
@@ -502,8 +502,17 @@ export default function MarketplacePage() {
                                                             )}
                                                         </p>
                                                     </div>
-                                                    <div className="min-w-0 px-1">
-                                                        <p className="text-[10px] font-bold text-[var(--color-text-muted)] mb-1 truncate">Potential Annual Return</p>
+                                                    <div className="min-w-0 px-1 relative group/tip">
+                                                        <p 
+                                                            className="text-[10px] font-bold text-[var(--color-text-muted)] mb-1 truncate cursor-default"
+                                                            title="Potential Annual Return"
+                                                        >
+                                                            Potential Annual Return
+                                                        </p>
+                                                        <div className="absolute -top-8 left-1/2 -translate-x-1/2 hidden group-hover/tip:flex items-center px-2 py-0.5 bg-neutral-900 text-white text-[10px] font-semibold rounded shadow-xl border border-neutral-700 whitespace-nowrap z-30 pointer-events-none">
+                                                            Potential Annual Return
+                                                            <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1.5 h-1.5 bg-neutral-900 rotate-45 border-r border-b border-neutral-700" />
+                                                        </div>
                                                         <p className="text-[13px] font-extrabold text-[var(--sidebar-active-text)] break-all leading-tight">{formattedYield}%</p>
                                                     </div>
                                                 </div>
