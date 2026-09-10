@@ -6,7 +6,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { CheckIcon, LoadingSpinner, LockIcon, BackArrowIcon, DocumentIcon, TrendingUpIcon, ClockIcon, VerifiedIcon } from "@/components/VectorImages";
 import { useCreateInvestmentMutation, useVerifyInvestmentPaymentMutation } from "@/store/api/investmentApi";
 import { useBuySecondaryListingMutation, useVerifySecondaryPurchaseMutation } from "@/store/api/secondaryMarketApi";
-import { openRazorpayCheckout } from "@/utils/razorpay";
+// import { openRazorpayCheckout } from "@/utils/razorpay";
 import { formatInrAmount, toApiPaymentMethod } from "@/utils/paymentMethods";
 
 
@@ -116,6 +116,8 @@ export default function PaymentModal({ isOpen, onClose, flow, asset, onSuccess }
                 throw new Error("Invalid payment order response from server.");
             }
 
+            // Razorpay checkout commented out
+            /*
             await new Promise<void>((resolve, reject) => {
                 openRazorpayCheckout({
                     key: keyId,
@@ -182,6 +184,7 @@ export default function PaymentModal({ isOpen, onClose, flow, asset, onSuccess }
                     },
                 }).catch(reject);
             });
+            */
         } catch (err: unknown) {
             const e = err as { data?: { message?: string }; message?: string };
             const message =

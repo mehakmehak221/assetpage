@@ -21,9 +21,14 @@ import {
     useGetAssetRentalScheduleQuery,
     useGetAssetProjectedValuationQuery
 } from "@/store/api/assetApi";
-import { useGetInvestmentsQuery } from "@/store/api/investmentApi";
+import {
+    useGetInvestmentsQuery,
+    useCreateInvestmentMutation,
+    useVerifyInvestmentPaymentMutation,
+} from "@/store/api/investmentApi";
 import { useGetKycStatusQuery } from "@/store/api/kycApi";
 import { useGetUserCouponsQuery, useValidateCouponMutation } from "@/store/api/rewardsApi";
+// import { openRazorpayCheckout } from "@/utils/razorpay";
 
 import { API_URL } from "@/constants";
 
@@ -36,7 +41,16 @@ export default function PropertyDetailPage() {
     const searchParams = useSearchParams();
     const assetId = params.id as string;
 
-    const [isLoggedIn] = useState(() => typeof window !== "undefined" && localStorage.getItem("isLoggedIn") === "true");
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+    useEffect(() => {
+        const loggedIn = typeof window !== "undefined" && (
+            localStorage.getItem("isLoggedIn") === "true" ||
+            !!localStorage.getItem("access_token") ||
+            !!localStorage.getItem("token")
+        );
+        setIsLoggedIn(loggedIn);
+    }, []);
     const [isShareDropdownOpen, setIsShareDropdownOpen] = useState(false);
 
     const { data: property, isLoading, isError } = useGetAssetByIdQuery(assetId);
@@ -64,6 +78,8 @@ export default function PropertyDetailPage() {
     const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
     const couponSectionRef = useRef<HTMLDivElement | null>(null);
     const [validateCoupon, { isLoading: validatingCoupon }] = useValidateCouponMutation();
+    const [createInvestment, { isLoading: isCreatingInvestment }] = useCreateInvestmentMutation();
+    const [verifyInvestmentPayment, { isLoading: isVerifyingPayment }] = useVerifyInvestmentPaymentMutation();
     const sharedCouponCode = searchParams.get("coupon")?.trim() || "";
     const sharedCouponCampaign = searchParams.get("campaign")?.trim() || "";
     const [couponCode, setCouponCode] = useState(() => sharedCouponCode);
@@ -205,18 +221,69 @@ export default function PropertyDetailPage() {
     ].filter(doc => doc.url);
 
     const handleInvestNow = () => {
-        if (!isLoggedIn) {
-            showToast("Coming soon!");
-            return;
-        }
-        setInvestOpen(true);
+        showToast("Coming Soon");
     };
 
     const handleVerifyPay = async (qty: number, total: number, discount: number = 0) => {
         setInvestQuantity(qty);
-        setInvestOpen(false);
         setPendingInvestment({ quantity: qty, total, discount });
-        setPaymentModalOpen(true);
+
+        // Razorpay checkout commented out
+        /*
+        try {
+            const couponToApply = couponMatchesSelection ? (couponCode.trim() || sharedCouponCode) : undefined;
+            const orderResponse = (await createInvestment({
+                assetId,
+                fractions: qty,
+                paymentMethod: "UPI",
+                currency: "INR",
+                ...(couponToApply ? { couponCode: couponToApply } : {}),
+            }).unwrap()) as Record<string, unknown>;
+
+            const keyId = String(orderResponse?.keyId ?? "");
+            const order = orderResponse?.order as { id?: string; amount?: number; currency?: string } | undefined;
+
+            if (!keyId || !order?.id || order.amount == null) {
+                throw new Error("Invalid payment order response from server.");
+            }
+
+            setInvestOpen(false);
+
+            await openRazorpayCheckout({
+                key: keyId,
+                amount: order.amount,
+                currency: order.currency ?? "INR",
+                order_id: order.id,
+                name: "GloFi Estate",
+                description: property?.title || "Property Investment",
+                theme: { color: "#00DAAF" },
+                handler: async (razorpayResponse) => {
+                    try {
+                        const verified = await verifyInvestmentPayment({
+                            razorpayOrderId: razorpayResponse.razorpay_order_id,
+                            razorpayPaymentId: razorpayResponse.razorpay_payment_id,
+                            razorpaySignature: razorpayResponse.razorpay_signature,
+                        }).unwrap();
+
+                        showToast("Investment successful! You can view it in your portfolio.");
+                        refetchInvestments();
+                        setInvestStatus("SUCCESS");
+                    } catch (verifyErr: any) {
+                        const errorMsg = verifyErr?.data?.message || verifyErr?.message || "Payment verification failed.";
+                        showToast(errorMsg, "error");
+                    }
+                },
+                modal: {
+                    ondismiss: () => {
+                        showToast("Payment cancelled", "warning");
+                    },
+                },
+            });
+        } catch (err: any) {
+            const errorMsg = err?.data?.message || err?.message || "Failed to initiate payment. Please try again.";
+            showToast(errorMsg, "error");
+        }
+        */
     };
 
     const handlePaymentSuccess = () => {
@@ -988,6 +1055,7 @@ export default function PropertyDetailPage() {
                                 </div>
                             </div>
 
+                            {/* Active Coupons and Validate Coupon section commented out for now
                             <div className="bg-[var(--sidebar-bg)] border border-[var(--sidebar-border)] rounded-2xl p-4 sm:p-5 shadow-sm">
 
                                 {couponsLoading ? (
@@ -1112,6 +1180,7 @@ export default function PropertyDetailPage() {
                                     </button>
                                 </form>
                             </div>
+                            */}
 
                             <div className="bg-[var(--color-primary-300)]/10 border border-[var(--color-primary-300)]/20 rounded-xl p-3 flex items-center justify-center gap-2">
                                 <svg className="w-4 h-4 text-[var(--sidebar-active-text)]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
@@ -1147,8 +1216,9 @@ export default function PropertyDetailPage() {
                 discountAmount={appliedCouponDiscount}
                 couponCode={couponMatchesSelection ? couponCode.trim() || sharedCouponCode : ""}
                 onVerifyPay={handleVerifyPay}
+                isLoading={isCreatingInvestment || isVerifyingPayment}
             />
-            <PaymentModal
+            {/* <PaymentModal
                 isOpen={paymentModalOpen}
                 onClose={() => {
                     setPaymentModalOpen(false);
@@ -1163,7 +1233,7 @@ export default function PropertyDetailPage() {
                     couponCode: couponMatchesSelection ? couponCode.trim() || sharedCouponCode : undefined,
                 }}
                 onSuccess={handlePaymentSuccess}
-            />
+            /> */}
             <KYCModal
                 isOpen={kycOpen}
                 onClose={() => setKycOpen(false)}

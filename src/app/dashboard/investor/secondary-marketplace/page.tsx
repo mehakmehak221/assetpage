@@ -360,10 +360,13 @@ function DetailModal({ id, onClose, onBuy }) {
 
                                 <div className="mt-auto space-y-4">
                                     <button
-                                        disabled
-                                        className="w-full py-4 rounded-full bg-[var(--sidebar-border)] text-[var(--color-text-muted)] text-xs font-bold uppercase tracking-[0.2em] shadow-lg opacity-80 cursor-not-allowed border-0"
+                                        onClick={() => {
+                                            onClose();
+                                            onBuy(listing);
+                                        }}
+                                        className="w-full py-4 rounded-full bg-[var(--color-primary-300)] text-black text-xs font-bold uppercase tracking-[0.2em] shadow-lg hover:opacity-90 cursor-pointer border-0 transition-all"
                                     >
-                                        Coming Soon
+                                        Buy Fractions
                                     </button>
                                     <p className="text-[10px] text-center text-[var(--color-text-muted)] uppercase font-bold tracking-[0.2em]">Transaction secured by Glofy Escrow</p>
                                 </div>
