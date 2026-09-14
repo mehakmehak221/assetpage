@@ -12,7 +12,7 @@ import {
 
 const CONTACTS = [
     {
-        name: 'Maaz Menon',
+        name: 'Maaz Memon',
         phone: '+1 (716) 907-5786',
         telHref: 'tel:+17169075786',
         email: 'maaz@glofiestates.com',
