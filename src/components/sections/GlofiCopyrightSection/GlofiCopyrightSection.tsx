@@ -10,6 +10,23 @@ import {
     useLandingMotion,
 } from '@/lib/landingAnimations';
 
+const CONTACTS = [
+    {
+        name: 'Maaz Menon',
+        phone: '+1 (716) 907-5786',
+        telHref: 'tel:+17169075786',
+        email: 'maaz@glofiestates.com',
+        emailHref: 'mailto:maaz@glofiestates.com',
+    },
+    {
+        name: 'Girish Ahirwar',
+        phone: '+91 95999 70225',
+        telHref: 'tel:+919599970225',
+        email: 'girish@glofiestates.com',
+        emailHref: 'mailto:girish@glofiestates.com',
+    },
+];
+
 const NAV_LINKS = [
     { label: 'Company', href: '/#company' },
     { label: 'Product', href: '/#product' },
@@ -107,17 +124,52 @@ export default function GlofiCopyrightSection() {
                     </motion.div>
                 </motion.div>
 
+                <motion.div variants={fadeUpSubtle} className="site-footer__contact-section">
+                    <div className="site-footer__contact-heading">
+                        <span className="site-footer__contact-line" />
+                        <span className="site-footer__contact-title">Contact Us</span>
+                        <span className="site-footer__contact-line" />
+                    </div>
+
+                    <div className="site-footer__contacts-grid">
+                        {CONTACTS.map((contact) => (
+                            <div key={contact.name} className="site-footer__contact-card">
+                                <h4 className="site-footer__contact-name">{contact.name}</h4>
+                                <a
+                                    href={contact.telHref}
+                                    className="site-footer__contact-link"
+                                >
+                                    <svg className="site-footer__contact-icon" viewBox="0 0 24 24" fill="currentColor">
+                                        <path d="M6.62 10.79a15.053 15.053 0 006.59 6.59l2.2-2.2a1 1 0 011.01-.24c1.12.37 2.33.57 3.58.57a1 1 0 011 1V20a1 1 0 01-1 1A17 17 0 013 4a1 1 0 011-1h3.5a1 1 0 011 1c0 1.25.2 2.46.57 3.58a1 1 0 01-.24 1.01l-2.21 2.2z" />
+                                    </svg>
+                                    <span>{contact.phone}</span>
+                                </a>
+                                <a
+                                    href={contact.emailHref}
+                                    className="site-footer__contact-link"
+                                >
+                                    <svg className="site-footer__contact-icon" viewBox="0 0 24 24" fill="currentColor">
+                                        <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z" />
+                                    </svg>
+                                    <span>{contact.email}</span>
+                                </a>
+                            </div>
+                        ))}
+                    </div>
+                </motion.div>
+
                 <motion.p className="site-footer__powered-by" variants={fadeUpSubtle}>
                     Powered By Maxtron
                 </motion.p>
 
                 <motion.nav className="site-footer__nav" aria-label="Footer navigation" variants={fadeUpSubtle}>
-                    {NAV_LINKS.map((link) => (
-                        <motion.span key={link.label} whileHover={{ y: -2 }} className="inline-block">
-                            <Link href={link.href} className="site-footer__nav-link">
+                    {NAV_LINKS.map((link, index) => (
+                        <span key={link.label} className="site-footer__legal-item">
+                            {index > 0 && <span className="site-footer__legal-sep" aria-hidden>|</span>}
+                            <Link href={link.href} className="site-footer__nav-link" onClick={(e) => handleScroll(e, link.href)}>
                                 {link.label}
                             </Link>
-                        </motion.span>
+                        </span>
                     ))}
                 </motion.nav>
 

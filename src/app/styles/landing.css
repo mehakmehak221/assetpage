@@ -2382,7 +2382,110 @@
     align-items: center;
     justify-content: center;
     gap: 0.75rem;
-    margin-bottom: 1rem;
+    margin-bottom: 1.5rem;
+  }
+
+  /* Contact Us Section */
+  .site-footer__contact-section {
+    width: 100%;
+    max-width: 500px;
+    margin: 0.5rem auto 2.25rem;
+  }
+
+  .site-footer__contact-heading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1.25rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .site-footer__contact-line {
+    height: 1.5px;
+    width: 3.5rem;
+    background-color: #00876d;
+    opacity: 0.85;
+    border-radius: 9999px;
+  }
+
+  .site-footer__contact-title {
+    font-family: var(--font-montserrat);
+    font-size: 1.1875rem;
+    font-weight: 700;
+    color: #111827;
+    letter-spacing: -0.02em;
+  }
+
+  .site-footer__contacts-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+    position: relative;
+    max-width: 380px;
+    margin: 0 auto;
+  }
+
+  @media (min-width: 640px) {
+    .site-footer__contacts-grid {
+      grid-template-columns: 1fr 1fr;
+      gap: 0;
+      max-width: 470px;
+    }
+  }
+
+  .site-footer__contact-card {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.3rem;
+    text-align: left;
+    padding: 0 0.5rem;
+  }
+
+  @media (min-width: 640px) {
+    .site-footer__contact-card:first-child {
+      padding-right: 1.75rem;
+      padding-left: 0.5rem;
+      border-right: 1px solid #e5e7eb;
+    }
+
+    .site-footer__contact-card:last-child {
+      padding-left: 1.75rem;
+      padding-right: 0.5rem;
+    }
+  }
+
+  .site-footer__contact-name {
+    margin: 0 0 0.15rem;
+    font-family: var(--font-montserrat);
+    font-size: 1.0625rem;
+    font-weight: 700;
+    color: #111827;
+    letter-spacing: -0.01em;
+  }
+
+  .site-footer__contact-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: var(--font-montserrat);
+    font-size: 0.9375rem;
+    font-weight: 500;
+    color: #374151;
+    text-decoration: none;
+    letter-spacing: -0.01em;
+    transition: color 0.15s ease;
+  }
+
+  .site-footer__contact-link:hover {
+    color: #00876d;
+  }
+
+  .site-footer__contact-icon {
+    width: 1rem;
+    height: 1rem;
+    color: #00876d;
+    flex-shrink: 0;
   }
 
   .site-footer__powered-by {
