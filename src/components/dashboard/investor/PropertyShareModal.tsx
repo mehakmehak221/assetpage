@@ -30,8 +30,7 @@ export default function PropertyShareModal({
   };
 
   const shareUrl = getShareUrl();
-  const shareDescription = `Check out this property on GloFi Estates: ${propertyTitle}`;
-  const whatsappMessage = `${shareDescription}\n${shareUrl}`;
+  const shareText = `Check out this property on GloFi Estates: ${propertyTitle} - ${shareUrl}`;
 
   const triggerToast = (msg: string) => {
     if (showToast) {
@@ -44,33 +43,33 @@ export default function PropertyShareModal({
   const handleCopyLink = async () => {
     try {
       if (typeof navigator !== "undefined" && navigator.clipboard) {
-        await navigator.clipboard.writeText(shareUrl);
+        await navigator.clipboard.writeText(shareText);
       } else {
         throw new Error("Clipboard API unavailable");
       }
-      triggerToast("Property link copied to clipboard!");
+      triggerToast("Property link & details copied!");
     } catch {
       const el = document.createElement("textarea");
-      el.value = shareUrl;
+      el.value = shareText;
       el.style.position = "fixed";
       el.style.opacity = "0";
       document.body.appendChild(el);
       el.select();
       document.execCommand("copy");
       document.body.removeChild(el);
-      triggerToast("Property link copied to clipboard!");
+      triggerToast("Property link & details copied!");
     }
   };
 
-  const whatsappUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(whatsappMessage)}`;
-  const telegramUrl = `https://t.me/share/url?url=${encodeURIComponent(shareUrl)}&text=${encodeURIComponent(shareDescription)}`;
+  const whatsappUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(shareText)}`;
+  const telegramUrl = `https://t.me/share/url?url=${encodeURIComponent(shareUrl)}&text=${encodeURIComponent(`Check out this property on GloFi Estates: ${propertyTitle}`)}`;
 
   const handleMoreApps = async () => {
     if (typeof navigator !== "undefined" && typeof navigator.share === "function") {
       try {
         await navigator.share({
           title: propertyTitle,
-          text: shareDescription,
+          text: shareText,
           url: shareUrl,
         });
         return;
