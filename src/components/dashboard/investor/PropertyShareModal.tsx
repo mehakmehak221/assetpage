@@ -24,30 +24,36 @@ export default function PropertyShareModal({
 
   const getShareUrl = () => {
     if (typeof window !== "undefined") {
-      return `${window.location.origin}/property?id=${propertyId}`;
+      return `${window.location.origin}/dashboard/investor/marketplace/${propertyId}`;
     }
-    return `https://www.glofiestates.com/property?id=${propertyId}`;
+    return `https://www.glofiestates.com/dashboard/investor/marketplace/${propertyId}`;
   };
 
   const shareUrl = getShareUrl();
-  const shareText = `Check out this property on Glofi Estates: ${propertyTitle}\n${shareUrl}`;
+  const shareDescription = `Check out this property on GloFi Estates: ${propertyTitle}`;
+  const whatsappMessage = `${shareDescription}\n${shareUrl}`;
 
   const triggerToast = (msg: string) => {
     if (showToast) {
       showToast(msg, "success");
-    } else {
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
     }
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2500);
   };
 
   const handleCopyLink = async () => {
     try {
-      await navigator.clipboard.writeText(shareUrl);
+      if (typeof navigator !== "undefined" && navigator.clipboard) {
+        await navigator.clipboard.writeText(shareUrl);
+      } else {
+        throw new Error("Clipboard API unavailable");
+      }
       triggerToast("Property link copied to clipboard!");
     } catch {
       const el = document.createElement("textarea");
       el.value = shareUrl;
+      el.style.position = "fixed";
+      el.style.opacity = "0";
       document.body.appendChild(el);
       el.select();
       document.execCommand("copy");
@@ -56,35 +62,23 @@ export default function PropertyShareModal({
     }
   };
 
-  const handleWhatsApp = () => {
-    const encodedText = encodeURIComponent(shareText);
-    window.open(`https://api.whatsapp.com/send?text=${encodedText}`, "_blank", "noopener,noreferrer");
-    onClose();
-  };
-
-  const handleTelegram = () => {
-    const encodedUrl = encodeURIComponent(shareUrl);
-    const encodedTitle = encodeURIComponent(`Check out this property on Glofi Estates: ${propertyTitle}`);
-    window.open(`https://t.me/share/url?url=${encodedUrl}&text=${encodedTitle}`, "_blank", "noopener,noreferrer");
-    onClose();
-  };
+  const whatsappUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(whatsappMessage)}`;
+  const telegramUrl = `https://t.me/share/url?url=${encodeURIComponent(shareUrl)}&text=${encodeURIComponent(shareDescription)}`;
 
   const handleMoreApps = async () => {
-    if (typeof navigator !== "undefined" && navigator.share) {
+    if (typeof navigator !== "undefined" && typeof navigator.share === "function") {
       try {
         await navigator.share({
           title: propertyTitle,
-          text: shareText,
+          text: shareDescription,
           url: shareUrl,
         });
-        onClose();
         return;
       } catch (err) {
         if ((err as Error).name === "AbortError") return;
       }
     }
     await handleCopyLink();
-    onClose();
   };
 
   return (
@@ -105,6 +99,8 @@ export default function PropertyShareModal({
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.95, y: 20 }}
           transition={{ duration: 0.2 }}
+          onClick={(e) => e.stopPropagation()}
+          onMouseDown={(e) => e.stopPropagation()}
           className="relative w-full max-w-md bg-[var(--sidebar-bg)] border border-[var(--sidebar-border)] rounded-3xl p-6 shadow-2xl z-10 overflow-hidden font-sans"
         >
           {/* Header */}
@@ -152,9 +148,11 @@ export default function PropertyShareModal({
           {/* 4 Share Tiles matching App exactly */}
           <div className="grid grid-cols-4 gap-3 text-center mb-2">
             {/* WhatsApp */}
-            <button
-              onClick={handleWhatsApp}
-              className="flex flex-col items-center gap-2 group cursor-pointer"
+            <a
+              href={whatsappUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex flex-col items-center gap-2 group cursor-pointer no-underline"
             >
               <div className="w-14 h-14 rounded-full bg-[#25D366] flex items-center justify-center shadow-lg shadow-[#25D366]/20 group-hover:scale-105 transition-transform">
                 <svg className="w-7 h-7 fill-white" viewBox="0 0 24 24">
@@ -163,12 +161,14 @@ export default function PropertyShareModal({
                 </svg>
               </div>
               <span className="text-xs font-medium text-[var(--header-text)]">WhatsApp</span>
-            </button>
+            </a>
 
             {/* Telegram */}
-            <button
-              onClick={handleTelegram}
-              className="flex flex-col items-center gap-2 group cursor-pointer"
+            <a
+              href={telegramUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex flex-col items-center gap-2 group cursor-pointer no-underline"
             >
               <div className="w-14 h-14 rounded-full bg-[#0088CC] flex items-center justify-center shadow-lg shadow-[#0088CC]/20 group-hover:scale-105 transition-transform">
                 <svg className="w-7 h-7 fill-white" viewBox="0 0 24 24">
@@ -176,25 +176,33 @@ export default function PropertyShareModal({
                 </svg>
               </div>
               <span className="text-xs font-medium text-[var(--header-text)]">Telegram</span>
-            </button>
+            </a>
 
             {/* Copy Link */}
             <button
+              type="button"
               onClick={handleCopyLink}
-              className="flex flex-col items-center gap-2 group cursor-pointer"
+              className="flex flex-col items-center gap-2 group cursor-pointer bg-transparent border-0 p-0"
             >
               <div className="w-14 h-14 rounded-full bg-emerald-500 flex items-center justify-center shadow-lg shadow-emerald-500/20 group-hover:scale-105 transition-transform text-black">
-                <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
-                </svg>
+                {copied ? (
+                  <svg className="w-6 h-6 text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                  </svg>
+                ) : (
+                  <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
+                  </svg>
+                )}
               </div>
-              <span className="text-xs font-medium text-[var(--header-text)]">Copy Link</span>
+              <span className="text-xs font-medium text-[var(--header-text)]">{copied ? "Copied!" : "Copy Link"}</span>
             </button>
 
             {/* More Apps */}
             <button
+              type="button"
               onClick={handleMoreApps}
-              className="flex flex-col items-center gap-2 group cursor-pointer"
+              className="flex flex-col items-center gap-2 group cursor-pointer bg-transparent border-0 p-0"
             >
               <div className="w-14 h-14 rounded-full bg-[var(--card-surface)] border border-[var(--sidebar-border)] flex items-center justify-center shadow-md group-hover:scale-105 transition-transform text-[var(--header-text)]">
                 <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>

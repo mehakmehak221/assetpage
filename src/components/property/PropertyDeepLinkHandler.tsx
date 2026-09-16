@@ -33,22 +33,10 @@ function PropertyDeepLinkContent({ propertyIdParam }: PropertyDeepLinkHandlerPro
 
   useEffect(() => {
     if (typeof window !== "undefined") {
-      const ua = navigator.userAgent || navigator.vendor;
-      let detected: "android" | "ios" | "desktop" = "desktop";
-      if (/android/i.test(ua)) {
-        detected = "android";
-      } else if (/iPad|iPhone|iPod/.test(ua)) {
-        detected = "ios";
-      }
-      setDeviceType(detected);
-
-      // On desktop / laptop / mac, immediately auto-redirect to web marketplace
-      if (detected === "desktop") {
-        const targetUrl = propertyId
-          ? `/dashboard/investor/marketplace/${propertyId}`
-          : `/dashboard/investor/marketplace`;
-        router.replace(targetUrl);
-      }
+      const targetUrl = propertyId
+        ? `/dashboard/investor/marketplace/${propertyId}`
+        : `/dashboard/investor/marketplace`;
+      router.replace(targetUrl);
     }
   }, [propertyId, router]);
 

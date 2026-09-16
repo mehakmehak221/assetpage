@@ -95,57 +95,7 @@ export default function PropertyDetailPage() {
     const purchaseMode: "fractional" | "whole" = property?.saleType === 'WHOLE' ? "whole" : "fractional";
     const selectedInvestQuantity = property?.saleType === 'WHOLE' ? (property.totalFractions || 1) : investQuantity;
 
-    useEffect(() => {
-        const handleClickOutside = (event: MouseEvent) => {
-            if (isShareDropdownOpen && !(event.target as Element).closest('.share-container')) {
-                setIsShareDropdownOpen(false);
-            }
-        };
-        document.addEventListener('mousedown', handleClickOutside);
-        return () => document.removeEventListener('mousedown', handleClickOutside);
-    }, [isShareDropdownOpen]);
 
-    const getShareUrl = () => {
-        if (typeof window !== 'undefined') {
-            return `${window.location.origin}/property?id=${assetId}`;
-        }
-        return `https://www.glofiestates.com/property?id=${assetId}`;
-    };
-
-    const handleCopyLink = () => {
-        const url = getShareUrl();
-        navigator.clipboard.writeText(url);
-        showToast("Link copied to clipboard!");
-        setIsShareDropdownOpen(false);
-    };
-
-    const handleShareWhatsApp = () => {
-        const url = getShareUrl();
-        const text = `Check out this premium property on Glofi Estates: ${property?.title || ""}`;
-        window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(text + " " + url)}`, "_blank");
-        setIsShareDropdownOpen(false);
-    };
-
-    const handleShareEmail = () => {
-        const url = getShareUrl();
-        const subject = `Premium Property Opportunity: ${property?.title || ""}`;
-        const body = `Hi,\n\nI found this interesting property on Glofi Estates and thought you might like to see it:\n\n${property?.title || ""}\nLocation: ${property?.location || ""}\nValuation: ₹${Number(property?.valuation || 0).toLocaleString('en-IN')}\n\nView details here: ${url}`;
-        window.open(`mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`, "_self");
-        setIsShareDropdownOpen(false);
-    };
-
-    const handleShareTwitter = () => {
-        const url = getShareUrl();
-        const text = `Check out this premium property on Glofi Estates: ${property?.title || ""}`;
-        window.open(`https://twitter.com/intent/tweet?url=${encodeURIComponent(url)}&text=${encodeURIComponent(text)}`, "_blank");
-        setIsShareDropdownOpen(false);
-    };
-
-    const handleShareLinkedIn = () => {
-        const url = getShareUrl();
-        window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}`, "_blank");
-        setIsShareDropdownOpen(false);
-    };
 
     const [hoveredPoint, setHoveredPoint] = useState<"current" | "projected" | null>(null);
     const [hoveredBar, setHoveredBar] = useState<number | null>(null);
