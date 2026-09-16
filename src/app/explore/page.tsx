@@ -403,17 +403,17 @@ export default function ExplorePage() {
                                                 </div>
 
 
-                                                <div className="bg-[#F9FAFB] border border-neutral-200/80 rounded-md p-4 mb-6 shadow-sm">
+                                                <div className="bg-[#F9FAFB] border border-neutral-200/80 rounded-md p-3 sm:p-4 mb-6 shadow-sm">
                                                     <div className="grid grid-cols-3 divide-x divide-neutral-200/65 text-center items-center">
-                                                        <div>
-                                                            <p className="text-[10px] font-bold text-neutral-400 mb-1">Valuation</p>
-                                                            <p className="text-[15px] font-extrabold text-neutral-900">{formatPrice(property.valuation, true)}</p>
+                                                        <div className="min-w-0 px-1 flex flex-col justify-center">
+                                                            <p className="text-[9px] sm:text-[10px] font-bold text-neutral-400 mb-1 truncate">Valuation</p>
+                                                            <p className="text-[11px] min-[400px]:text-xs sm:text-[15px] font-extrabold text-neutral-900 whitespace-nowrap leading-tight">{formatPrice(property.valuation, true)}</p>
                                                         </div>
-                                                        <div>
-                                                            <p className="text-[10px] font-bold text-neutral-400 mb-1">
+                                                        <div className="min-w-0 px-1 flex flex-col justify-center">
+                                                            <p className="text-[9px] sm:text-[10px] font-bold text-neutral-400 mb-1 truncate">
                                                                 {property.saleType === 'WHOLE' ? 'Whole Price' : 'Per Fraction'}
                                                             </p>
-                                                            <p className="text-[15px] font-extrabold text-neutral-900">
+                                                            <p className="text-[11px] min-[400px]:text-xs sm:text-[15px] font-extrabold text-neutral-900 whitespace-nowrap leading-tight">
                                                                 {formatPrice(
                                                                     Number(property.fractionPrice) && Number(property.fractionPrice) !== Number(property.valuation)
                                                                         ? property.fractionPrice
@@ -422,13 +422,13 @@ export default function ExplorePage() {
                                                                 )}
                                                             </p>
                                                         </div>
-                                                        <div className="relative group/tip min-w-0">
-                                                            <p className="text-[10px] font-bold text-neutral-400 mb-1 truncate cursor-default" title="Potential Annual Return">Potential Annual Return</p>
+                                                        <div className="relative group/tip min-w-0 px-1 flex flex-col justify-center">
+                                                            <p className="text-[9px] sm:text-[10px] font-bold text-neutral-400 mb-1 truncate cursor-default" title="Potential Annual Return">Potential Annual Return</p>
                                                             <div className="absolute -top-8 left-1/2 -translate-x-1/2 hidden group-hover/tip:flex items-center px-2 py-0.5 bg-neutral-900 text-white text-[10px] font-semibold rounded shadow-xl border border-neutral-700 whitespace-nowrap z-30 pointer-events-none">
                                                                 Potential Annual Return
                                                                 <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1.5 h-1.5 bg-neutral-900 rotate-45 border-r border-b border-neutral-700" />
                                                             </div>
-                                                            <p className="text-[15px] font-extrabold text-[#00B28F]">{formattedYield}%</p>
+                                                            <p className="text-[11px] min-[400px]:text-xs sm:text-[15px] font-extrabold text-[#00B28F] whitespace-nowrap leading-tight">{formattedYield}%</p>
                                                         </div>
                                                     </div>
                                                 </div>

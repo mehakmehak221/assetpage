@@ -405,7 +405,7 @@ export default function MarketplacePage() {
                             initial="hidden"
                             animate="visible"
                             exit="hidden"
-                            className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5"
+                            className="grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3 gap-5 sm:gap-6"
                         >
                             {assets.map((property) => {
                                 const propertyImage = property.images?.[0];
@@ -473,27 +473,29 @@ export default function MarketplacePage() {
                                         </div>
 
                                         <div className="p-5 sm:p-6">
-                                            <h3 className="text-[22px] font-extrabold text-[var(--header-text)] mb-1 leading-snug tracking-tight">
+                                            <h3 className="text-xl sm:text-[22px] font-extrabold text-[var(--header-text)] mb-1 leading-snug tracking-tight">
                                                 {property.title}
                                             </h3>
-                                            <div className="flex items-center gap-1.5 text-[var(--color-text-muted)] text-[13px] mb-5 font-medium">
-                                                <MapPinIcon className="w-4 h-4 text-[var(--color-text-muted)]" />
-                                                {property.city && property.state
-                                                    ? `${property.city}, ${property.state}`
-                                                    : property.location}
+                                            <div className="flex items-center gap-1.5 text-[var(--color-text-muted)] text-xs sm:text-[13px] mb-4 sm:mb-5 font-medium">
+                                                <MapPinIcon className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[var(--color-text-muted)] shrink-0" />
+                                                <span className="truncate">
+                                                    {property.city && property.state
+                                                        ? `${property.city}, ${property.state}`
+                                                        : property.location}
+                                                </span>
                                             </div>
 
-                                            <div className="bg-[var(--sidebar-bg)] border border-[var(--sidebar-border)] rounded-md p-4 mb-5 shadow-sm">
-                                                <div className="grid grid-cols-3 divide-x divide-[var(--sidebar-border)]/65 text-center">
-                                                    <div className="min-w-0 px-1">
-                                                        <p className="text-[10px] font-bold text-[var(--color-text-muted)] mb-1 truncate" title="Valuation">Valuation</p>
-                                                        <p className="text-[13px] font-extrabold text-[var(--header-text)] break-all leading-tight">{formatPrice(property.valuation, true)}</p>
+                                            <div className="bg-[var(--sidebar-bg)] border border-[var(--sidebar-border)] rounded-md p-3.5 sm:p-4 mb-4 sm:mb-5 shadow-sm">
+                                                <div className="grid grid-cols-3 divide-x divide-[var(--sidebar-border)]/65 text-center items-center">
+                                                    <div className="min-w-0 px-2 flex flex-col justify-center">
+                                                        <p className="text-[10px] sm:text-[11px] font-bold text-[var(--color-text-muted)] mb-1 truncate" title="Valuation">Valuation</p>
+                                                        <p className="text-xs sm:text-sm font-extrabold text-[var(--header-text)] whitespace-nowrap leading-tight">{formatPrice(property.valuation, true)}</p>
                                                     </div>
-                                                    <div className="min-w-0 px-1">
-                                                        <p className="text-[10px] font-bold text-[var(--color-text-muted)] mb-1 truncate" title={property.saleType === 'WHOLE' ? 'Whole Price' : 'Per Fraction'}>
+                                                    <div className="min-w-0 px-2 flex flex-col justify-center">
+                                                        <p className="text-[10px] sm:text-[11px] font-bold text-[var(--color-text-muted)] mb-1 truncate" title={property.saleType === 'WHOLE' ? 'Whole Price' : 'Per Fraction'}>
                                                             {property.saleType === 'WHOLE' ? 'Whole Price' : 'Per Fraction'}
                                                         </p>
-                                                        <p className="text-[13px] font-extrabold text-[var(--header-text)] break-all leading-tight">
+                                                        <p className="text-xs sm:text-sm font-extrabold text-[var(--header-text)] whitespace-nowrap leading-tight">
                                                             {formatPrice(
                                                                 Number(property.fractionPrice) && Number(property.fractionPrice) !== Number(property.valuation)
                                                                     ? property.fractionPrice
@@ -502,9 +504,9 @@ export default function MarketplacePage() {
                                                             )}
                                                         </p>
                                                     </div>
-                                                    <div className="min-w-0 px-1 relative group/tip">
+                                                    <div className="min-w-0 px-2 relative group/tip flex flex-col justify-center">
                                                         <p 
-                                                            className="text-[10px] font-bold text-[var(--color-text-muted)] mb-1 truncate cursor-default"
+                                                            className="text-[10px] sm:text-[11px] font-bold text-[var(--color-text-muted)] mb-1 truncate cursor-default"
                                                             title="Potential Annual Return"
                                                         >
                                                             Potential Annual Return
@@ -513,7 +515,7 @@ export default function MarketplacePage() {
                                                             Potential Annual Return
                                                             <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1.5 h-1.5 bg-neutral-900 rotate-45 border-r border-b border-neutral-700" />
                                                         </div>
-                                                        <p className="text-[13px] font-extrabold text-[var(--sidebar-active-text)] break-all leading-tight">{formattedYield}%</p>
+                                                        <p className="text-xs sm:text-sm font-extrabold text-[var(--sidebar-active-text)] whitespace-nowrap leading-tight">{formattedYield}%</p>
                                                     </div>
                                                 </div>
                                             </div>
