@@ -3,7 +3,10 @@ import sanitizeHtml from 'sanitize-html';
 import { unstable_cache } from 'next/cache';
 import { BlogPost } from '@/types/blog';
 
-const MEDIUM_FEED_URL = 'https://medium.com/feed/@laxmi_83890';
+const MEDIUM_FEED_URLS = [
+    'https://medium.com/feed/@glofiestates',
+    'https://medium.com/feed/@laxmi_83890',
+];
 const REVALIDATE_SECONDS = 3600;
 
 type MediumFeedItem = {
@@ -168,8 +171,37 @@ function mapFeedItem(
 
 async function fetchAllMediumPosts(): Promise<BlogPost[]> {
     try {
-        const feed = await parser.parseURL(MEDIUM_FEED_URL);
-        return (feed.items ?? []).map((item) => mapFeedItem(item, feed.title));
+        const feedPromises = MEDIUM_FEED_URLS.map(async (url) => {
+            try {
+                const feed = await parser.parseURL(url);
+                return (feed.items ?? []).map((item) => mapFeedItem(item, feed.title));
+            } catch {
+                return [];
+            }
+        });
+
+        const results = await Promise.all(feedPromises);
+        const combined = results.flat();
+
+        // Deduplicate by slug or link
+        const seen = new Set<string>();
+        const uniquePosts: BlogPost[] = [];
+
+        for (const post of combined) {
+            const key = post.slug || post.link;
+            if (!key || seen.has(key)) continue;
+            seen.add(key);
+            uniquePosts.push(post);
+        }
+
+        // Sort chronologically descending (newest articles first)
+        uniquePosts.sort((a, b) => {
+            const timeA = a.isoDate ? new Date(a.isoDate).getTime() : 0;
+            const timeB = b.isoDate ? new Date(b.isoDate).getTime() : 0;
+            return timeB - timeA;
+        });
+
+        return uniquePosts;
     } catch {
         return [];
     }
@@ -177,7 +209,7 @@ async function fetchAllMediumPosts(): Promise<BlogPost[]> {
 
 const getCachedMediumPosts = unstable_cache(
     fetchAllMediumPosts,
-    ['medium-blog-posts-v4'],
+    ['medium-blog-posts-multi-v1'],
     { revalidate: REVALIDATE_SECONDS }
 );
 

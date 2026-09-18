@@ -14,7 +14,7 @@ import {
     useLandingMotion,
 } from '@/lib/landingAnimations';
 
-const BLOG_SOURCE_PROFILE = 'https://medium.com/@laxmi_83890';
+const BLOG_SOURCE_PROFILE = 'https://medium.com/@glofiestates';
 
 type BlogPageContentProps = {
     posts: BlogPost[];

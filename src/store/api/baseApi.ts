@@ -37,10 +37,6 @@ const baseQuery = fetchBaseQuery({
 
 
     headers.set('accept', '*/*');
-    const storedAttrId = typeof window !== 'undefined' ? localStorage.getItem('glofi_attr_id') : null;
-    if (storedAttrId) {
-      headers.set('X-Attribution-ID', storedAttrId);
-    }
     return headers;
   },
 });
