@@ -11,7 +11,7 @@ import { API_URL } from "@/constants";
 import { Country } from "country-state-city";
 import { Camera, AlertCircle, CheckCircle2 } from "lucide-react";
 
-const TABS = ["Profile", "Wallet", "KYC", "Certificates", "Referrals", "Support"];
+const TABS = ["Profile", "Wallet", "KYC", "Certificates", /* "Referrals", */ "Support"];
 
 const tabContentVariants = {
     hidden: { opacity: 0, y: 10 },
@@ -568,7 +568,7 @@ Start building your property portfolio today! ✨`;
                         </div>
                     )}
 
-                    {activeTab === "Referrals" && (
+                    {/* {activeTab === "Referrals" && (
                         <div className="bg-[var(--card-surface)] border border-[var(--sidebar-border)] rounded-xl sm:rounded-2xl p-4 sm:p-6 lg:p-10 max-w-[900px] shadow-sm">
                             <h2 className="text-base sm:text-[22px] font-bold text-[var(--header-text)] mb-1">Invite & Earn</h2>
                             <p className="text-xs sm:text-sm text-[var(--color-text-muted)] mb-5 sm:mb-8 font-medium">Earn ₹250 for every referred investor</p>
@@ -658,7 +658,7 @@ Start building your property portfolio today! ✨`;
                                 </div>
                             </div>
                         </div>
-                    )}
+                    )} */}
 
                     {activeTab === "Support" && (
                         <div className="max-w-[980px]">
