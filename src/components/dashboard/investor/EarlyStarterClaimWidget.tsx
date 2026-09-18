@@ -78,28 +78,26 @@ export function EarlyStarterClaimWidget() {
       <motion.div
         whileHover={{ y: -2 }}
         onClick={() => setIsModalOpen(true)}
-        className="relative rounded-md overflow-hidden h-full min-h-[100px] cursor-pointer shadow-lg group bg-gradient-to-br from-[#0A3D2F] via-[#0D4F3C] to-[#056346]"
+        className="relative rounded-xl overflow-hidden h-full cursor-pointer shadow-md group bg-gradient-to-br from-[#0A3D2F] via-[#0D4F3C] to-[#056346]"
       >
-
-        {/* Content */}
-        <div className="relative z-10 p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 h-full">
-          <div className="flex items-center gap-4">
-            <div className="w-12 h-12 rounded-xl bg-white/15 border border-white/20 backdrop-blur-sm flex items-center justify-center shrink-0">
-              <TagIcon className="w-6 h-6 text-white" />
+        <div className="relative z-10 p-3.5 sm:p-5 flex items-center justify-between gap-3 h-full">
+          <div className="flex items-center gap-3 sm:gap-4 min-w-0 flex-1">
+            <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-white/15 border border-white/20 backdrop-blur-sm flex items-center justify-center shrink-0">
+              <TagIcon className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
             </div>
-            <div>
-              <h3 className="text-white text-lg sm:text-xl font-bold mb-0.5 tracking-tight drop-shadow">
+            <div className="min-w-0 flex-1">
+              <h3 className="text-white text-base sm:text-lg lg:text-xl font-bold mb-0.5 tracking-tight drop-shadow truncate">
                 5% OFF Waitlist
               </h3>
-              <p className="text-white/70 text-xs sm:text-sm font-medium">Early access deal</p>
+              <p className="text-white/70 text-[11px] sm:text-xs lg:text-sm font-medium truncate">Early access deal</p>
             </div>
           </div>
 
           <button
             onClick={(e) => { e.stopPropagation(); setIsModalOpen(true); }}
-            className={`px-5 py-2.5 rounded-full text-sm font-semibold transition-all shadow-md self-start sm:self-auto border backdrop-blur-sm ${isClaimed
+            className={`px-4 sm:px-5 py-2 sm:py-2.5 rounded-full text-xs sm:text-sm font-bold transition-all shadow-md shrink-0 border backdrop-blur-sm ${isClaimed
               ? "bg-white/15 border-white/25 text-white"
-              : "bg-white text-[#056346] border-transparent hover:bg-white/90 hover:shadow-lg"
+              : "bg-white text-[#056346] border-transparent hover:bg-white/90 hover:shadow-lg active:scale-95"
               }`}
           >
             {isClaimed ? "🎉 Claimed" : "Join"}
@@ -107,7 +105,6 @@ export function EarlyStarterClaimWidget() {
         </div>
       </motion.div>
 
-      {/* ── Floating Action Button ───────────────────────────────── */}
       {!isClaimed && (
         <motion.button
           onClick={() => setIsModalOpen(true)}
@@ -120,11 +117,9 @@ export function EarlyStarterClaimWidget() {
         </motion.button>
       )}
 
-      {/* ── Modal ───────────────────────────────────────────────── */}
       <AnimatePresence>
         {isModalOpen && (
           <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
-            {/* Backdrop */}
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -141,9 +136,7 @@ export function EarlyStarterClaimWidget() {
                          bg-white dark:bg-[#0F1A17]
                          border border-neutral-100 dark:border-white/10"
             >
-              {/* ── Modal Header with bg image ── */}
               <div className="relative pt-10 pb-8 px-6 flex flex-col items-center overflow-hidden">
-                {/* header background image */}
                 <Image
                   src="/assets/images/backgrounds/referbg.png"
                   alt=""
@@ -151,10 +144,8 @@ export function EarlyStarterClaimWidget() {
                   className="object-cover object-top"
                   sizes="360px"
                 />
-                {/* overlay */}
                 <div className="absolute inset-0 bg-gradient-to-b from-[#056346]/90 via-[#056346]/80 to-[#033d2b]/95" />
 
-                {/* Decorative blobs */}
                 <motion.div
                   animate={{ scale: [1, 1.15, 1], rotate: [0, 90, 0] }}
                   transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
@@ -166,7 +157,6 @@ export function EarlyStarterClaimWidget() {
                   className="absolute bottom-0 left-0 w-28 h-28 bg-white/10 rounded-full -translate-x-14 translate-y-14"
                 />
 
-                {/* Icon */}
                 <motion.div
                   initial={{ scale: 0.8, rotate: -10 }}
                   animate={{ scale: 1, rotate: 0 }}
@@ -206,7 +196,6 @@ export function EarlyStarterClaimWidget() {
                 </span>
               </div>
 
-              {/* ── Modal Body ── */}
               <motion.div
                 initial="hidden"
                 animate="visible"
@@ -230,7 +219,6 @@ export function EarlyStarterClaimWidget() {
                   variants={{ hidden: { opacity: 0, y: 10 }, visible: { opacity: 1, y: 0 } }}
                   className="w-full flex flex-col gap-3"
                 >
-                  {/* Refer Now */}
                   <motion.button
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
@@ -241,7 +229,6 @@ export function EarlyStarterClaimWidget() {
                     Refer Now
                   </motion.button>
 
-                  {/* Claim Discount */}
                   <motion.button
                     whileHover={{ scale: isClaimed || isRedeeming ? 1 : 1.02 }}
                     whileTap={{ scale: isClaimed || isRedeeming ? 1 : 0.98 }}

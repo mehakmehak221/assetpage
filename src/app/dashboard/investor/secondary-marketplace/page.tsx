@@ -121,42 +121,42 @@ export default function SecondaryMarketplacePage() {
     ];
 
     return (
-        <div className="p-4 sm:p-6 lg:p-10 bg-[var(--background)] min-h-screen text-[var(--sidebar-text)] font-sans transition-colors duration-300">
+        <div className="p-3 sm:p-6 lg:p-10 bg-[var(--background)] min-h-screen text-[var(--sidebar-text)] font-sans transition-colors duration-300">
             <div className="max-w-[1100px] mx-auto">
 
-                <header className="mb-6">
-                    <h1 className="text-2xl sm:text-3xl font-bold mb-3 text-[var(--header-text)] tracking-tight">Secondary Marketplace</h1>
-                    <p className="text-sm sm:text-base text-[var(--color-text-muted)] mb-8 max-w-2xl leading-relaxed font-medium">Browse property fractions relisted by investors. All assets are available for immediate purchase and transfer.</p>
+                <header className="mb-5 sm:mb-8">
+                    <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold mb-2 sm:mb-3 text-[var(--header-text)] tracking-tight">Secondary Marketplace</h1>
+                    <p className="text-xs sm:text-sm lg:text-base text-[var(--color-text-muted)] mb-5 sm:mb-8 max-w-2xl leading-relaxed font-medium">Browse property fractions relisted by investors. All assets are available for immediate purchase and transfer.</p>
                 </header>
 
 
-                <section className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 mb-6 sm:mb-8">
+                <section className="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-4 mb-5 sm:mb-8">
                     {stats.map((stat) => (
-                        <div key={stat.label} className="bg-[var(--marketplace-card-bg)] border border-[var(--sidebar-border)] rounded-md p-4 sm:p-5 relative overflow-hidden">
-                            <div className="flex justify-between items-start mb-4">
-                                <span className="text-[10px] text-[var(--color-text-muted)] uppercase tracking-[0.2em] font-bold">{stat.label}</span>
-                                <div className="w-8 h-8 rounded-full bg-[var(--badge-bg)] flex items-center justify-center text-[var(--sidebar-active-text)]">
-                                    <stat.icon className="w-4 h-4" />
+                        <div key={stat.label} className="bg-[var(--marketplace-card-bg)] border border-[var(--sidebar-border)] rounded-xl p-3.5 sm:p-5 relative overflow-hidden flex flex-col justify-between">
+                            <div className="flex justify-between items-start mb-2 sm:mb-4 gap-1">
+                                <span className="text-[9px] sm:text-[10px] text-[var(--color-text-muted)] uppercase tracking-wider font-bold truncate">{stat.label}</span>
+                                <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-[var(--badge-bg)] flex items-center justify-center text-[var(--sidebar-active-text)] shrink-0">
+                                    <stat.icon className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                                 </div>
                             </div>
                             <div>
-                                <span className="text-2xl font-bold text-[var(--header-text)]">{stat.value}</span>
+                                <span className="text-lg sm:text-2xl lg:text-3xl font-extrabold text-[var(--header-text)] tracking-tight">{stat.value}</span>
                             </div>
-                            <div className="inline-flex items-center gap-1.5 mt-2 px-2 py-1 rounded-full bg-[var(--search-bg)] border border-[var(--sidebar-border)]">
-                                <span className="text-xs text-[var(--sidebar-text)] font-semibold">{stat.change}</span>
+                            <div className="inline-flex items-center gap-1 mt-1.5 sm:mt-2 px-2 py-0.5 sm:py-1 rounded-full bg-[var(--search-bg)] border border-[var(--sidebar-border)] w-fit max-w-full">
+                                <span className="text-[10px] sm:text-xs text-[var(--sidebar-text)] font-semibold truncate">{stat.change}</span>
                             </div>
                         </div>
                     ))}
                 </section>
 
 
-                <div className="mb-6 sm:mb-8">
-                    <div className="flex items-center gap-2 overflow-x-auto max-w-full no-scrollbar">
+                <div className="mb-5 sm:mb-8">
+                    <div className="flex items-center gap-2 overflow-x-auto max-w-full no-scrollbar pb-1">
                         {filters.map((filter) => (
                             <button
                                 key={filter}
                                 onClick={() => setActiveFilter(filter)}
-                                className={`px-5 py-2.5 rounded-full text-[13px] font-semibold whitespace-nowrap transition-all duration-300 border border-[var(--sidebar-border)] cursor-pointer ${activeFilter === filter
+                                className={`px-4 sm:px-5 py-2 sm:py-2.5 rounded-full text-xs sm:text-[13px] font-semibold whitespace-nowrap transition-all duration-300 border border-[var(--sidebar-border)] cursor-pointer ${activeFilter === filter
                                     ? "bg-[var(--btn-cta-bg)] text-[var(--btn-cta-text)] shadow-sm"
                                     : "bg-[var(--marketplace-card-bg)] text-[var(--marketplace-text-secondary)] hover:text-[var(--header-text)]"
                                     }`}
@@ -173,19 +173,19 @@ export default function SecondaryMarketplacePage() {
                     variants={containerVariants}
                     initial="hidden"
                     animate="visible"
-                    className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-5 mb-10"
+                    className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-6 mb-10"
                 >
                     {isLoading ? (
                         <div className="col-span-full flex justify-center p-12">
                             <div className="w-8 h-8 border-2 border-[var(--color-primary-300)]/20 border-t-[var(--color-primary-300)] rounded-full animate-spin"></div>
                         </div>
                     ) : displayAssets.length === 0 ? (
-                        <div className="col-span-full flex flex-col items-center justify-center p-20 bg-[var(--marketplace-card-bg)] border border-dashed border-[var(--sidebar-border)] rounded-3xl text-center">
-                            <div className="w-20 h-20 rounded-full bg-[var(--badge-bg)] flex items-center justify-center mb-6">
-                                <SearchIcon className="w-10 h-10 text-[var(--color-text-muted)]" />
+                        <div className="col-span-full flex flex-col items-center justify-center p-12 sm:p-20 bg-[var(--marketplace-card-bg)] border border-dashed border-[var(--sidebar-border)] rounded-3xl text-center">
+                            <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-[var(--badge-bg)] flex items-center justify-center mb-4 sm:mb-6">
+                                <SearchIcon className="w-8 h-8 sm:w-10 sm:h-10 text-[var(--color-text-muted)]" />
                             </div>
-                            <h3 className="text-xl font-bold text-[var(--header-text)] mb-2">No active listings</h3>
-                            <p className="text-sm text-[var(--color-text-muted)] max-w-xs">There are no secondary market listings available at the moment. Check back later!</p>
+                            <h3 className="text-lg sm:text-xl font-bold text-[var(--header-text)] mb-2">No active listings</h3>
+                            <p className="text-xs sm:text-sm text-[var(--color-text-muted)] max-w-xs">There are no secondary market listings available at the moment. Check back later!</p>
                         </div>
                     ) : (
                         displayAssets.map((asset) => (
@@ -229,17 +229,17 @@ export default function SecondaryMarketplacePage() {
                 />
 
 
-                <section className="bg-[var(--marketplace-card-bg)] border border-[var(--sidebar-border)] rounded-md p-6 sm:p-8 flex flex-col md:flex-row items-start gap-5 shadow-lg relative overflow-hidden">
-                    <div className="w-14 h-14 rounded-2xl bg-[var(--badge-bg)] border border-[var(--sidebar-active-text)]/20 flex items-center justify-center flex-shrink-0">
-                        <AboutIcon className="w-6 h-6 text-[var(--sidebar-active-text)]" />
+                <section className="bg-[var(--marketplace-card-bg)] border border-[var(--sidebar-border)] rounded-2xl p-4 sm:p-6 lg:p-8 flex flex-col md:flex-row items-start gap-4 sm:gap-6 shadow-sm relative overflow-hidden">
+                    <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-[var(--badge-bg)] border border-[var(--sidebar-active-text)]/20 flex items-center justify-center shrink-0">
+                        <AboutIcon className="w-5 h-5 sm:w-6 sm:h-6 text-[var(--sidebar-active-text)]" />
                     </div>
-                    <div className="text-left">
-                        <div className="flex items-center gap-3 mb-1">
-                            <h2 className="text-2xl font-bold text-[var(--header-text)] leading-tight">About Secondary Marketplace</h2>
-                            <span className="px-2 py-0.5 rounded-full text-[10px] font-bold uppercase bg-[var(--badge-bg)] text-[var(--sidebar-active-text)] border border-[var(--sidebar-active-text)]/30">Live</span>
+                    <div className="text-left flex-1">
+                        <div className="flex flex-wrap items-center gap-2 sm:gap-3 mb-1">
+                            <h2 className="text-lg sm:text-xl lg:text-2xl font-bold text-[var(--header-text)] leading-tight">About Secondary Marketplace</h2>
+                            <span className="px-2 py-0.5 rounded-full text-[9px] sm:text-[10px] font-bold uppercase bg-[var(--badge-bg)] text-[var(--sidebar-active-text)] border border-[var(--sidebar-active-text)]/30">Live</span>
                         </div>
-                        <p className="text-sm font-semibold text-[var(--sidebar-active-text)] mb-2">Peer-to-Peer Property Fraction Trading</p>
-                        <p className="text-sm font-medium text-[var(--color-text-muted)] leading-relaxed max-w-5xl">
+                        <p className="text-xs sm:text-sm font-semibold text-[var(--sidebar-active-text)] mb-2">Peer-to-Peer Property Fraction Trading</p>
+                        <p className="text-xs sm:text-sm font-medium text-[var(--color-text-muted)] leading-relaxed max-w-5xl">
                             The Secondary Marketplace allows investors to buy property fractions that have been relisted by other investors. All properties shown here were previously purchased from the primary marketplace and are now available for immediate transfer. Prices may vary based on current market value and seller preferences.
                         </p>
                     </div>
@@ -253,9 +253,9 @@ function MarketplaceCard({ asset, onView }) {
     return (
         <motion.div
             variants={itemVariants}
-            className="group w-full sm:w-[92%] md:w-full mx-auto bg-[var(--marketplace-card-bg)] border border-[var(--marketplace-card-border)] rounded-md overflow-hidden flex flex-col transition-all duration-500 h-full shadow-[var(--marketplace-card-shadow)] select-none"
+            className="group w-full bg-[var(--marketplace-card-bg)] border border-[var(--marketplace-card-border)] rounded-2xl overflow-hidden flex flex-col transition-all duration-300 h-full shadow-[var(--marketplace-card-shadow)] hover:border-[var(--color-primary-300)]/40 hover:shadow-glow-primary/10 select-none"
         >
-            <div className="relative h-64 sm:h-72 overflow-hidden">
+            <div className="relative aspect-[16/10] sm:h-56 md:h-60 overflow-hidden">
                 <Image
                     src={asset.image}
                     alt={asset.name}
@@ -264,9 +264,9 @@ function MarketplaceCard({ asset, onView }) {
                 />
                 <div className="absolute inset-0" style={{ background: 'var(--marketplace-card-overlay)' }} />
 
-                <div className="absolute top-3 left-3">
-                    <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider text-[#00DAAF] bg-black/60 border border-[#00DAAF]/30 shadow-[0_4px_14px_rgba(0,218,175,0.15)] backdrop-blur-md">
-                        <TrendingUpIcon className="w-3.5 h-3.5" />
+                <div className="absolute top-2.5 left-2.5 sm:top-3 sm:left-3">
+                    <span className="inline-flex items-center gap-1 sm:gap-1.5 px-2.5 sm:px-3 py-1 rounded-full text-[9px] sm:text-[10px] font-bold uppercase tracking-wider text-[#00DAAF] bg-black/70 border border-[#00DAAF]/30 shadow-[0_4px_14px_rgba(0,218,175,0.15)] backdrop-blur-md">
+                        <TrendingUpIcon className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
                         {asset.change && asset.change !== "0%" ? (asset.change.endsWith("p.a.") ? asset.change : `${asset.change} p.a.`) : "0.0% p.a."}
                     </span>
                 </div>
@@ -274,25 +274,29 @@ function MarketplaceCard({ asset, onView }) {
                 <div className="absolute inset-0 ring-1 ring-inset ring-black/5 pointer-events-none" />
             </div>
 
-            <div className="p-4 sm:p-5 flex flex-col flex-1 gap-3">
-                <h3 className="text-[32px] font-bold text-[var(--marketplace-text-primary)] leading-tight line-clamp-1">{asset.name}</h3>
-                <p className="text-sm text-[var(--marketplace-text-muted)]">Dholera</p>
+            <div className="p-3.5 sm:p-5 flex flex-col flex-1 gap-2.5 sm:gap-3">
+                <div>
+                    <h3 className="text-base sm:text-lg lg:text-xl font-bold text-[var(--marketplace-text-primary)] leading-snug line-clamp-1">{asset.name}</h3>
+                    <p className="text-xs sm:text-sm text-[var(--marketplace-text-muted)] font-medium mt-0.5">{asset.location || "Dholera"}</p>
+                </div>
 
-                <div className="grid grid-cols-2 gap-0 border border-[var(--marketplace-card-border)] rounded-md overflow-hidden">
-                    <div className="bg-[var(--card-surface)] px-3 py-2.5 border-r border-[var(--marketplace-card-border)]">
-                        <p className="text-[9px] text-[var(--marketplace-text-muted)] uppercase tracking-[0.15em] font-bold mb-1">Fractions</p>
-                        <p className="text-2xl font-bold text-[var(--marketplace-text-primary)]">{asset.fractions} / {asset.fractions}</p>
+                <div className="flex items-stretch border border-[var(--marketplace-card-border)] rounded-xl overflow-hidden bg-[var(--card-surface)]">
+                    <div className="px-2.5 py-2 sm:px-3.5 sm:py-2.5 border-r border-[var(--marketplace-card-border)] shrink-0 min-w-[70px] sm:min-w-[85px]">
+                        <p className="text-[8px] sm:text-[9px] text-[var(--marketplace-text-muted)] uppercase tracking-wider font-bold mb-0.5 whitespace-nowrap">Fractions</p>
+                        <p className="text-sm sm:text-base font-bold text-[var(--marketplace-text-primary)] whitespace-nowrap font-mono">{asset.fractions} / {asset.fractions}</p>
                     </div>
-                    <div className="bg-[var(--card-surface)] px-3 py-2.5">
-                        <p className="text-[9px] text-[var(--marketplace-text-muted)] uppercase tracking-[0.15em] font-bold mb-1">Ask Price</p>
-                        <p className="text-2xl font-bold text-[var(--marketplace-text-primary)]">{asset.pricePerFraction ? `₹${asset.pricePerFraction.toFixed(2)}` : asset.price}</p>
+                    <div className="px-2.5 py-2 sm:px-3.5 sm:py-2.5 flex-1 min-w-0">
+                        <p className="text-[8px] sm:text-[9px] text-[var(--marketplace-text-muted)] uppercase tracking-wider font-bold mb-0.5 whitespace-nowrap">Ask Price</p>
+                        <p className="text-sm sm:text-base font-bold text-[var(--marketplace-text-primary)] whitespace-nowrap font-mono tracking-tight" title={asset.pricePerFraction ? `₹${asset.pricePerFraction.toLocaleString("en-IN")}` : asset.price}>
+                            {asset.pricePerFraction ? `₹${asset.pricePerFraction.toLocaleString("en-IN")}` : asset.price}
+                        </p>
                     </div>
                 </div>
 
-                <div className="mt-auto">
+                <div className="mt-auto pt-1">
                     <button
                         onClick={onView}
-                        className="w-full py-3 rounded-full text-sm font-bold uppercase tracking-wide border border-[var(--sidebar-active-text)] text-[var(--header-text)] bg-transparent hover:bg-[var(--sidebar-active-bg)] transition-colors cursor-pointer"
+                        className="w-full py-2.5 sm:py-3 rounded-full text-xs sm:text-sm font-bold uppercase tracking-wider border border-[var(--sidebar-active-text)] text-[var(--header-text)] bg-transparent hover:bg-[var(--sidebar-active-bg)] transition-colors cursor-pointer active:scale-98"
                     >
                         View Details
                     </button>
