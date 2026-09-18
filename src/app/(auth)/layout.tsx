@@ -8,6 +8,8 @@ export default function AuthLayout({ children }: { children: ReactNode }) {
             <AuthLeftPanel />
             <div 
                 style={{ 
+                    '--background': '#FFFFFF',
+                    '--foreground': '#0F172A',
                     '--field-surface': '#F8FAFC', 
                     '--color-border-subtle': '#E2E8F0', 
                     '--color-text-primary': '#0F172A',
