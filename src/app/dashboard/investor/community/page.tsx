@@ -60,7 +60,7 @@ export default function InvestorCommunityPage() {
               <motion.div
                 key={activity.id}
                 variants={itemVariants}
-                className="flex items-center justify-between p-5 transition-all hover:bg-[var(--color-bg-light)]/40 group"
+                className="flex items-center justify-between p-5 transition-all hover:bg-[var(--foreground)]/[0.04] group"
               >
                 <div className="flex items-center gap-5 flex-1">
                   <div
