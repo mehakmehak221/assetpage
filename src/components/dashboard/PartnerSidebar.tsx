@@ -16,7 +16,6 @@ import {
     FinancialIcon,
     CollapseIcon,
     SignOutIcon,
-    SupportIcon,
     AccountIcon,
 } from "@/components/VectorImages";
 

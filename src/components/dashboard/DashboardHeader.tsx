@@ -50,9 +50,9 @@ export default function DashboardHeader() {
     } else {
         const storedRole = typeof window !== "undefined" ? localStorage.getItem("userType") : null;
         if (storedRole) {
-            displayRole = storedRole.charAt(0).toUpperCase() + storedRole.slice(1).toLowerCase();
+            displayRole = storedRole.toUpperCase() === "PARTNER" ? "Developer" : (storedRole.charAt(0).toUpperCase() + storedRole.slice(1).toLowerCase());
         } else if (profileData?.role) {
-            displayRole = profileData.role.charAt(0).toUpperCase() + profileData.role.slice(1).toLowerCase();
+            displayRole = profileData.role.toUpperCase() === "PARTNER" ? "Developer" : (profileData.role.charAt(0).toUpperCase() + profileData.role.slice(1).toLowerCase());
         }
     }
 

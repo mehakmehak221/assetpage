@@ -84,7 +84,7 @@ export const LeadTable: React.FC<LeadTableProps> = ({ leads, onSelectLead, onEdi
   return (
     <div className="bg-[var(--card-surface)] border border-[var(--sidebar-border)] rounded-md overflow-hidden font-montserrat">
       <div className="overflow-x-auto">
-        <table className="w-full text-left border-collapse">
+        <table className="w-full text-left border-collapse min-w-[700px]">
           <thead>
             <tr className="border-b border-[var(--sidebar-border)] bg-[var(--background)]/20">
               <th className="px-5 py-4 text-[10px] font-bold uppercase tracking-wider text-[var(--sidebar-text)] opacity-65">{t("Lead Info")}</th>

@@ -41,7 +41,6 @@ const PARTNER_NAV_ITEMS = [
 
     { href: "/dashboard/partner/finance", icon: FinancialIcon, label: "Finance" },
     { href: "/dashboard/partner/account", icon: AccountIcon, label: "Account" },
-    { href: "/dashboard/partner/support", icon: SupportIcon, label: "Support" },
 ];
 
 const AGENT_NAV_ITEMS = [
@@ -92,7 +91,21 @@ export default function MobileDrawer({ isOpen, onClose }: MobileDrawerProps) {
     const profile = profileData?.agentProfile || profileData?.partnerProfile || profileData?.investorProfile || {};
     const fullName = profileData?.fullName || profile.fullName || profileData?.name || profile.name || "Guest";
     const avatarUrl = profileData?.avatarUrl || profile.avatarUrl || "";
-    const role = profileData?.role ? (profileData.role.charAt(0) + profileData.role.slice(1).toLowerCase()) : (isPartner ? "Developer" : isAgent ? "Agent" : "Investor");
+    let role = "Investor";
+    if (isPartner) {
+        role = "Developer";
+    } else if (isAgent) {
+        role = "Agent";
+    } else if (pathname.startsWith("/dashboard/investor")) {
+        role = "Investor";
+    } else {
+        const storedRole = typeof window !== "undefined" ? localStorage.getItem("userType") : null;
+        if (storedRole) {
+            role = storedRole.toUpperCase() === "PARTNER" ? "Developer" : (storedRole.charAt(0).toUpperCase() + storedRole.slice(1).toLowerCase());
+        } else if (profileData?.role) {
+            role = profileData.role.toUpperCase() === "PARTNER" ? "Developer" : (profileData.role.charAt(0).toUpperCase() + profileData.role.slice(1).toLowerCase());
+        }
+    }
 
     const handleLogout = async () => {
         try {
@@ -152,15 +165,12 @@ export default function MobileDrawer({ isOpen, onClose }: MobileDrawerProps) {
                         </div>
 
                         {/* Nav Items */}
-                        <nav className="flex-1 min-h-0 overflow-y-auto px-4 py-5 flex flex-col gap-1 sm:px-5 sm:py-6">
-                            <motion.div
-                                className="px-4 pt-5 pb-2 overflow-hidden"
-
-                            >
+                        <nav className="flex-1 min-h-0 overflow-y-auto px-4 py-3 flex flex-col gap-1 sm:px-5">
+                            <div className="px-1 pt-1 pb-2">
                                 <span className="text-[10px] font-medium text-[var(--panel-chip-text)] tracking-[0.15em] uppercase border border-[var(--panel-chip-border)] font-montserrat bg-[var(--panel-chip-bg)] rounded-full px-3 py-1 inline-block">
                                     {isPartner ? "Developer Panel" : isAgent ? "Agent Panel" : "Investor Panel"}
                                 </span>
-                            </motion.div>
+                            </div>
                             {activeNavItems.map((item, i) => {
                                 const isActive = pathname === item.href || pathname.startsWith(item.href + "/");
                                 return (

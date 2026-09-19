@@ -80,22 +80,22 @@ export function EarlyStarterClaimWidget() {
         onClick={() => setIsModalOpen(true)}
         className="relative rounded-xl overflow-hidden h-full cursor-pointer shadow-md group bg-gradient-to-br from-[#0A3D2F] via-[#0D4F3C] to-[#056346]"
       >
-        <div className="relative z-10 p-3.5 sm:p-5 flex items-center justify-between gap-3 h-full">
-          <div className="flex items-center gap-3 sm:gap-4 min-w-0 flex-1">
+        <div className="relative z-10 p-3 sm:p-5 flex items-center justify-between gap-2.5 sm:gap-3 h-full">
+          <div className="flex items-center gap-2.5 sm:gap-4 min-w-0 flex-1">
             <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-white/15 border border-white/20 backdrop-blur-sm flex items-center justify-center shrink-0">
               <TagIcon className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
             </div>
             <div className="min-w-0 flex-1">
-              <h3 className="text-white text-base sm:text-lg lg:text-xl font-bold mb-0.5 tracking-tight drop-shadow truncate">
+              <h3 className="text-white text-sm sm:text-lg lg:text-xl font-bold leading-tight mb-0.5 tracking-tight drop-shadow">
                 5% OFF Waitlist
               </h3>
-              <p className="text-white/70 text-[11px] sm:text-xs lg:text-sm font-medium truncate">Early access deal</p>
+              <p className="text-white/70 text-[11px] sm:text-xs lg:text-sm font-medium leading-tight">Early access deal</p>
             </div>
           </div>
 
           <button
             onClick={(e) => { e.stopPropagation(); setIsModalOpen(true); }}
-            className={`px-4 sm:px-5 py-2 sm:py-2.5 rounded-full text-xs sm:text-sm font-bold transition-all shadow-md shrink-0 border backdrop-blur-sm ${isClaimed
+            className={`px-3.5 sm:px-5 py-2 sm:py-2.5 rounded-full text-xs sm:text-sm font-bold transition-all shadow-md shrink-0 border backdrop-blur-sm ${isClaimed
               ? "bg-white/15 border-white/25 text-white"
               : "bg-white text-[#056346] border-transparent hover:bg-white/90 hover:shadow-lg active:scale-95"
               }`}

@@ -123,66 +123,66 @@ export default function AgentLeadsPage() {
   };
 
   return (
-    <div className="min-h-screen p-4 sm:p-6 lg:p-8 max-w-[1200px] mx-auto font-montserrat space-y-6">
+    <div className="min-h-screen p-3.5 sm:p-6 lg:p-8 max-w-[1200px] mx-auto font-montserrat space-y-4 sm:space-y-6">
       {/* Page Header */}
       <div>
-        <div className="flex items-center gap-2 mb-2">
+        <div className="flex items-center gap-2 mb-1.5 sm:mb-2">
           <span className="px-2.5 py-1 rounded-md bg-[var(--badge-bg)] border border-[var(--badge-border)] text-[var(--badge-text)] text-[10px] font-bold uppercase tracking-widest">
             Agent Workspace
           </span>
           <span className="text-xs text-[var(--sidebar-text)] opacity-60">• Lead Pipeline</span>
         </div>
-        <h1 className="text-3xl font-bold text-[var(--foreground)] tracking-tight">
+        <h1 className="text-2xl sm:text-3xl font-bold text-[var(--foreground)] tracking-tight">
           Assigned Leads & CRM
         </h1>
-        <p className="text-sm text-[var(--sidebar-text)] opacity-60 mt-1">
+        <p className="text-xs sm:text-sm text-[var(--sidebar-text)] opacity-60 mt-1">
           Manage your investor prospects, track status transitions, add notes, and schedule follow-ups.
         </p>
       </div>
 
       {/* KPI Stats Grid */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-4">
         {/* Total Assigned */}
-        <div className="bg-[var(--card-surface)] border border-[var(--sidebar-border)] rounded-md p-4 flex items-center gap-4">
-          <div className="w-10 h-10 rounded-md bg-[var(--color-primary-300)]/10 text-[var(--color-primary-300)] flex items-center justify-center">
-            <Users className="w-5 h-5" />
+        <div className="bg-[var(--card-surface)] border border-[var(--sidebar-border)] rounded-md p-3 sm:p-4 flex items-center gap-2.5 sm:gap-4 min-w-0">
+          <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-md bg-[var(--color-primary-300)]/10 text-[var(--color-primary-300)] flex items-center justify-center shrink-0">
+            <Users className="w-4 h-4 sm:w-5 sm:h-5" />
           </div>
-          <div>
-            <p className="text-2xl font-bold text-[var(--foreground)]">{stats.totalAssigned}</p>
-            <p className="text-xs font-semibold text-[var(--sidebar-text)] opacity-60 uppercase tracking-wider">Total Leads</p>
+          <div className="min-w-0 flex-1">
+            <p className="text-xl sm:text-2xl font-bold text-[var(--foreground)] leading-tight">{stats.totalAssigned}</p>
+            <p className="text-[9px] sm:text-xs font-semibold text-[var(--sidebar-text)] opacity-60 uppercase tracking-wider truncate">Total Leads</p>
           </div>
         </div>
 
         {/* New Leads */}
-        <div className="bg-[var(--card-surface)] border border-[var(--sidebar-border)] rounded-md p-4 flex items-center gap-4">
-          <div className="w-10 h-10 rounded-md bg-[var(--badge-bg)] text-[var(--badge-text)] border border-[var(--badge-border)] flex items-center justify-center">
-            <UserPlus className="w-5 h-5" />
+        <div className="bg-[var(--card-surface)] border border-[var(--sidebar-border)] rounded-md p-3 sm:p-4 flex items-center gap-2.5 sm:gap-4 min-w-0">
+          <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-md bg-[var(--badge-bg)] text-[var(--badge-text)] border border-[var(--badge-border)] flex items-center justify-center shrink-0">
+            <UserPlus className="w-4 h-4 sm:w-5 sm:h-5" />
           </div>
-          <div>
-            <p className="text-2xl font-bold text-[var(--foreground)]">{stats.newLeads}</p>
-            <p className="text-xs font-semibold text-[var(--sidebar-text)] opacity-60 uppercase tracking-wider">New Leads</p>
+          <div className="min-w-0 flex-1">
+            <p className="text-xl sm:text-2xl font-bold text-[var(--foreground)] leading-tight">{stats.newLeads}</p>
+            <p className="text-[9px] sm:text-xs font-semibold text-[var(--sidebar-text)] opacity-60 uppercase tracking-wider truncate">New Leads</p>
           </div>
         </div>
 
         {/* In Contact */}
-        <div className="bg-[var(--card-surface)] border border-[var(--sidebar-border)] rounded-md p-4 flex items-center gap-4">
-          <div className="w-10 h-10 rounded-md bg-amber-500/10 text-amber-500 border border-amber-500/20 flex items-center justify-center">
-            <Clock className="w-5 h-5" />
+        <div className="bg-[var(--card-surface)] border border-[var(--sidebar-border)] rounded-md p-3 sm:p-4 flex items-center gap-2.5 sm:gap-4 min-w-0">
+          <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-md bg-amber-500/10 text-amber-500 border border-amber-500/20 flex items-center justify-center shrink-0">
+            <Clock className="w-4 h-4 sm:w-5 sm:h-5" />
           </div>
-          <div>
-            <p className="text-2xl font-bold text-[var(--foreground)]">{stats.inContact}</p>
-            <p className="text-xs font-semibold text-[var(--sidebar-text)] opacity-60 uppercase tracking-wider">In Contact</p>
+          <div className="min-w-0 flex-1">
+            <p className="text-xl sm:text-2xl font-bold text-[var(--foreground)] leading-tight">{stats.inContact}</p>
+            <p className="text-[9px] sm:text-xs font-semibold text-[var(--sidebar-text)] opacity-60 uppercase tracking-wider truncate">In Contact</p>
           </div>
         </div>
 
         {/* Converted */}
-        <div className="bg-[var(--card-surface)] border border-[var(--sidebar-border)] rounded-md p-4 flex items-center gap-4">
-          <div className="w-10 h-10 rounded-md bg-[var(--color-primary-300)]/10 text-[var(--color-primary-300)] border border-[var(--color-primary-300)]/25 flex items-center justify-center">
-            <CheckCircle2 className="w-5 h-5" />
+        <div className="bg-[var(--card-surface)] border border-[var(--sidebar-border)] rounded-md p-3 sm:p-4 flex items-center gap-2.5 sm:gap-4 min-w-0">
+          <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-md bg-[var(--color-primary-300)]/10 text-[var(--color-primary-300)] border border-[var(--color-primary-300)]/25 flex items-center justify-center shrink-0">
+            <CheckCircle2 className="w-4 h-4 sm:w-5 sm:h-5" />
           </div>
-          <div>
-            <p className="text-2xl font-bold text-[var(--foreground)]">{stats.converted}</p>
-            <p className="text-xs font-semibold text-[var(--sidebar-text)] opacity-60 uppercase tracking-wider">Converted</p>
+          <div className="min-w-0 flex-1">
+            <p className="text-xl sm:text-2xl font-bold text-[var(--foreground)] leading-tight">{stats.converted}</p>
+            <p className="text-[9px] sm:text-xs font-semibold text-[var(--sidebar-text)] opacity-60 uppercase tracking-wider truncate">Converted</p>
           </div>
         </div>
       </div>

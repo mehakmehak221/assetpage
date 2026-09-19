@@ -22,39 +22,34 @@ export const LeadFilters: React.FC<LeadFiltersProps> = ({
   isLoading,
 }) => {
   return (
-    <div className="bg-[var(--card-surface)] border border-[var(--sidebar-border)] p-4 rounded-md space-y-4 mb-6">
-      <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3">
+    <div className="bg-[var(--card-surface)] border border-[var(--sidebar-border)] p-3.5 sm:p-4 rounded-md space-y-3.5 sm:space-y-4 mb-4 sm:mb-6">
+      <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2.5 sm:gap-3">
         {/* Search Input */}
-        <div className="relative flex-1">
-          <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--sidebar-text)] opacity-60" />
+        <div className="relative flex-1 min-w-0">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--sidebar-text)] opacity-60" />
           <input
             type="text"
-            placeholder="Search by lead name, phone, or email..."
+            placeholder="Search by name, phone, or email..."
             value={filters.search || ''}
             onChange={(e) => onFilterChange({ search: e.target.value, page: 1 })}
-            className="w-full pl-10 pr-4 py-2.5 rounded-md bg-[var(--background)] border border-[var(--sidebar-border)] text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-primary-300)]/20 focus:border-[var(--color-primary-300)] transition-all text-[var(--foreground)] placeholder:text-[var(--sidebar-text)] placeholder:opacity-60 font-montserrat"
+            className="w-full pl-9 pr-3 py-2 sm:py-2.5 rounded-md bg-[var(--background)] border border-[var(--sidebar-border)] text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-primary-300)]/20 focus:border-[var(--color-primary-300)] transition-all text-[var(--foreground)] placeholder:text-[var(--sidebar-text)] placeholder:opacity-60 font-montserrat"
           />
         </div>
 
-
-        <div className="flex items-center gap-2">
-
-
-          <button
-            onClick={onOpenCreateModal}
-            className="px-4 py-2.5 rounded-md bg-[var(--color-primary-300)] hover:bg-[var(--color-primary-300)]/90 text-[#050505] text-xs font-bold shadow-[var(--shadow-btn)] flex items-center gap-2 transition-all active:scale-[0.98] font-montserrat cursor-pointer"
-          >
-            <Plus className="w-4 h-4 stroke-[2.5]" />
-            New Lead
-          </button>
-        </div>
+        <button
+          onClick={onOpenCreateModal}
+          className="px-4 py-2 sm:py-2.5 rounded-md bg-[var(--color-primary-300)] hover:bg-[var(--color-primary-300)]/90 text-[#050505] text-xs font-bold shadow-[var(--shadow-btn)] flex items-center justify-center gap-2 transition-all active:scale-[0.98] font-montserrat cursor-pointer shrink-0"
+        >
+          <Plus className="w-4 h-4 stroke-[2.5]" />
+          New Lead
+        </button>
       </div>
 
       {/* Filter Options */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-3 pt-3 border-t border-[var(--sidebar-border)]">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-2.5 sm:gap-3 pt-3 border-t border-[var(--sidebar-border)]">
         {/* Status Select */}
-        <div>
-          <label className="block text-[10px] font-bold tracking-widest text-[var(--sidebar-text)] opacity-60 uppercase mb-1.5 font-montserrat">
+        <div className="min-w-0">
+          <label className="block text-[10px] font-bold tracking-widest text-[var(--sidebar-text)] opacity-60 uppercase mb-1 font-montserrat">
             Status
           </label>
           <select
@@ -62,9 +57,9 @@ export const LeadFilters: React.FC<LeadFiltersProps> = ({
             onChange={(e) =>
               onFilterChange({ status: (e.target.value as LeadStatus) || undefined, page: 1 })
             }
-            className="w-full px-3 py-2 rounded-md bg-[var(--background)] border border-[var(--sidebar-border)] text-xs font-medium text-[var(--foreground)] focus:outline-none focus:border-[var(--color-primary-300)] font-montserrat"
+            className="w-full px-2 sm:px-3 py-1.5 sm:py-2 rounded-md bg-[var(--background)] border border-[var(--sidebar-border)] text-[11px] sm:text-xs font-medium text-[var(--foreground)] focus:outline-none focus:border-[var(--color-primary-300)] font-montserrat truncate cursor-pointer"
           >
-            <option value="">All Statuses</option>
+            <option value="">All Status</option>
             {Object.values(LeadStatus).map((st) => (
               <option key={st} value={st}>
                 {st.replace('_', ' ')}
@@ -73,9 +68,9 @@ export const LeadFilters: React.FC<LeadFiltersProps> = ({
           </select>
         </div>
 
-
-        <div>
-          <label className="block text-[10px] font-bold tracking-widest text-[var(--sidebar-text)] opacity-60 uppercase mb-1.5 font-montserrat">
+        {/* Priority Select */}
+        <div className="min-w-0">
+          <label className="block text-[10px] font-bold tracking-widest text-[var(--sidebar-text)] opacity-60 uppercase mb-1 font-montserrat">
             Priority
           </label>
           <select
@@ -86,24 +81,24 @@ export const LeadFilters: React.FC<LeadFiltersProps> = ({
                 page: 1,
               })
             }
-            className="w-full px-3 py-2 rounded-md bg-[var(--background)] border border-[var(--sidebar-border)] text-xs font-medium text-[var(--foreground)] focus:outline-none focus:border-[var(--color-primary-300)] font-montserrat"
+            className="w-full px-2 sm:px-3 py-1.5 sm:py-2 rounded-md bg-[var(--background)] border border-[var(--sidebar-border)] text-[11px] sm:text-xs font-medium text-[var(--foreground)] focus:outline-none focus:border-[var(--color-primary-300)] font-montserrat truncate cursor-pointer"
           >
-            <option value="">All Priorities</option>
+            <option value="">All Priority</option>
             <option value="HIGH">High</option>
             <option value="MEDIUM">Medium</option>
             <option value="LOW">Low</option>
           </select>
         </div>
 
-
-        <div>
-          <label className="block text-[10px] font-bold tracking-widest text-[var(--sidebar-text)] opacity-60 uppercase mb-1.5 font-montserrat">
+        {/* Source Select */}
+        <div className="min-w-0">
+          <label className="block text-[10px] font-bold tracking-widest text-[var(--sidebar-text)] opacity-60 uppercase mb-1 font-montserrat">
             Source
           </label>
           <select
             value={filters.source || ''}
             onChange={(e) => onFilterChange({ source: e.target.value || undefined, page: 1 })}
-            className="w-full px-3 py-2 rounded-md bg-[var(--background)] border border-[var(--sidebar-border)] text-xs font-medium text-[var(--foreground)] focus:outline-none focus:border-[var(--color-primary-300)] font-montserrat"
+            className="w-full px-2 sm:px-3 py-1.5 sm:py-2 rounded-md bg-[var(--background)] border border-[var(--sidebar-border)] text-[11px] sm:text-xs font-medium text-[var(--foreground)] focus:outline-none focus:border-[var(--color-primary-300)] font-montserrat truncate cursor-pointer"
           >
             <option value="">All Sources</option>
             {SOURCES.map((src) => (
@@ -114,16 +109,16 @@ export const LeadFilters: React.FC<LeadFiltersProps> = ({
           </select>
         </div>
 
-
-        <div>
-          <label className="block text-[10px] font-bold tracking-widest text-[var(--sidebar-text)] opacity-60 uppercase mb-1.5 font-montserrat">
+        {/* Created From */}
+        <div className="min-w-0">
+          <label className="block text-[10px] font-bold tracking-widest text-[var(--sidebar-text)] opacity-60 uppercase mb-1 font-montserrat">
             Created From
           </label>
           <input
             type="date"
             value={filters.createdFrom || ''}
             onChange={(e) => onFilterChange({ createdFrom: e.target.value || undefined, page: 1 })}
-            className="w-full px-3 py-2 rounded-md bg-[var(--background)] border border-[var(--sidebar-border)] text-xs font-medium text-[var(--foreground)] focus:outline-none focus:border-[var(--color-primary-300)] font-montserrat"
+            className="w-full px-2 sm:px-3 py-1.5 sm:py-2 rounded-md bg-[var(--background)] border border-[var(--sidebar-border)] text-[11px] sm:text-xs font-medium text-[var(--foreground)] focus:outline-none focus:border-[var(--color-primary-300)] font-montserrat min-w-0"
           />
         </div>
       </div>
