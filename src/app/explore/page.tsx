@@ -8,7 +8,7 @@ import { useGetAssetsQuery } from "@/store/api/assetApi";
 import { CATEGORIES } from "@/data/propertyData";
 import { Country, State, City } from "country-state-city";
 import { API_URL } from "@/constants";
-import { MapPinIcon, TrendingUpIcon, VerifiedIcon, SecondaryMarketplaceIcon, ShareIcon } from "@/components/VectorImages";
+import { MapPinIcon, TrendingUpIcon, VerifiedIcon, SecondaryMarketplaceIcon, ShareIcon, StarIcon } from "@/components/VectorImages";
 import Link from "next/link";
 
 import { useCurrency } from "@/providers/CurrencyProvider";
@@ -146,7 +146,7 @@ export default function ExplorePage() {
     const [cityFilter, setCityFilter] = useState("");
     const [countryIsoCode, setCountryIsoCode] = useState("");
     const [stateIsoCode, setStateIsoCode] = useState("");
-    const [saleTypeFilter, setSaleTypeFilter] = useState<"FRACTIONAL" | "WHOLE">("FRACTIONAL");
+    const [saleTypeFilter, setSaleTypeFilter] = useState<"FRACTIONAL" | "WHOLE" | "PREMIUM">("FRACTIONAL");
     const [copiedId, setCopiedId] = useState<string | null>(null);
 
     const apiCategory = activeCategory === "All" ? undefined : CATEGORY_MAP[activeCategory];
@@ -179,20 +179,22 @@ export default function ExplorePage() {
                         <p className="text-sm text-neutral-500 font-medium">
                             {saleTypeFilter === "FRACTIONAL"
                                 ? `Invest fractionally starting from ${currency.symbol}15,000.`
-                                : "Acquire complete institutional assets as a single whole transaction."}
+                                : saleTypeFilter === "PREMIUM"
+                                    ? `Curated ultra-prime assets with min. valuation of ₹2 Cr and ₹1 Lakh min. share investment.`
+                                    : "Acquire complete institutional assets as a single whole transaction."}
                         </p>
                     </div>
 
                     {/* Sale-type pill toggle */}
                     <div className="flex mb-1">
                         <div className="inline-flex bg-neutral-100 border border-neutral-200/80 rounded-md p-1 gap-1 shadow-sm relative">
-                            {(["FRACTIONAL", "WHOLE"] as const).map((type) => {
+                            {(["FRACTIONAL", "WHOLE", "PREMIUM"] as const).map((type) => {
                                 const isSelected = saleTypeFilter === type;
                                 return (
                                     <button
                                         key={type}
                                         onClick={() => setSaleTypeFilter(type)}
-                                        className={`relative px-5 py-2 rounded-md text-xs font-bold transition-colors duration-300 cursor-pointer border-0 bg-transparent z-10 ${
+                                        className={`relative px-5 py-2 rounded-md text-xs font-bold transition-colors duration-300 cursor-pointer border-0 bg-transparent z-10 flex items-center gap-1.5 ${
                                             isSelected
                                                 ? "text-[#00B28F]"
                                                 : "text-neutral-500 hover:text-neutral-900"
@@ -205,7 +207,16 @@ export default function ExplorePage() {
                                                 transition={{ type: "spring", stiffness: 380, damping: 30 }}
                                             />
                                         )}
-                                        {type === "FRACTIONAL" ? "Fractional Real Estate" : "Whole Properties"}
+                                        {type === "FRACTIONAL"
+                                            ? "Fractional Real Estate"
+                                            : type === "PREMIUM"
+                                                ? (
+                                                    <span className="inline-flex items-center gap-1.5">
+                                                        <StarIcon className="w-3.5 h-3.5 fill-current" />
+                                                        GloFi Premium
+                                                    </span>
+                                                )
+                                                : "Whole Properties"}
                                     </button>
                                 );
                             })}
@@ -359,9 +370,17 @@ export default function ExplorePage() {
                                                 <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
 
 
-                                                <span className="absolute bottom-3 left-3 px-3.5 py-1.5 rounded-full text-[11px] font-bold capitalize bg-white text-[#111111] shadow-md z-10 tracking-wide">
-                                                    {property.category.replace(/_/g, ' ').toLowerCase()}
-                                                </span>
+                                                <div className="absolute bottom-3 left-3 flex items-center gap-1.5 z-10">
+                                                    <span className="px-3.5 py-1.5 rounded-full text-[11px] font-bold capitalize bg-white text-[#111111] shadow-md tracking-wide">
+                                                        {property.category.replace(/_/g, ' ').toLowerCase()}
+                                                    </span>
+                                                    {property.saleType === 'PREMIUM' && (
+                                                        <span className="px-2.5 py-1.5 rounded-full text-[10px] font-black uppercase bg-gradient-to-r from-amber-400 to-amber-500 text-black shadow-md tracking-wider flex items-center gap-1">
+                                                            <StarIcon className="w-3 h-3 fill-black shrink-0" />
+                                                            PREMIUM
+                                                        </span>
+                                                    )}
+                                                </div>
 
                                                 <span className="absolute top-3 left-3 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-black/50 text-white border border-white/10 backdrop-blur-md shadow-sm z-10">
                                                     <span className={`w-1.5 h-1.5 rounded-full flex-shrink-0 shadow-[0_0_8px_currentColor] ${riskLevel === "LOW"

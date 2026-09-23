@@ -1,5 +1,5 @@
 import { baseApi } from './baseApi';
-import { unwrapAssetResponse, type UpdateAssetPayload } from '@/utils/assetUtils';
+import { unwrapAssetResponse, type UpdateAssetPayload, type SaleType } from '@/utils/assetUtils';
 
 export const assetApi = baseApi.injectEndpoints({
   overrideExisting: true,
@@ -19,7 +19,7 @@ export const assetApi = baseApi.injectEndpoints({
       city?: string;
       limit?: number;
       page?: number;
-      saleType?: 'FRACTIONAL' | 'WHOLE';
+      saleType?: SaleType;
       status?: string;
       search?: string;
       sortBy?: string;
@@ -51,11 +51,40 @@ export const assetApi = baseApi.injectEndpoints({
       }),
       transformResponse: (response: unknown) => unwrapAssetResponse(response) ?? response,
     }),
-    getMyListings: builder.query<any, { limit?: number; page?: number } | void>({
+    getMyListings: builder.query<any, {
+      limit?: number;
+      page?: number;
+      saleType?: SaleType;
+      status?: string;
+      search?: string;
+    } | void>({
       query: (arg) => {
-        const { limit = 10, page = 1 } = arg || {};
+        const { limit = 10, page = 1, saleType, status, search } = arg || {};
+        const params = new URLSearchParams({ limit: String(limit), page: String(page) });
+        if (saleType) params.append('saleType', saleType);
+        if (status) params.append('status', status);
+        if (search) params.append('search', search);
         return {
-          url: `assets/my/listings?limit=${limit}&page=${page}`,
+          url: `assets/my/listings?${params.toString()}`,
+          method: 'GET',
+        };
+      },
+    }),
+    getAdminAssets: builder.query<any, {
+      limit?: number;
+      page?: number;
+      saleType?: SaleType;
+      status?: string;
+      search?: string;
+    } | void>({
+      query: (arg) => {
+        const { limit = 10, page = 1, saleType, status, search } = arg || {};
+        const params = new URLSearchParams({ limit: String(limit), page: String(page) });
+        if (saleType) params.append('saleType', saleType);
+        if (status) params.append('status', status);
+        if (search) params.append('search', search);
+        return {
+          url: `admin/assets?${params.toString()}`,
           method: 'GET',
         };
       },
@@ -146,6 +175,7 @@ export const {
   useDeleteAssetMutation,
   useUploadFileMutation,
   useGetMyListingsQuery,
+  useGetAdminAssetsQuery,
   useGetPartnerAssetByIdQuery,
   useGetAssetsQuery,
   useGetAssetByIdQuery,

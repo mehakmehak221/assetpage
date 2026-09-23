@@ -13,6 +13,7 @@ import {
     LinkIcon,
     UserGroupIcon,
     SparkleIcon,
+    StarIcon,
 } from "@/components/VectorImages";
 import NewListingForm from "@/components/dashboard/NewListingForm";
 import KYCModal from "@/components/dashboard/KYCModal";
@@ -27,6 +28,7 @@ import {
     useGetPartnerAssetShareReportQuery,
 } from "@/store/api/partnerApi";
 import { copyToClipboard } from "@/utils/assetShare";
+import type { SaleType } from "@/utils/assetUtils";
 
 const formatValuation = (val) => {
     const num = parseFloat(val);
@@ -124,13 +126,24 @@ function PropertyCard({ property, index, onDelete, onSubmitForReview, onEdit, on
                         </span>
                     </div>
 
-                    {property.category && (
-                        <div className="absolute bottom-4 left-4">
+                    <div className="absolute bottom-4 left-4 flex flex-wrap items-center gap-1.5">
+                        {property.category && (
                             <span className="rounded-full bg-white/95 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.18em] text-black shadow-sm">
                                 {property.category.replace(/_/g, " ")}
                             </span>
-                        </div>
-                    )}
+                        )}
+                        {property.saleType === "PREMIUM" && (
+                            <span className="rounded-full bg-gradient-to-r from-amber-400 to-amber-500 px-2.5 py-1 text-[10px] font-black uppercase tracking-[0.15em] text-black shadow-sm flex items-center gap-1">
+                                <StarIcon className="w-3 h-3 fill-black shrink-0" />
+                                PREMIUM
+                            </span>
+                        )}
+                        {property.saleType === "WHOLE" && (
+                            <span className="rounded-full bg-blue-500/90 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.15em] text-white shadow-sm">
+                                WHOLE
+                            </span>
+                        )}
+                    </div>
                 </div>
 
                 <div className="min-w-0 flex-1 p-4 sm:p-5 xl:p-7">
@@ -273,7 +286,10 @@ export default function PartnerPropertiesPage() {
     const [selectedShareAsset, setSelectedShareAsset] = useState<any | null>(null);
     const [selectedShareUrl, setSelectedShareUrl] = useState<string | null>(null);
     const [copiedShareId, setCopiedShareId] = useState<string | null>(null);
-    const { data, isLoading, isError, error, refetch } = useGetMyListingsQuery();
+    const [saleTypeFilter, setSaleTypeFilter] = useState<SaleType | "ALL">("ALL");
+    const { data, isLoading, isError, error, refetch } = useGetMyListingsQuery(
+        saleTypeFilter === "ALL" ? undefined : { saleType: saleTypeFilter }
+    );
     const { data: kycData, refetch: refetchKyc } = useGetKycStatusQuery();
     const { data: kybData, refetch: refetchKyb } = useGetKybStatusQuery();
     const { data: sharedAssetsData, isLoading: sharedLoading } = useGetSharedAssetsQuery();
@@ -431,6 +447,36 @@ export default function PartnerPropertiesPage() {
                             </motion.button>
                         </div>
 
+                        {/* Sale Type Filter Toggle */}
+                        <div className="mb-6 flex flex-wrap items-center gap-2">
+                            {(["ALL", "FRACTIONAL", "WHOLE", "PREMIUM"] as const).map((type) => {
+                                const isSelected = saleTypeFilter === type;
+                                return (
+                                    <button
+                                        key={type}
+                                        onClick={() => setSaleTypeFilter(type)}
+                                        className={`relative px-4 py-1.5 rounded-md text-xs font-bold transition-all duration-200 cursor-pointer border ${
+                                            isSelected
+                                                ? "bg-[var(--sidebar-active-bg)] text-[var(--sidebar-active-text)] border-[var(--sidebar-active-text)]/30 shadow-sm"
+                                                : "bg-[var(--card-surface)] text-[var(--color-text-muted)] border-[var(--sidebar-border)] hover:text-[var(--foreground)] hover:border-[var(--sidebar-border)]/80"
+                                        }`}
+                                    >
+                                        {type === "ALL"
+                                            ? "All Types"
+                                            : type === "FRACTIONAL"
+                                                ? "Fractional"
+                                                : type === "PREMIUM"
+                                                    ? (
+                                                        <span className="inline-flex items-center gap-1">
+                                                            <StarIcon className="w-3 h-3 fill-current" />
+                                                            Premium
+                                                        </span>
+                                                    )
+                                                    : "Whole"}
+                                    </button>
+                                );
+                            })}
+                        </div>
 
                         <div className="flex flex-col gap-4 lg:gap-5">
                             {isLoading ? (

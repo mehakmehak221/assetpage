@@ -338,6 +338,12 @@ export const ProfileIcon = ({ className = "w-4 h-4" }) => (
     </svg>
 );
 
+export const StarIcon = ({ className = "w-3.5 h-3.5" }) => (
+    <svg className={className} viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+        <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" />
+    </svg>
+);
+
 export const SparkleIcon = ({ className = "w-4 h-4" }) => (
     <svg className={className} width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
         <g clipPath="url(#clip0_99_533)">

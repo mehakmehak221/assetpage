@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { BusinessPropertyIcon, UploadIcon, LoadingSpinner } from "../VectorImages";
+import { BusinessPropertyIcon, UploadIcon, LoadingSpinner, StarIcon } from "../VectorImages";
 import {
     useCreateAssetMutation,
     useUploadFileMutation,
@@ -213,7 +213,7 @@ function formDataToUpdatePayload(formData: ReturnType<typeof assetToFormData>): 
         images: formData.images,
         isReraVerified: formData.isReraVerified,
         isreraverified: formData.isReraVerified,
-        saleType: formData.saleType as "FRACTIONAL" | "WHOLE",
+        saleType: formData.saleType as "FRACTIONAL" | "WHOLE" | "PREMIUM",
     };
 }
 
@@ -380,6 +380,21 @@ export default function NewListingForm({ onBack, editId, initialProperty = null 
         if (!formData.images || formData.images.length === 0) {
             setErrorMsg("Please upload an Asset Image.");
             return;
+        }
+
+        if (formData.saleType === 'PREMIUM') {
+            const valuationNum = Number(formData.valuation) || 0;
+            const totalFractionsNum = Number(formData.totalFractions) || 1;
+            const fractionPrice = valuationNum / totalFractionsNum;
+
+            if (valuationNum < 20000000) {
+                setErrorMsg("GloFi Premium listings require a minimum property valuation of ₹2,00,00,000 (₹2 Crore).");
+                return;
+            }
+            if (fractionPrice < 100000) {
+                setErrorMsg("GloFi Premium listings require a minimum share price of ₹1,00,000 (₹1 Lakh). Please adjust valuation or total fractions.");
+                return;
+            }
         }
 
         if (kycStatus?.status !== 'VERIFIED') {
@@ -625,7 +640,14 @@ export default function NewListingForm({ onBack, editId, initialProperty = null 
                                 >
                                     <option value="FRACTIONAL" className="bg-[var(--form-surface)] text-[var(--foreground)]">Fractional</option>
                                     <option value="WHOLE" className="bg-[var(--form-surface)] text-[var(--foreground)]">Whole</option>
+                                    <option value="PREMIUM" className="bg-[var(--form-surface)] text-[var(--foreground)]">Premium (GloFi Premium)</option>
                                 </select>
+                                {formData.saleType === "PREMIUM" && (
+                                    <p className="text-[11px] text-amber-500 font-semibold bg-amber-500/10 border border-amber-500/20 rounded px-2.5 py-1.5 mt-0.5 flex items-center gap-1.5">
+                                        <StarIcon className="w-3.5 h-3.5 fill-amber-500 shrink-0" />
+                                        <span><strong>GloFi Premium:</strong> Requires minimum valuation of ₹2,00,00,000 (₹2 Cr) and minimum share/fraction price of ₹1,00,000 (₹1 Lakh).</span>
+                                    </p>
+                                )}
                             </div>
                             <div className="flex flex-col gap-2">
                                 <label className="text-[10px] font-semibold text-[var(--foreground)] tracking-widest uppercase font-montserrat flex items-center gap-1.5">

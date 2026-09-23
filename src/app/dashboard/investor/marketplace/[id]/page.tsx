@@ -5,7 +5,7 @@ import { useParams, useRouter, useSearchParams } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
-import { MapPinIcon, ShareIcon } from "@/components/VectorImages";
+import { MapPinIcon, ShareIcon, StarIcon } from "@/components/VectorImages";
 import { PROPERTIES } from "@/data/propertyData";
 import InvestModal from "@/components/dashboard/InvestModal";
 import KYCModal from "@/components/dashboard/KYCModal";
@@ -388,9 +388,17 @@ export default function PropertyDetailPage() {
                         )}
 
 
-                        <span className="absolute bottom-3 left-3 sm:bottom-4 sm:left-4 px-3.5 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-widest bg-[#FFFFFF] text-[#111111] border border-white/40 shadow-md z-10">
-                            {property.category?.replace(/_/g, ' ')}
-                        </span>
+                        <div className="absolute bottom-3 left-3 sm:bottom-4 sm:left-4 flex items-center gap-2 z-10">
+                            <span className="px-3.5 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-widest bg-[#FFFFFF] text-[#111111] border border-white/40 shadow-md">
+                                {property.category?.replace(/_/g, ' ')}
+                            </span>
+                            {property.saleType === 'PREMIUM' && (
+                                <span className="px-3 py-1.5 rounded-full text-[10px] font-black uppercase bg-gradient-to-r from-amber-400 to-amber-500 text-black shadow-md tracking-wider flex items-center gap-1">
+                                    <StarIcon className="w-3 h-3 fill-black shrink-0" />
+                                    PREMIUM
+                                </span>
+                            )}
+                        </div>
 
 
                         <span className="absolute top-3 right-3 sm:top-4 sm:right-4 inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-black/50 text-white border border-white/10 backdrop-blur-md shadow-sm z-10">

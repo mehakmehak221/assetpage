@@ -18,6 +18,8 @@ export function unwrapAssetResponse(response: unknown): Record<string, unknown> 
   return null;
 }
 
+export type SaleType = "FRACTIONAL" | "WHOLE" | "PREMIUM";
+
 export type UpdateAssetPayload = {
   title: string;
   description: string;
@@ -41,7 +43,7 @@ export type UpdateAssetPayload = {
   images: string[];
   isReraVerified?: boolean;
   isreraverified?: boolean;
-  saleType?: "FRACTIONAL" | "WHOLE";
+  saleType?: SaleType;
 };
 
 export const validateFileUpload = (file: File): boolean => {
