@@ -610,8 +610,13 @@
   }
 
   @keyframes shrink-x {
-    from { transform: scaleX(1); }
-    to   { transform: scaleX(0); }
+    from {
+      transform: scaleX(1);
+    }
+
+    to {
+      transform: scaleX(0);
+    }
   }
 
   .animate-shrink-x {
@@ -887,4 +892,13 @@ input::-webkit-inner-spin-button {
 input[type="number"] {
   -moz-appearance: textfield;
   appearance: textfield;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }

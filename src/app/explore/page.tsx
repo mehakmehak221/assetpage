@@ -49,16 +49,16 @@ function PillDropdown({ label, options, value, onChange, placeholder, disabled =
     );
 
     return (
-        <div className={`flex flex-col gap-1.5 relative ${isOpen ? 'z-30' : 'z-10'}`} ref={dropdownRef}>
+        <div className={`flex flex-col gap-1.5 relative w-full sm:w-auto ${isOpen ? 'z-30' : 'z-10'}`} ref={dropdownRef}>
             <label className="text-[10px] uppercase tracking-wider text-neutral-500 font-semibold px-1 font-Montserrat">{label}</label>
             <div
                 onClick={() => !disabled && setIsOpen(!isOpen)}
-                className={`flex justify-between items-center bg-neutral-50 border border-neutral-200/80 rounded-md px-4 py-1.5 text-xs font-Montserrat cursor-pointer transition-all min-w-[150px] ${disabled ? 'opacity-50 cursor-not-allowed' : 'hover:border-neutral-300'} ${isOpen ? 'border-[#00DAAF] shadow-sm' : ''}`}
+                className={`flex justify-between items-center bg-neutral-50 border border-neutral-200/80 rounded-md px-4 py-1.5 text-xs font-Montserrat cursor-pointer transition-all min-w-0 sm:min-w-[150px] w-full sm:w-auto ${disabled ? 'opacity-50 cursor-not-allowed' : 'hover:border-neutral-300'} ${isOpen ? 'border-[#00DAAF] shadow-sm' : ''}`}
             >
-                <span className={value ? "text-neutral-900 font-medium" : "text-neutral-400"}>
+                <span className={`truncate ${value ? "text-neutral-900 font-medium" : "text-neutral-400"}`}>
                      {value || placeholder}
                 </span>
-                <svg className={`w-3 h-3 text-neutral-400 transition-transform ${isOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className={`w-3 h-3 text-neutral-400 shrink-0 transition-transform ${isOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
                 </svg>
             </div>
@@ -69,7 +69,7 @@ function PillDropdown({ label, options, value, onChange, placeholder, disabled =
                         initial={{ opacity: 0, y: -5 }}
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: -5 }}
-                        className="absolute z-[100] top-[calc(100%+6px)] left-0 min-w-[200px] bg-white border border-neutral-200 rounded-md shadow-2xl overflow-hidden backdrop-blur-xl"
+                        className="absolute z-[100] top-[calc(100%+6px)] left-0 min-w-[200px] w-full sm:w-auto bg-white border border-neutral-200 rounded-md shadow-2xl overflow-hidden backdrop-blur-xl"
                     >
                         <div className="p-2 border-b border-neutral-100">
                             <input
@@ -186,15 +186,15 @@ export default function ExplorePage() {
                     </div>
 
                     {/* Sale-type pill toggle */}
-                    <div className="flex mb-1">
-                        <div className="inline-flex bg-neutral-100 border border-neutral-200/80 rounded-md p-1 gap-1 shadow-sm relative">
+                    <div className="flex mb-1 overflow-x-auto no-scrollbar">
+                        <div className="inline-flex min-w-full sm:min-w-0 bg-neutral-100 border border-neutral-200/80 rounded-md p-1 gap-1 shadow-sm relative">
                             {(["FRACTIONAL", "WHOLE", "PREMIUM"] as const).map((type) => {
                                 const isSelected = saleTypeFilter === type;
                                 return (
                                     <button
                                         key={type}
                                         onClick={() => setSaleTypeFilter(type)}
-                                        className={`relative px-5 py-2 rounded-md text-xs font-bold transition-colors duration-300 cursor-pointer border-0 bg-transparent z-10 flex items-center gap-1.5 ${
+                                        className={`relative flex-1 sm:flex-initial px-3.5 sm:px-5 py-2 rounded-md text-xs font-bold transition-colors duration-300 cursor-pointer border-0 bg-transparent z-10 flex items-center justify-center gap-1.5 whitespace-nowrap ${
                                             isSelected
                                                 ? "text-[#00B28F]"
                                                 : "text-neutral-500 hover:text-neutral-900"
@@ -223,13 +223,13 @@ export default function ExplorePage() {
                         </div>
                     </div>
 
-                    <div className="flex flex-col gap-8">
-                        <div className="flex flex-wrap gap-3">
+                    <div className="flex flex-col gap-6 sm:gap-8">
+                        <div className="flex overflow-x-auto no-scrollbar sm:flex-wrap gap-2 sm:gap-3 pb-1 sm:pb-0">
                             {CATEGORIES.map((cat) => (
                                 <button
                                     key={cat}
                                     onClick={() => setActiveCategory(cat)}
-                                    className={`px-5 py-2.5 rounded-md text-xs font-bold transition-all duration-300 border ${activeCategory === cat
+                                    className={`px-3.5 sm:px-5 py-2 sm:py-2.5 rounded-md text-xs font-bold transition-all duration-300 border whitespace-nowrap shrink-0 ${activeCategory === cat
                                         ? "bg-[#00DAAF]/10 text-[#00B28F] border-[#00DAAF]/30 shadow-[0_0_20px_rgba(0,218,175,0.05)]"
                                         : "bg-neutral-50 text-neutral-500 border-neutral-200 hover:border-neutral-300 hover:bg-neutral-100"
                                         }`}
@@ -239,7 +239,7 @@ export default function ExplorePage() {
                             ))}
                         </div>
 
-                        <div className="flex flex-wrap gap-6 items-center border-t border-neutral-100 pt-5">
+                        <div className="flex flex-col sm:flex-row flex-wrap gap-4 sm:gap-6 items-stretch sm:items-center border-t border-neutral-100 pt-5">
                             <PillDropdown
                                 label="Country"
                                 options={Country.getAllCountries()}

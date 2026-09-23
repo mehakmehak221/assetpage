@@ -49,11 +49,13 @@ function FilterDropdown({
     value,
     onChange,
     placeholder,
+    align = "left",
 }: {
     options: { label: string; value: string }[];
     value: string;
     onChange: (v: string) => void;
     placeholder: string;
+    align?: "left" | "right";
 }) {
     const [open, setOpen] = useState(false);
     const ref = useRef<HTMLDivElement>(null);
@@ -69,17 +71,17 @@ function FilterDropdown({
     const selected = options.find((o) => o.value === value);
 
     return (
-        <div className="relative" ref={ref}>
+        <div className="relative w-full sm:w-auto" ref={ref}>
             <button
                 onClick={() => setOpen((p) => !p)}
-                className={`flex items-center gap-2 px-4 py-2 rounded-md text-xs font-bold border transition-all cursor-pointer ${value
+                className={`w-full sm:w-auto flex items-center justify-between sm:justify-start gap-2 px-3.5 sm:px-4 py-2 rounded-md text-xs font-bold border transition-all cursor-pointer ${value
                         ? "bg-[var(--sidebar-active-bg)] text-[var(--sidebar-active-text)] border-[var(--sidebar-active-text)]/30"
                         : "bg-[var(--field-surface)] text-[var(--color-text-muted)] border-[var(--sidebar-border)] hover:border-[var(--sidebar-active-text)]/30 hover:text-[var(--header-text)]"
                     }`}
             >
-                {selected ? selected.label : placeholder}
+                <span className="truncate">{selected ? selected.label : placeholder}</span>
                 <svg
-                    className={`w-3 h-3 transition-transform ${open ? "rotate-180" : ""}`}
+                    className={`w-3 h-3 shrink-0 transition-transform ${open ? "rotate-180" : ""}`}
                     fill="none" stroke="currentColor" viewBox="0 0 24 24"
                 >
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
@@ -93,7 +95,7 @@ function FilterDropdown({
                         animate={{ opacity: 1, y: 0, scale: 1 }}
                         exit={{ opacity: 0, y: -6, scale: 0.97 }}
                         transition={{ duration: 0.15 }}
-                        className="absolute z-50 top-[calc(100%+6px)] left-0 min-w-[180px] bg-[var(--card-surface)] border border-[var(--sidebar-border)] rounded-md shadow-2xl overflow-hidden"
+                        className={`absolute z-50 top-[calc(100%+6px)] ${align === "right" ? "right-0" : "left-0"} min-w-[160px] sm:min-w-[180px] w-full sm:w-auto bg-[var(--card-surface)] border border-[var(--sidebar-border)] rounded-md shadow-2xl overflow-hidden`}
                     >
                         {options.map((opt) => (
                             <button
@@ -245,15 +247,15 @@ export default function MarketplacePage() {
             </div>
 
             {/* Sale-type pill toggle */}
-            <div className="max-w-6xl mx-auto mb-6">
-                <div className="inline-flex bg-[var(--sidebar-bg)] border border-[var(--sidebar-border)] rounded-md p-1 gap-1 shadow-sm relative">
+            <div className="max-w-6xl mx-auto mb-6 overflow-x-auto no-scrollbar">
+                <div className="inline-flex min-w-full sm:min-w-0 bg-[var(--sidebar-bg)] border border-[var(--sidebar-border)] rounded-md p-1 gap-1 shadow-sm relative">
                     {(["FRACTIONAL", "WHOLE", "PREMIUM"] as const).map((type) => {
                         const isSelected = saleTypeFilter === type;
                         return (
                             <button
                                 key={type}
                                 onClick={() => setSaleTypeFilter(type)}
-                                className={`relative px-6 py-2.5 rounded-md text-xs font-bold transition-colors duration-300 cursor-pointer border-0 bg-transparent z-10 flex items-center gap-1.5 ${isSelected
+                                className={`relative flex-1 sm:flex-initial px-3.5 sm:px-6 py-2 sm:py-2.5 rounded-md text-xs font-bold transition-colors duration-300 cursor-pointer border-0 bg-transparent z-10 flex items-center justify-center gap-1.5 whitespace-nowrap ${isSelected
                                         ? "text-[var(--sidebar-active-text)]"
                                         : "text-[var(--color-text-muted)] hover:text-[var(--header-text)]"
                                     }`}
@@ -286,17 +288,17 @@ export default function MarketplacePage() {
                 initial={{ opacity: 0, y: -12 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.4 }}
-                className="max-w-6xl mx-auto mb-6 bg-[var(--card-surface)] border border-[var(--sidebar-border)] rounded-md p-5 sm:p-6 shadow-sm backdrop-blur-md"
+                className="max-w-6xl mx-auto mb-6 bg-[var(--card-surface)] border border-[var(--sidebar-border)] rounded-md p-4 sm:p-6 shadow-sm backdrop-blur-md"
             >
                 {/* Category tabs */}
-                <div className="flex flex-wrap gap-2 mb-4 relative z-10">
+                <div className="flex overflow-x-auto no-scrollbar sm:flex-wrap gap-1.5 sm:gap-2 mb-4 relative z-10 pb-1 sm:pb-0">
                     {CATEGORIES.map((cat) => {
                         const isSelected = activeCategory === cat;
                         return (
                             <button
                                 key={cat}
                                 onClick={() => setActiveCategory(cat)}
-                                className={`relative px-4 py-1.5 rounded-md text-xs font-semibold transition-colors duration-200 cursor-pointer border-0 bg-transparent ${isSelected
+                                className={`relative px-3.5 sm:px-4 py-1.5 rounded-md text-xs font-semibold whitespace-nowrap shrink-0 transition-colors duration-200 cursor-pointer border-0 bg-transparent ${isSelected
                                         ? "text-[var(--sidebar-active-text)]"
                                         : "text-[var(--color-text-muted)] hover:text-[var(--header-text)]"
                                     }`}
@@ -314,11 +316,11 @@ export default function MarketplacePage() {
                     })}
                 </div>
 
-                <div className="h-px bg-gradient-to-r from-[var(--sidebar-border)]/20 via-[var(--sidebar-border)]/60 to-[var(--sidebar-border)]/20 mb-5" />
+                <div className="h-px bg-gradient-to-r from-[var(--sidebar-border)]/20 via-[var(--sidebar-border)]/60 to-[var(--sidebar-border)]/20 mb-4 sm:mb-5" />
 
                 {/* Search + dropdowns */}
-                <div className="flex flex-wrap items-center gap-3">
-                    <div className="relative flex-1 min-w-[200px] max-w-xs">
+                <div className="flex flex-col sm:flex-row sm:flex-wrap items-stretch sm:items-center gap-3">
+                    <div className="relative flex-1 min-w-0 sm:min-w-[200px] sm:max-w-xs">
                         <svg
                             className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--sidebar-active-text)] pointer-events-none"
                             fill="none" stroke="currentColor" viewBox="0 0 24 24"
@@ -344,34 +346,41 @@ export default function MarketplacePage() {
                         )}
                     </div>
 
-                    <FilterDropdown
-                        options={RISK_OPTIONS}
-                        value={riskFilter}
-                        onChange={setRiskFilter}
-                        placeholder="Risk Rating"
-                    />
+                    <div className="flex items-center gap-2.5">
+                        <div className="flex-1 sm:flex-initial">
+                            <FilterDropdown
+                                options={RISK_OPTIONS}
+                                value={riskFilter}
+                                onChange={setRiskFilter}
+                                placeholder="Risk Rating"
+                            />
+                        </div>
 
-                    <FilterDropdown
-                        options={SORT_OPTIONS.map((o, i) => ({ label: o.label, value: String(i) }))}
-                        value={String(sortIndex)}
-                        onChange={(v) => setSortIndex(Number(v))}
-                        placeholder="Sort By"
-                    />
+                        <div className="flex-1 sm:flex-initial">
+                            <FilterDropdown
+                                options={SORT_OPTIONS.map((o, i) => ({ label: o.label, value: String(i) }))}
+                                value={String(sortIndex)}
+                                onChange={(v) => setSortIndex(Number(v))}
+                                placeholder="Sort By"
+                                align="right"
+                            />
+                        </div>
 
-                    {hasActiveFilters && (
-                        <button
-                            onClick={clearAllFilters}
-                            className="flex items-center gap-1.5 px-4 py-2 rounded-md text-xs font-bold text-[var(--sidebar-active-text)] border border-[var(--sidebar-active-text)]/30 hover:bg-[var(--sidebar-active-text)]/10 cursor-pointer transition-all"
-                        >
-                            <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M6 18L18 6M6 6l12 12" />
-                            </svg>
-                            Clear
-                        </button>
-                    )}
+                        {hasActiveFilters && (
+                            <button
+                                onClick={clearAllFilters}
+                                className="flex items-center justify-center gap-1.5 px-3 sm:px-4 py-2 rounded-md text-xs font-bold text-[var(--sidebar-active-text)] border border-[var(--sidebar-active-text)]/30 hover:bg-[var(--sidebar-active-text)]/10 cursor-pointer transition-all shrink-0"
+                            >
+                                <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M6 18L18 6M6 6l12 12" />
+                                </svg>
+                                Clear
+                            </button>
+                        )}
+                    </div>
 
                     {!isLoading && (
-                        <span className="ml-auto text-[11px] text-[var(--color-text-muted)] font-medium">
+                        <span className="sm:ml-auto text-[11px] text-[var(--color-text-muted)] font-medium text-right sm:text-left">
                             {assets.length} asset{assets.length !== 1 ? "s" : ""}
                         </span>
                     )}
