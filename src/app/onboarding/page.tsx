@@ -145,15 +145,15 @@ export default function OnboardingPage() {
     };
 
     return (
-        <main className="min-h-screen w-full bg-[var(--color-bg-dark)] flex flex-col items-center px-4 py-8 sm:py-20 font-sans selection:bg-[var(--color-primary-300)]/30 theme-purple overflow-x-hidden">
-            <div className="mb-8 sm:mb-12 flex flex-col items-center text-center w-full max-w-full">
+        <main className="min-h-screen w-full bg-[var(--color-bg-dark)] flex flex-col items-center px-4 py-8 sm:py-20 font-sans selection:bg-[var(--color-primary-300)]/30 theme-purple overflow-x-hidden relative">
+            <div className="mb-6 sm:mb-12 flex flex-col items-center text-center w-full max-w-full">
                 <Link href="/" className="cursor-pointer">
-                    <Image src="/assets/images/branding/logo.png" alt="Glofi Logo" width={144} height={48} className="h-10 sm:h-12 w-auto mb-2" priority />
+                    <Image src="/assets/images/branding/logo.png" alt="Glofi Logo" width={144} height={48} className="h-9 sm:h-12 w-auto mb-2" priority />
                 </Link>
             </div>
 
 
-            <div className="flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-[var(--color-bg-surface-subtle)] mb-10 sm:mb-16 shadow-sm max-w-full">
+            <div className="flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-[var(--color-bg-surface-subtle)] mb-8 sm:mb-16 shadow-sm max-w-full">
                 <div className="w-1.5 h-1.5 rounded-full bg-[var(--color-primary-300)]/60" />
                 <span className="text-[11px] sm:text-[12px] font-bold tracking-[0.15em] text-[var(--color-text-muted)] uppercase font-Montserrat whitespace-nowrap">
                     {userRole === "PARTNER" ? "Developer Panel" : userRole === "AGENT" ? "Agent Setup" : "Investor Setup"}
@@ -258,9 +258,9 @@ export default function OnboardingPage() {
 
 
             {step === 3 && userRole !== "AGENT" && (
-                <div className="w-full max-w-[500px] flex flex-col animate-fade-in p-6 sm:p-10 rounded-[24px] sm:rounded-[32px] border border-white/5 bg-[#0D0D0D] shadow-2xl relative">
-                    <h1 className="text-white font-bold text-3xl tracking-tight mb-3 font-Montserrat">Set up your profile</h1>
-                    <p className="text-[var(--color-text-muted)] text-md leading-relaxed mb-2 font-Montserrat">
+                <div className="w-full max-w-[500px] flex flex-col animate-fade-in p-5 sm:p-10 rounded-[20px] sm:rounded-[32px] border border-white/5 bg-[#0D0D0D] shadow-2xl relative">
+                    <h1 className="text-white font-bold text-2xl sm:text-3xl tracking-tight mb-2 sm:mb-3 font-Montserrat">Set up your profile</h1>
+                    <p className="text-[var(--color-text-muted)] text-sm sm:text-base leading-relaxed mb-6 font-Montserrat">
                         Tell us a bit about yourself
                     </p>
                     {errorMsg && (
@@ -273,27 +273,27 @@ export default function OnboardingPage() {
                         </motion.div>
                     )}
 
-                    <form onSubmit={handleProfileSubmit} className="w-full space-y-5 text-left">
+                    <form onSubmit={handleProfileSubmit} className="w-full space-y-4 sm:space-y-5 text-left">
                         <input
                             type="text" placeholder="Full legal name" required
                             value={profile.fullName} onChange={e => { setProfile({ ...profile, fullName: e.target.value }); setErrorMsg(""); }}
-                            className="w-full h-[50px] rounded-lg px-6 bg-[var(--color-bg-surface-subtle)] border border-[var(--color-border-subtle)] text-white placeholder-[var(--color-text-muted)] focus:outline-none focus:border-[var(--color-primary-300)]/40 transition-all font-medium font-Montserrat"
+                            className="w-full h-[50px] rounded-lg px-4 sm:px-6 bg-[var(--color-bg-surface-subtle)] border border-[var(--color-border-subtle)] text-white placeholder-[var(--color-text-muted)] focus:outline-none focus:border-[var(--color-primary-300)]/40 transition-all font-medium font-Montserrat text-sm sm:text-base"
                         />
 
-                        <div className="grid grid-cols-2 gap-4">
-                            <div className="space-y-2">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div className="space-y-2 min-w-0">
                                 <label className="text-[10px] font-bold text-[var(--color-text-muted)]/50 tracking-widest uppercase font-Montserrat ml-1">Date of Birth</label>
                                 <input
                                     type="date" required
                                     value={profile.dateOfBirth} onChange={e => { setProfile({ ...profile, dateOfBirth: e.target.value }); setErrorMsg(""); }}
-                                    className="w-full h-[50px] rounded-lg px-6 bg-[var(--color-bg-surface-subtle)] border border-[var(--color-border-subtle)] text-[var(--color-text-muted)] focus:outline-none focus:border-[var(--color-primary-300)]/40 transition-all font-medium custom-calendar-picker"
+                                    className="w-full h-[50px] rounded-lg px-4 sm:px-6 bg-[var(--color-bg-surface-subtle)] border border-[var(--color-border-subtle)] text-[var(--color-text-muted)] focus:outline-none focus:border-[var(--color-primary-300)]/40 transition-all font-medium custom-calendar-picker text-sm sm:text-base"
                                 />
                             </div>
-                            <div className="space-y-2">
+                            <div className="space-y-2 min-w-0">
                                 <label className="text-[10px] font-bold text-[var(--color-text-muted)]/50 tracking-widest uppercase font-Montserrat ml-1">Nationality</label>
-                                <div className="relative">
+                                <div className="relative w-full">
                                     <select
-                                        className="w-full h-[50px] rounded-lg px-6 bg-[var(--color-bg-surface-subtle)] border border-[var(--color-border-subtle)] text-[var(--color-text-muted)] focus:outline-none focus:border-[var(--color-primary-300)]/40 appearance-none transition-all font-medium font-Montserrat"
+                                        className="w-full h-[50px] rounded-lg px-4 sm:px-6 bg-[var(--color-bg-surface-subtle)] border border-[var(--color-border-subtle)] text-[var(--color-text-muted)] focus:outline-none focus:border-[var(--color-primary-300)]/40 appearance-none transition-all font-medium font-Montserrat text-sm sm:text-base"
                                         value={profile.nationality} onChange={e => { setProfile({ ...profile, nationality: e.target.value }); setErrorMsg(""); }}
                                     >
                                         <option>United States</option>
@@ -301,7 +301,7 @@ export default function OnboardingPage() {
                                         <option>United Kingdom</option>
                                         <option>Indian</option>
                                     </select>
-                                    <svg className="w-4 h-4 text-[var(--color-text-muted)]/50 absolute right-6 top-1/2 -translate-y-1/2 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <svg className="w-4 h-4 text-[var(--color-text-muted)]/50 absolute right-4 sm:right-6 top-1/2 -translate-y-1/2 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M19 9l-7 7-7-7" />
                                     </svg>
                                 </div>
@@ -311,10 +311,10 @@ export default function OnboardingPage() {
                         <input
                             type="text" placeholder="Residential address" required
                             value={profile.residentialAddress} onChange={e => { setProfile({ ...profile, residentialAddress: e.target.value }); setErrorMsg(""); }}
-                            className="w-full h-[50px] rounded-lg px-6 bg-[var(--color-bg-surface-subtle)] border border-[var(--color-border-subtle)] text-white placeholder-[var(--color-text-muted)] focus:outline-none focus:border-[var(--color-primary-300)]/40 transition-all font-medium font-Montserrat"
+                            className="w-full h-[50px] rounded-lg px-4 sm:px-6 bg-[var(--color-bg-surface-subtle)] border border-[var(--color-border-subtle)] text-white placeholder-[var(--color-text-muted)] focus:outline-none focus:border-[var(--color-primary-300)]/40 transition-all font-medium font-Montserrat text-sm sm:text-base"
                         />
 
-                        <div className="flex gap-4 pt-4">
+                        <div className="flex gap-4 pt-2 sm:pt-4">
                             {/* <button
                                 type="button" onClick={handleBack}
                                 className="w-[60px] h-[50px] rounded-2xl bg-[var(--color-bg-surface-subtle)] border border-[var(--color-border-subtle)] flex items-center justify-center text-[var(--color-text-muted)] hover:text-white hover:border-[var(--color-border-muted)] transition-all font-Montserrat"
@@ -323,7 +323,7 @@ export default function OnboardingPage() {
                             </button> */}
                             <button
                                 type="submit" disabled={isSettingUp}
-                                className="flex-1 h-[50px] rounded-full bg-[var(--color-primary-300)] text-black font-bold text-base flex items-center justify-center gap-2 hover:opacity-90 transition-all shadow-[0_8px_20px_var(--color-primary-300-alpha-15)] font-Montserrat"
+                                className="w-full h-[50px] rounded-full bg-[var(--color-primary-300)] text-black font-bold text-base flex items-center justify-center gap-2 hover:opacity-90 transition-all shadow-[0_8px_20px_var(--color-primary-300-alpha-15)] font-Montserrat cursor-pointer"
                             >
                                 {isSettingUp ? <LoadingSpinner /> : <>Complete Setup <SparkleIcon /></>}
                             </button>
@@ -332,17 +332,17 @@ export default function OnboardingPage() {
                 </div>
             )}
             {step === 4 && (
-                <div className="w-full max-w-[560px] flex flex-col animate-fade-in p-6 sm:p-10 rounded-[24px] sm:rounded-[32px] border border-white/5 bg-[#0D0D0D] shadow-2xl relative">
-                    <h1 className="text-white font-semibold text-2xl tracking-tight mb-8 font-Montserrat">Identity Verification</h1>
-                    <p className="text-[var(--color-text-muted)] text-sm leading-relaxed mb-8 font-Montserrat">
+                <div className="w-full max-w-[560px] flex flex-col animate-fade-in p-5 sm:p-10 rounded-[20px] sm:rounded-[32px] border border-white/5 bg-[#0D0D0D] shadow-2xl relative">
+                    <h1 className="text-white font-semibold text-xl sm:text-2xl tracking-tight mb-4 sm:mb-8 font-Montserrat">Identity Verification</h1>
+                    <p className="text-[var(--color-text-muted)] text-xs sm:text-sm leading-relaxed mb-6 sm:mb-8 font-Montserrat">
                         Please upload your documents to complete KYC. This is required for agent commission payouts.
                     </p>
                     
-                    <form onSubmit={handleKycSubmit} className="w-full space-y-6">
+                    <form onSubmit={handleKycSubmit} className="w-full space-y-4 sm:space-y-6">
                         <div className="space-y-2.5">
                             <label className="text-[11px] font-semibold text-white/50 tracking-wider uppercase font-Montserrat ml-1">Document Type</label>
                             <select
-                                className="w-full h-[56px] rounded-xl px-5 bg-white/[0.03] border border-white/10 text-white focus:outline-none focus:border-[#00FFCC]/30 transition-all font-medium font-Montserrat appearance-none"
+                                className="w-full h-[52px] sm:h-[56px] rounded-xl px-4 sm:px-5 bg-white/[0.03] border border-white/10 text-white focus:outline-none focus:border-[#00FFCC]/30 transition-all font-medium font-Montserrat appearance-none"
                                 value={rera.documentType} onChange={e => setRera({ ...rera, documentType: e.target.value, documentFile: null })}
                             >
                                 <option value="PASSPORT" className="bg-[#0D0D0D]">Passport</option>
@@ -352,8 +352,8 @@ export default function OnboardingPage() {
                             </select>
                         </div>
 
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div className="space-y-2.5">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div className="space-y-2.5 min-w-0">
                                 <label className="text-[11px] font-semibold text-white/50 tracking-wider uppercase font-Montserrat ml-1">Document Front/Full</label>
                                 <div 
                                     className="relative w-full h-[100px] rounded-xl border-2 border-dashed border-white/10 bg-white/[0.02] flex flex-col items-center justify-center gap-1 cursor-pointer hover:border-[#00FFCC]/20 transition-all overflow-hidden"
@@ -373,7 +373,7 @@ export default function OnboardingPage() {
                                     )}
                                 </div>
                             </div>
-                            <div className="space-y-2.5">
+                            <div className="space-y-2.5 min-w-0">
                                 <label className="text-[11px] font-semibold text-white/50 tracking-wider uppercase font-Montserrat ml-1">Selfie Verification</label>
                                 <div 
                                     className="relative w-full h-[100px] rounded-xl border-2 border-dashed border-white/10 bg-white/[0.02] flex flex-col items-center justify-center gap-1 cursor-pointer hover:border-[#00FFCC]/20 transition-all overflow-hidden"
@@ -418,7 +418,7 @@ export default function OnboardingPage() {
 
                         <button
                             type="submit"
-                            className="w-full h-[60px] rounded-2xl bg-[#00FFCC] text-black font-bold text-base flex items-center justify-center gap-2 hover:opacity-90 transition-all shadow-[0_8px_20px_rgba(0,255,204,0.2)] font-Montserrat"
+                            className="w-full h-[52px] sm:h-[60px] rounded-2xl bg-[#00FFCC] text-black font-bold text-base flex items-center justify-center gap-2 hover:opacity-90 transition-all shadow-[0_8px_20px_rgba(0,255,204,0.2)] font-Montserrat cursor-pointer"
                         >
                             Next: RERA Details <ArrowRightIcon />
                         </button>
@@ -427,23 +427,23 @@ export default function OnboardingPage() {
             )}
 
             {step === 5 && (
-                <div className="w-full max-w-[560px] flex flex-col animate-fade-in p-6 sm:p-10 rounded-[24px] sm:rounded-[32px] border border-white/5 bg-[#0D0D0D] shadow-2xl relative">
-                    <h1 className="text-white font-semibold text-2xl tracking-tight mb-8 font-Montserrat">RERA Registration Details</h1>
+                <div className="w-full max-w-[560px] flex flex-col animate-fade-in p-5 sm:p-10 rounded-[20px] sm:rounded-[32px] border border-white/5 bg-[#0D0D0D] shadow-2xl relative">
+                    <h1 className="text-white font-semibold text-xl sm:text-2xl tracking-tight mb-6 sm:mb-8 font-Montserrat">RERA Registration Details</h1>
                     
-                    <div className="flex items-center gap-4 p-4 rounded-xl bg-[#00FFCC]/5 border border-[#00FFCC]/10 mb-8 w-full">
+                    <div className="flex items-center gap-3 sm:gap-4 p-3.5 sm:p-4 rounded-xl bg-[#00FFCC]/5 border border-[#00FFCC]/10 mb-6 sm:mb-8 w-full">
                         <div className="w-6 h-6 rounded-full border border-[#00FFCC]/40 flex items-center justify-center text-[12px] text-[#00FFCC] shrink-0 font-bold">!</div>
-                        <p className="text-[13px] text-white/70 leading-relaxed font-Montserrat">
+                        <p className="text-[12px] sm:text-[13px] text-white/70 leading-relaxed font-Montserrat">
                             Your RERA registration will be verified against the official registry. Ensure the details match exactly.
                         </p>
                     </div>
 
-                    <form onSubmit={handleReraSubmit} className="w-full space-y-7">
+                    <form onSubmit={handleReraSubmit} className="w-full space-y-5 sm:space-y-7">
                         <div className="space-y-2.5">
                             <label className="text-[11px] font-semibold text-white/50 tracking-wider uppercase font-Montserrat ml-1">RERA Registration Number</label>
                             <input
                                 type="text" placeholder="RERA-MH-2024-001234" required
                                 value={rera.registrationNumber} onChange={e => setRera({ ...rera, registrationNumber: e.target.value })}
-                                className="w-full h-[56px] rounded-xl px-5 bg-white/[0.03] border border-white/10 text-white placeholder-white/20 focus:outline-none focus:border-[#00FFCC]/30 transition-all font-medium font-Montserrat"
+                                className="w-full h-[50px] sm:h-[56px] rounded-xl px-4 sm:px-5 bg-white/[0.03] border border-white/10 text-white placeholder-white/20 focus:outline-none focus:border-[#00FFCC]/30 transition-all font-medium font-Montserrat text-sm sm:text-base"
                             />
                         </div>
 
@@ -452,7 +452,7 @@ export default function OnboardingPage() {
                             <input
                                 type="text" placeholder="Select state" required
                                 value={rera.state} onChange={e => setRera({ ...rera, state: e.target.value })}
-                                className="w-full h-[56px] rounded-xl px-5 bg-white/[0.03] border border-white/10 text-white placeholder-white/20 focus:outline-none focus:border-[#00FFCC]/30 transition-all font-medium font-Montserrat"
+                                className="w-full h-[50px] sm:h-[56px] rounded-xl px-4 sm:px-5 bg-white/[0.03] border border-white/10 text-white placeholder-white/20 focus:outline-none focus:border-[#00FFCC]/30 transition-all font-medium font-Montserrat text-sm sm:text-base"
                             />
                         </div>
 
@@ -462,7 +462,7 @@ export default function OnboardingPage() {
                                 <input
                                     type="date" required
                                     value={rera.expiryDate} onChange={e => setRera({ ...rera, expiryDate: e.target.value })}
-                                    className="w-full h-[56px] rounded-xl px-5 bg-white/[0.03] border border-white/10 text-white focus:outline-none focus:border-[#00FFCC]/30 transition-all font-medium custom-calendar-picker"
+                                    className="w-full h-[50px] sm:h-[56px] rounded-xl px-4 sm:px-5 bg-white/[0.03] border border-white/10 text-white focus:outline-none focus:border-[#00FFCC]/30 transition-all font-medium custom-calendar-picker text-sm sm:text-base"
                                 />
                             </div>
                         </div>
@@ -470,7 +470,7 @@ export default function OnboardingPage() {
                         <div className="space-y-2.5">
                             <label className="text-[11px] font-semibold text-white/50 tracking-wider uppercase font-Montserrat ml-1">Upload RERA Certificate</label>
                             <div 
-                                className="w-full h-[140px] rounded-2xl border-2 border-dashed border-white/10 bg-white/[0.02] flex flex-col items-center justify-center gap-3 cursor-pointer hover:border-[#00FFCC]/20 hover:bg-white/[0.04] transition-all group overflow-hidden"
+                                className="w-full h-[120px] sm:h-[140px] rounded-2xl border-2 border-dashed border-white/10 bg-white/[0.02] flex flex-col items-center justify-center gap-3 cursor-pointer hover:border-[#00FFCC]/20 hover:bg-white/[0.04] transition-all group overflow-hidden"
                                 onClick={() => document.getElementById('reraFile')?.click()}
                             >
                                 <input 
@@ -484,25 +484,25 @@ export default function OnboardingPage() {
                                     </div>
                                 ) : (
                                     <>
-                                        <div className="w-12 h-12 rounded-full bg-white/[0.05] flex items-center justify-center group-hover:scale-110 transition-transform">
-                                            <UploadIcon className="w-6 h-6 text-white/40" />
+                                        <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-white/[0.05] flex items-center justify-center group-hover:scale-110 transition-transform">
+                                            <UploadIcon className="w-5 h-5 sm:w-6 sm:h-6 text-white/40" />
                                         </div>
-                                        <span className="text-[12px] font-medium text-white/40">Click to upload (PDF, JPG, PNG)</span>
+                                        <span className="text-[11px] sm:text-[12px] font-medium text-white/40">Click to upload (PDF, JPG, PNG)</span>
                                     </>
                                 )}
                             </div>
                         </div>
 
-                        <div className="flex gap-4 pt-6">
+                        <div className="flex gap-3 sm:gap-4 pt-4 sm:pt-6">
                             <button
                                 type="button" onClick={() => setStep(4)}
-                                className="flex-1 h-[56px] rounded-2xl border border-white/10 text-white font-semibold text-[15px] hover:bg-white/5 transition-all font-Montserrat"
+                                className="flex-1 h-[50px] sm:h-[56px] rounded-2xl border border-white/10 text-white font-semibold text-sm sm:text-[15px] hover:bg-white/5 transition-all font-Montserrat cursor-pointer"
                             >
                                 Back
                             </button>
                             <button
                                 type="submit" disabled={isSubmittingKyc}
-                                className="flex-[2] h-[56px] rounded-2xl bg-[#00FFCC] text-black font-bold text-[15px] flex items-center justify-center gap-2 hover:opacity-90 transition-all shadow-[0_4px_24px_rgba(0,255,204,0.3)] font-Montserrat"
+                                className="flex-[2] h-[50px] sm:h-[56px] rounded-2xl bg-[#00FFCC] text-black font-bold text-sm sm:text-[15px] flex items-center justify-center gap-2 hover:opacity-90 transition-all shadow-[0_4px_24px_rgba(0,255,204,0.3)] font-Montserrat cursor-pointer"
                             >
                                 {isSubmittingKyc ? <LoadingSpinner color="black" /> : "Submit for Verification"}
                             </button>
@@ -512,7 +512,7 @@ export default function OnboardingPage() {
             )}
 
 
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-[var(--color-primary-300)]/5 rounded-full blur-[120px] -z-10 pointer-events-none" />
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] sm:w-[500px] h-[300px] sm:h-[500px] bg-[var(--color-primary-300)]/5 rounded-full blur-[120px] -z-10 pointer-events-none" />
         </main>
     );
 }

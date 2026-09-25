@@ -340,6 +340,7 @@
     scroll-behavior: smooth;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
   }
 
   section[id],
@@ -352,6 +353,8 @@
     color: var(--foreground);
     font-family: var(--font-primary);
     line-height: 1.6;
+    overflow-x: hidden;
+    min-height: 100vh;
   }
 
   h1,
