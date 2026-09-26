@@ -95,10 +95,21 @@ export default function SecondaryMarketplacePage() {
         return allAssets;
     }, [allAssets, activeFilter]);
 
-    const handleBuyFractions = (asset) => {
+    const showToast = (message: string, type = "success") => {
+        if (typeof window !== "undefined") {
+            window.dispatchEvent(
+                new CustomEvent("show-toast", {
+                    detail: { message, type },
+                })
+            );
+        }
+    };
+
+    const handleBuyFractions = (_asset: any) => {
         setViewingAssetId(null);
-        setSelectedAsset(asset);
-        setIsPaymentModalOpen(true);
+        showToast("Coming Soon");
+        // setSelectedAsset(_asset);
+        // setIsPaymentModalOpen(true);
     };
 
     const handleViewDetail = (id) => {
@@ -199,7 +210,7 @@ export default function SecondaryMarketplacePage() {
                 </motion.div>
 
 
-                <PaymentModal
+                {/* <PaymentModal
                     isOpen={isPaymentModalOpen}
                     onClose={() => setIsPaymentModalOpen(false)}
                     flow="secondary"
@@ -220,7 +231,7 @@ export default function SecondaryMarketplacePage() {
                             }
                             : null
                     }
-                />
+                /> */}
 
                 <DetailModal
                     id={viewingAssetId}

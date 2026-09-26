@@ -276,13 +276,13 @@ function SecondaryListingCard({ item, onDelete }) {
             variants={itemVariants}
             className="bg-[var(--card-surface)] border border-[var(--sidebar-border)] rounded-md p-4 sm:p-5 lg:p-6 hover:border-[var(--sidebar-active-text)]/20 transition-all duration-300 relative group"
         >
-            <div className="flex flex-col lg:flex-row items-start lg:items-center gap-5 lg:gap-8">
-                <div className="w-full sm:w-[280px] lg:w-[240px] h-48 sm:h-[160px] lg:h-[135px] rounded-md overflow-hidden flex-shrink-0 relative">
+            <div className="flex flex-col md:flex-row items-start md:items-center gap-5 md:gap-6 lg:gap-8">
+                <div className="w-full md:w-[240px] lg:w-[260px] h-48 sm:h-56 md:h-[150px] rounded-lg overflow-hidden flex-shrink-0 relative">
                     <Image
                         src={imageUrl}
                         alt={title}
                         fill
-                        sizes="(max-width: 640px) 100vw, 280px"
+                        sizes="(max-width: 768px) 100vw, 260px"
                         className="object-cover"
                     />
                 </div>
@@ -375,14 +375,14 @@ function AssetCard({ asset, onResale }) {
             variants={itemVariants}
             className={`bg-[var(--card-surface)] border ${asset.isResale ? 'border-[var(--sidebar-active-text)]/10' : 'border-[var(--sidebar-border)]'} rounded-md p-4 sm:p-5 lg:p-6 hover:border-[var(--sidebar-active-text)]/20 transition-all duration-300 relative group`}
         >
-            <div className="flex flex-col lg:flex-row items-start lg:items-center gap-5 lg:gap-8">
+            <div className="flex flex-col md:flex-row items-start md:items-center gap-5 md:gap-6 lg:gap-8">
 
-                <div className="w-full sm:w-[280px] lg:w-[240px] h-48 sm:h-[160px] lg:h-[135px] rounded-md overflow-hidden flex-shrink-0 relative">
+                <div className="w-full md:w-[240px] lg:w-[260px] h-48 sm:h-56 md:h-[150px] rounded-lg overflow-hidden flex-shrink-0 relative">
                     <Image
                         src={asset.image}
                         alt={asset.name}
                         fill
-                        sizes="(max-width: 640px) 100vw, 280px"
+                        sizes="(max-width: 768px) 100vw, 260px"
                         className="object-cover"
                     />
                     {asset.isResale && (

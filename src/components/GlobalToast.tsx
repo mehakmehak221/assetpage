@@ -8,26 +8,20 @@ export default function GlobalToast() {
     const [toast, setToast] = useState({ show: false, message: "", type: "success" });
     const pathname = usePathname();
 
+    // Check localStorage on route change or initial load
     useEffect(() => {
         const msg = localStorage.getItem("toastMessage");
         const type = localStorage.getItem("toastType") || "success";
-        
+
         if (msg) {
-            setTimeout(() => {
-                setToast({ show: true, message: msg, type });
-            }, 0);
             localStorage.removeItem("toastMessage");
             localStorage.removeItem("toastType");
-            
-            const timer = setTimeout(() => {
-                setToast(prev => ({ ...prev, show: false }));
-            }, 3000);
-            return () => clearTimeout(timer);
+            setToast({ show: true, message: msg, type });
         }
     }, [pathname]);
 
+    // Listen for custom "show-toast" events
     useEffect(() => {
-        let timer: NodeJS.Timeout;
         const handleShowToast = (e: Event) => {
             const customEvent = e as CustomEvent<{ message: string; type?: string }>;
             if (customEvent.detail) {
@@ -36,20 +30,24 @@ export default function GlobalToast() {
                     message: customEvent.detail.message,
                     type: customEvent.detail.type || "success"
                 });
-                
-                if (timer) clearTimeout(timer);
-                timer = setTimeout(() => {
-                    setToast(prev => ({ ...prev, show: false }));
-                }, 3000);
             }
         };
 
         window.addEventListener("show-toast", handleShowToast);
         return () => {
             window.removeEventListener("show-toast", handleShowToast);
-            if (timer) clearTimeout(timer);
         };
     }, []);
+
+    useEffect(() => {
+        if (!toast.show) return;
+
+        const timer = setTimeout(() => {
+            setToast(prev => ({ ...prev, show: false }));
+        }, 3000);
+
+        return () => clearTimeout(timer);
+    }, [toast.show, toast.message]);
 
     return (
         <AnimatePresence>

@@ -102,15 +102,15 @@ function PropertyCard({ property, index, onDelete, onSubmitForReview, onEdit, on
             transition={{ duration: 0.35, delay: index * 0.06 }}
             className="overflow-hidden rounded-md border border-[var(--sidebar-border)] bg-[var(--card-surface)] shadow-[0_20px_60px_rgba(0,0,0,0.12)] transition-all duration-300 hover:border-[var(--sidebar-active-text)]/20 hover:shadow-[0_24px_80px_rgba(0,0,0,0.18)]"
         >
-            <div className="flex flex-col xl:flex-row">
-                <div className="relative aspect-[16/10] w-full flex-shrink-0 bg-[var(--color-bg-card)] sm:aspect-[4/3] lg:aspect-auto lg:min-h-[240px] lg:w-[300px] xl:w-[320px]">
+            <div className="flex flex-col lg:flex-row">
+                <div className="relative aspect-[16/10] sm:aspect-[16/9] w-full flex-shrink-0 bg-[var(--color-bg-card)] lg:aspect-auto lg:min-h-[240px] lg:w-[300px] xl:w-[340px]">
                     {propertyImage ? (
                         <Image
                             src={propertyImage.startsWith("http") ? propertyImage : `/${propertyImage}`}
                             alt={property.title}
                             fill
                             className="object-cover"
-                            sizes="(max-width: 1024px) 100vw, 260px"
+                            sizes="(max-width: 1024px) 100vw, 340px"
                         />
                     ) : (
                         <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-[var(--sidebar-active-bg)] to-[var(--card-surface)]">
@@ -455,11 +455,10 @@ export default function PartnerPropertiesPage() {
                                     <button
                                         key={type}
                                         onClick={() => setSaleTypeFilter(type)}
-                                        className={`relative px-4 py-1.5 rounded-md text-xs font-bold transition-all duration-200 cursor-pointer border ${
-                                            isSelected
+                                        className={`relative px-4 py-1.5 rounded-md text-xs font-bold transition-all duration-200 cursor-pointer border ${isSelected
                                                 ? "bg-[var(--sidebar-active-bg)] text-[var(--sidebar-active-text)] border-[var(--sidebar-active-text)]/30 shadow-sm"
                                                 : "bg-[var(--card-surface)] text-[var(--color-text-muted)] border-[var(--sidebar-border)] hover:text-[var(--foreground)] hover:border-[var(--sidebar-border)]/80"
-                                        }`}
+                                            }`}
                                     >
                                         {type === "ALL"
                                             ? "All Types"

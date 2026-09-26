@@ -249,17 +249,17 @@ export default function AgentProfilePage() {
 
                         <div className="space-y-4">
                             <div className="relative overflow-hidden bg-gradient-to-r from-[var(--field-surface)] via-[var(--card-surface)] to-[var(--field-surface)] border border-[var(--dashboard-border)] hover:border-[#00FFCC]/40 rounded-2xl p-4 sm:p-5 transition-all">
-                                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4">
-                                    <div className="min-w-0 flex-1">
-                                        <div className="flex items-center gap-1.5 mb-1">
+                                <div className="flex flex-col gap-3">
+                                    <div className="min-w-0">
+                                        <div className="flex items-center gap-1.5 mb-1.5">
                                             <span className="w-1.5 h-1.5 rounded-full bg-[#00FFCC] animate-pulse" />
-                                            <label className="text-[10px] font-bold text-[var(--color-text-muted)] uppercase tracking-widest whitespace-nowrap">Referral Code</label>
+                                            <label className="text-[10px] font-bold text-[var(--color-text-muted)] uppercase tracking-widest">Referral Code</label>
                                         </div>
                                         <p className="text-lg sm:text-xl font-black text-[#00FFCC] font-mono tracking-[2px] select-all truncate">{referralCode || "N/A"}</p>
                                     </div>
                                     <button
                                         onClick={() => handleCopy(referralCode, 'code')}
-                                        className={`w-full sm:w-auto text-xs font-bold uppercase cursor-pointer px-4 py-2.5 rounded-xl border transition-all duration-200 flex items-center justify-center gap-1.5 flex-shrink-0 whitespace-nowrap ${copiedCode ? 'bg-[#00FFCC] text-black border-transparent shadow-md' : 'bg-[var(--sidebar-active-bg)] text-[var(--foreground)] border-[var(--dashboard-border)] hover:bg-[#00FFCC] hover:text-black hover:border-[#00FFCC] active:scale-95'}`}
+                                        className={`w-full text-xs font-bold uppercase cursor-pointer px-4 py-2.5 rounded-xl border transition-all duration-200 flex items-center justify-center gap-1.5 whitespace-nowrap ${copiedCode ? 'bg-[#00FFCC] text-black border-transparent shadow-md' : 'bg-[var(--sidebar-active-bg)] text-[var(--foreground)] border-[var(--dashboard-border)] hover:bg-[#00FFCC] hover:text-black hover:border-[#00FFCC] active:scale-95'}`}
                                     >
                                         {copiedCode ? "Copied!" : "Copy Code"}
                                     </button>
@@ -267,17 +267,17 @@ export default function AgentProfilePage() {
                             </div>
 
                             <div className="relative overflow-hidden bg-gradient-to-r from-[var(--field-surface)] via-[var(--card-surface)] to-[var(--field-surface)] border border-[var(--dashboard-border)] hover:border-[#00FFCC]/40 rounded-2xl p-4 sm:p-5 transition-all">
-                                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4">
-                                    <div className="min-w-0 flex-1">
-                                        <div className="flex items-center gap-1.5 mb-1">
+                                <div className="flex flex-col gap-3">
+                                    <div className="min-w-0">
+                                        <div className="flex items-center gap-1.5 mb-1.5">
                                             <span className="w-1.5 h-1.5 rounded-full bg-[#00FFCC] animate-pulse" />
-                                            <label className="text-[10px] font-bold text-[var(--color-text-muted)] uppercase tracking-widest whitespace-nowrap">Sign-up Link</label>
+                                            <label className="text-[10px] font-bold text-[var(--color-text-muted)] uppercase tracking-widest">Sign-up Link</label>
                                         </div>
-                                        <p className="text-xs font-mono text-[var(--foreground)] opacity-80 truncate">{referralLink || "N/A"}</p>
+                                        <p className="text-xs font-mono text-[var(--foreground)] opacity-80 truncate bg-[var(--field-surface)]/60 px-2.5 py-1.5 rounded-lg border border-[var(--dashboard-border)] select-all">{referralLink || "N/A"}</p>
                                     </div>
                                     <button
                                         onClick={() => handleCopy(referralLink, 'link')}
-                                        className={`w-full sm:w-auto text-xs font-bold uppercase cursor-pointer px-4 py-2.5 rounded-xl border transition-all duration-200 flex items-center justify-center gap-1.5 flex-shrink-0 whitespace-nowrap ${copiedLink ? 'bg-[#00FFCC] text-black border-transparent shadow-md' : 'bg-[var(--sidebar-active-bg)] text-[var(--foreground)] border-[var(--dashboard-border)] hover:bg-[#00FFCC] hover:text-black hover:border-[#00FFCC] active:scale-95'}`}
+                                        className={`w-full text-xs font-bold uppercase cursor-pointer px-4 py-2.5 rounded-xl border transition-all duration-200 flex items-center justify-center gap-1.5 whitespace-nowrap ${copiedLink ? 'bg-[#00FFCC] text-black border-transparent shadow-md' : 'bg-[var(--sidebar-active-bg)] text-[var(--foreground)] border-[var(--dashboard-border)] hover:bg-[#00FFCC] hover:text-black hover:border-[#00FFCC] active:scale-95'}`}
                                     >
                                         {copiedLink ? "Copied!" : "Copy Link"}
                                     </button>

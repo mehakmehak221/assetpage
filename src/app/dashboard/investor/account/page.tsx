@@ -457,10 +457,10 @@ Start building your property portfolio today! ✨`;
                                     <p className="text-[11px] sm:text-[13px] uppercase tracking-[1.5px] font-semibold text-[var(--color-text-muted)] mb-2">INR BALANCE</p>
                                     <p className="text-xl sm:text-2xl lg:text-3xl font-bold text-[var(--header-text)] mb-4 sm:mb-6 break-words tracking-tight">₹{profileData?.usdBalance || "0.00"}</p>
                                 </div>
-                                <div className="flex gap-2 w-full mt-auto">
+                                {/* <div className="flex gap-2 w-full mt-auto">
                                     <button className="flex-1 min-w-0 px-3 py-1.5 sm:py-2 bg-[var(--card-surface)] text-[var(--header-text)] text-[11px] sm:text-xs font-semibold tracking-wide rounded-full transition-all hover:bg-[var(--field-surface)] cursor-pointer border border-[var(--sidebar-border)] text-center truncate">Deposit</button>
                                     <button className="flex-1 min-w-0 px-3 py-1.5 sm:py-2 bg-[var(--card-surface)] text-[var(--header-text)] text-[11px] sm:text-xs font-semibold tracking-wide rounded-full border border-[var(--sidebar-border)] transition-all hover:bg-[var(--field-surface)] cursor-pointer text-center truncate">Withdraw</button>
-                                </div>
+                                </div> */}
                             </div>
 
                             <div className="rounded-xl sm:rounded-2xl p-4 sm:p-6 lg:p-7 relative overflow-hidden bg-gradient-to-b from-[var(--background)] to-[var(--color-primary-700)] shadow-glow-primary flex flex-col justify-between">
@@ -469,10 +469,10 @@ Start building your property portfolio today! ✨`;
                                     <p className="text-[11px] sm:text-[13px] uppercase tracking-[1.5px] font-semibold text-[var(--color-text-muted)] mb-2">AED BALANCE</p>
                                     <p className="text-xl sm:text-2xl lg:text-3xl font-bold text-[var(--header-text)] mb-4 sm:mb-6 break-words tracking-tight"><span className="text-xs sm:text-sm font-medium opacity-80 mr-1.5">AED</span>{profileData?.aedBalance || "0.00"}</p>
                                 </div>
-                                <div className="flex gap-2 w-full mt-auto">
+                                {/* <div className="flex gap-2 w-full mt-auto">
                                     <button className="flex-1 min-w-0 px-3 py-1.5 sm:py-2 bg-[var(--card-surface)] text-[var(--header-text)] text-[11px] sm:text-xs font-semibold tracking-wide rounded-full transition-all hover:bg-[var(--field-surface)] cursor-pointer border border-[var(--sidebar-border)] text-center truncate">Deposit</button>
                                     <button className="flex-1 min-w-0 px-3 py-1.5 sm:py-2 bg-[var(--card-surface)] text-[var(--header-text)] text-[11px] sm:text-xs font-semibold tracking-wide rounded-full border border-[var(--sidebar-border)] transition-all hover:bg-[var(--field-surface)] cursor-pointer text-center truncate">Withdraw</button>
-                                </div>
+                                </div> */}
                             </div>
 
                             <div className="rounded-xl sm:rounded-2xl p-4 sm:p-6 lg:p-7 relative overflow-hidden bg-gradient-to-b from-[var(--background)] to-[var(--color-primary-700)] shadow-glow-primary flex flex-col justify-between sm:col-span-2 lg:col-span-1">
@@ -481,10 +481,10 @@ Start building your property portfolio today! ✨`;
                                     <p className="text-[11px] sm:text-[13px] uppercase tracking-[1.5px] font-semibold text-[var(--color-text-muted)] mb-2">CRYPTO</p>
                                     <p className="text-xl sm:text-2xl lg:text-3xl font-bold text-[var(--header-text)] mb-4 sm:mb-6 break-words tracking-tight">{profileData?.cryptoBalance || "0.00"} <span className="text-xs sm:text-sm font-medium opacity-80 ml-1">ETH</span></p>
                                 </div>
-                                <div className="flex gap-2 w-full mt-auto">
+                                {/* <div className="flex gap-2 w-full mt-auto">
                                     <button className="flex-1 min-w-0 px-3 py-1.5 sm:py-2 bg-[var(--card-surface)] text-[var(--header-text)] text-[11px] sm:text-xs font-semibold tracking-wide rounded-full transition-all hover:bg-[var(--field-surface)] cursor-pointer border border-[var(--sidebar-border)] text-center truncate">Deposit</button>
                                     <button className="flex-1 min-w-0 px-3 py-1.5 sm:py-2 bg-[var(--card-surface)] text-[var(--header-text)] text-[11px] sm:text-xs font-semibold tracking-wide rounded-full border border-[var(--sidebar-border)] transition-all hover:bg-[var(--field-surface)] cursor-pointer text-center truncate">Withdraw</button>
-                                </div>
+                                </div> */}
                             </div>
                         </div>
                     )}
