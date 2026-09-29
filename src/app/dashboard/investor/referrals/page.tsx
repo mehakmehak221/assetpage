@@ -85,7 +85,7 @@ export default function InvestorReferralsPage() {
     setTimeout(() => setCopiedCode(false), 2500);
   };
 
-  const shareText = `Hey! Invest in vetted, high-yield institutional real estate with me on Glofi Estate. Sign up with my referral code ${referralCode || ""} or use this link: ${referralLink}`;
+  const shareText = `Hey! Invest in high-yield institutional real estate with me on Glofi Estate. Sign up with my referral code ${referralCode || ""} or use this link: ${referralLink}`;
 
   const handleShareWhatsApp = () => {
     window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(shareText)}`, "_blank");
