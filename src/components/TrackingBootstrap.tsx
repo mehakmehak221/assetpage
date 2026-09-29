@@ -10,7 +10,12 @@ export default function TrackingBootstrap() {
 
   useEffect(() => {
     const params = new URLSearchParams(searchParams.toString());
-    const referralCode = params.get("ref") || params.get("referral");
+    const referralCode = params.get("referralCode") || params.get("ref") || params.get("referral");
+    if (referralCode && typeof window !== "undefined") {
+      try {
+        localStorage.setItem("glofi_referral_code", referralCode);
+      } catch {}
+    }
     const utmSource = params.get("utm_source");
     const utmMedium = params.get("utm_medium");
     const utmCampaign = params.get("utm_campaign");

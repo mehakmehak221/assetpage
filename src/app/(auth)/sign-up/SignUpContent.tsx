@@ -86,7 +86,10 @@ function SignUpPageContent() {
         phone: "",
         password: "",
         confirmPassword: "",
-        referredByCode: searchParams.get("ref") || "",
+        referredByCode:
+            searchParams.get("referralCode") ||
+            searchParams.get("ref") ||
+            (typeof window !== "undefined" ? localStorage.getItem("glofi_referral_code") || "" : ""),
         reraNumber: "",
         expiryDate: ""
     });
@@ -198,7 +201,19 @@ function SignUpPageContent() {
         const nextRole = SIGNUP_ROLES.includes(next as SignupRole) ? (next as SignupRole) : null;
         if (!nextRole || nextRole === userType) return;
         setUserType(nextRole);
-        setForm({ name: "", email: "", phone: "", password: "", confirmPassword: "", referredByCode: searchParams.get("ref") || "", reraNumber: "", expiryDate: "" });
+        setForm({
+            name: "",
+            email: "",
+            phone: "",
+            password: "",
+            confirmPassword: "",
+            referredByCode:
+                searchParams.get("referralCode") ||
+                searchParams.get("ref") ||
+                (typeof window !== "undefined" ? localStorage.getItem("glofi_referral_code") || "" : ""),
+            reraNumber: "",
+            expiryDate: "",
+        });
         setErrorMsg(""); setNameError(""); setEmailError(""); setPhoneError(""); setPasswordError("");
         setConfirmPasswordError(""); setReraError(""); setExpiryError(""); setReferralError("");
         setShowPassword(false); setShowConfirmPassword(false);
@@ -464,10 +479,6 @@ function SignUpPageContent() {
                     setNameError, setEmailError, setPhoneError, setPasswordError, setReraError,
                     setExpiryError, setReferralError, setConfirmPasswordError, setOtpError, setErrorMsg,
                 });
-                const friendlyMsg = (apiErr?.data?.message) || (err instanceof Error ? err.message : "");
-                if (friendlyMsg) {
-                    setErrorMsg(friendlyMsg);
-                }
             }
             window.scrollTo({ top: 0, behavior: "smooth" });
         }

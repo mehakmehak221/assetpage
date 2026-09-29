@@ -54,7 +54,7 @@ export function openWhatsAppShare(shareUrl: string, assetTitle: string) {
 export async function trackReferralClick(searchParams: URLSearchParams) {
   if (typeof window === "undefined") return null;
 
-  const referralCode = searchParams.get("ref") || searchParams.get("referral");
+  const referralCode = searchParams.get("referralCode") || searchParams.get("ref") || searchParams.get("referral");
   const utmSource = searchParams.get("utm_source");
   const utmMedium = searchParams.get("utm_medium");
   const utmCampaign = searchParams.get("utm_campaign");
@@ -72,6 +72,7 @@ export async function trackReferralClick(searchParams: URLSearchParams) {
   } catch {
     // Session storage may be unavailable in some private browsing contexts.
   }
+
 
   const headers: Record<string, string> = {
     "Content-Type": "application/json",

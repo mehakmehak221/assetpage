@@ -151,8 +151,28 @@ export default function RewardsCenter() {
         <p className="text-xs text-[var(--color-text-muted)] mt-1">
           Track rewards, validate coupons, and see current promotional campaigns.
         </p>
-        {/* {profileData?.email ? <p className="text-xs text-[var(--color-text-muted)] mt-2">Signed in as {profileData.email}</p> : null} */}
       </motion.div>
+
+      <div className="mb-6 rounded-xl border border-[var(--color-primary-300)]/30 bg-gradient-to-r from-[var(--color-primary-500)]/10 via-[var(--card-surface)] to-[var(--background)] p-4 sm:p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 shadow-sm">
+        <div>
+          <span className="text-[10px] font-bold uppercase tracking-wider text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-2 py-0.5 rounded-full">
+            Refer &amp; Earn Program
+          </span>
+          <h3 className="text-sm sm:text-base font-bold text-[var(--foreground)] mt-1">
+            Invite friends and earn 2.5% on their investments
+          </h3>
+          <p className="text-xs text-[var(--color-text-muted)] mt-0.5">
+            Share your unique code to unlock rewards directly into your wallet.
+          </p>
+        </div>
+        <a
+          href="/dashboard/investor/referrals"
+          className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-[var(--color-primary-300)] text-black font-bold text-xs uppercase tracking-wider no-underline shadow-sm hover:opacity-90 transition-all shrink-0"
+        >
+          <span>Open Refer &amp; Earn</span>
+          <span>→</span>
+        </a>
+      </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
         <div className="rounded-md border border-[var(--sidebar-border)] bg-[var(--card-surface)] p-5">

@@ -11,7 +11,12 @@ import { API_URL } from "@/constants";
 import { Country } from "country-state-city";
 import { Camera, AlertCircle, CheckCircle2 } from "lucide-react";
 
-const TABS = ["Profile", "Wallet", "KYC", "Certificates", /* "Referrals", */ "Support"];
+import {
+    useGetInvestorReferralQuery,
+    useGetInvestorReferralSummaryQuery,
+} from "@/store/api/investorReferralApi";
+
+const TABS = ["Profile", "Wallet", "KYC", "Certificates", "Referrals", "Support"];
 
 const tabContentVariants = {
     hidden: { opacity: 0, y: 10 },
@@ -29,6 +34,8 @@ export default function AccountPage() {
     const { data: profileData, isLoading: profileLoading } = useGetProfileQuery();
     const { data: certsResponse, isLoading: certsLoading } = useGetMyCertificatesQuery();
     const { data: kycData, isLoading: kycLoading } = useGetKycStatusQuery();
+    const { data: referralInfo } = useGetInvestorReferralQuery();
+    const { data: referralSummary } = useGetInvestorReferralSummaryQuery();
 
     const [updateProfile] = useUpdateProfileMutation();
     const [uploadFile, { isLoading: isUploading }] = useUploadFileMutation();
@@ -78,32 +85,33 @@ export default function AccountPage() {
     const certificates = certsResponse?.data || [];
 
     const getShareUrl = () => {
-        const code = profileData?.referralCode || "";
-        return `https://glofiestates.com/sign-up?ref=${code}`;
+        if (referralInfo?.referralLink) return referralInfo.referralLink;
+        const code = referralInfo?.referralCode || profileData?.referralCode || "";
+        return code ? `https://www.glofiestate.com/sign-up?referralCode=${code}` : "";
     };
 
     const getShareMessage = () => {
-        const code = profileData?.referralCode || "";
-        return `Hey! I'm inviting you to invest in premium real estate with me on GloFi Estates.
+        const code = referralInfo?.referralCode || profileData?.referralCode || "";
+        const url = getShareUrl();
+        return `Hey! I'm inviting you to invest in premium real estate with me on Glofi Estate.
 
-GloFi Estates makes it easy to co-own high-growth, vetted properties and earn passive rental returns with fractional ownership.
+Glofi Estate makes it easy to co-own high-growth, vetted properties and earn passive rental returns with fractional ownership.
 
 👉 Sign up using my invite link:
-https://glofiestates.com/sign-up?ref=${code}
+${url}
 
-Referral Code: ${code}
-Start building your property portfolio today! ✨`;
+${code ? `Referral Code: ${code}\n` : ""}Start building your property portfolio today! ✨`;
     };
 
     const handleCopyLink = () => {
-        if (!profileData?.referralCode) return;
-        navigator.clipboard.writeText(getShareUrl());
+        const url = getShareUrl();
+        if (!url) return;
+        navigator.clipboard.writeText(url);
         setCopiedLink(true);
         setTimeout(() => setCopiedLink(false), 2000);
     };
 
     const handleCopyMessage = () => {
-        if (!profileData?.referralCode) return;
         navigator.clipboard.writeText(getShareMessage());
         setCopiedMessage(true);
         setTimeout(() => setCopiedMessage(false), 2000);
@@ -568,10 +576,23 @@ Start building your property portfolio today! ✨`;
                         </div>
                     )}
 
-                    {/* {activeTab === "Referrals" && (
+                    {activeTab === "Referrals" && (
                         <div className="bg-[var(--card-surface)] border border-[var(--sidebar-border)] rounded-xl sm:rounded-2xl p-4 sm:p-6 lg:p-10 max-w-[900px] shadow-sm">
-                            <h2 className="text-base sm:text-[22px] font-bold text-[var(--header-text)] mb-1">Invite & Earn</h2>
-                            <p className="text-xs sm:text-sm text-[var(--color-text-muted)] mb-5 sm:mb-8 font-medium">Earn ₹250 for every referred investor</p>
+                            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6 sm:mb-8">
+                                <div>
+                                    <h2 className="text-base sm:text-[22px] font-bold text-[var(--header-text)] mb-1">Invite &amp; Earn</h2>
+                                    <p className="text-xs sm:text-sm text-[var(--color-text-muted)] font-medium">
+                                        Earn {referralInfo?.reward?.percentage ?? 2.5}% reward on your referrals&apos; investments
+                                    </p>
+                                </div>
+                                <a
+                                    href="/dashboard/investor/referrals"
+                                    className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-[var(--color-primary-300)] text-black text-xs font-bold uppercase tracking-wider no-underline shadow-sm hover:opacity-90 transition-all shrink-0 w-max"
+                                >
+                                    <span>Full Referrals Page</span>
+                                    <span>→</span>
+                                </a>
+                            </div>
 
                             <div className="bg-[var(--field-surface)] border border-[var(--sidebar-border)] rounded-2xl p-3 sm:p-4 mb-5 sm:mb-8 w-full max-w-[840px] space-y-3 shadow-inner">
                                 <div className="flex items-center bg-[var(--background)] border border-[var(--sidebar-border)] rounded-xl px-3.5 py-2.5 gap-2.5">
@@ -581,7 +602,7 @@ Start building your property portfolio today! ✨`;
                                     </svg>
                                     <input
                                         readOnly
-                                        value={profileData?.referralCode ? getShareUrl() : "Not available"}
+                                        value={getShareUrl() || "Referral code not available"}
                                         className="flex-1 min-w-0 bg-transparent border-0 text-[var(--color-text-muted)] text-xs sm:text-sm font-mono focus:outline-none placeholder-[var(--color-text-muted)]/20 select-all truncate"
                                     />
                                 </div>
@@ -589,7 +610,8 @@ Start building your property portfolio today! ✨`;
                                 <div className="grid grid-cols-1 min-[420px]:grid-cols-2 gap-2.5 sm:gap-3">
                                     <button
                                         onClick={handleCopyLink}
-                                        className={`w-full py-2.5 px-4 rounded-xl text-xs font-bold tracking-wide transition-all flex items-center justify-center gap-2 shadow-sm cursor-pointer border active:scale-95 ${copiedLink ? 'bg-[var(--color-primary-700)] text-white border-transparent' : 'bg-[var(--background)] text-[var(--header-text)] border-[var(--sidebar-border)] hover:border-[var(--color-primary-300)] hover:bg-[var(--card-surface)]'}`}
+                                        disabled={!getShareUrl()}
+                                        className={`w-full py-2.5 px-4 rounded-xl text-xs font-bold tracking-wide transition-all flex items-center justify-center gap-2 shadow-sm cursor-pointer border active:scale-95 disabled:opacity-50 ${copiedLink ? 'bg-[var(--color-primary-700)] text-white border-transparent' : 'bg-[var(--background)] text-[var(--header-text)] border-[var(--sidebar-border)] hover:border-[var(--color-primary-300)] hover:bg-[var(--card-surface)]'}`}
                                         title="Copy registration link only"
                                     >
                                         {copiedLink ? (
@@ -606,59 +628,66 @@ Start building your property portfolio today! ✨`;
                                     </button>
 
                                     <button
-                                        onClick={() => setIsShareModalOpen(true)}
-                                        className="w-full py-2.5 px-4 rounded-xl text-xs font-bold tracking-wide transition-all flex items-center justify-center gap-2 shadow-glow-primary cursor-pointer border-0 bg-[var(--color-primary-300)] text-black hover:opacity-95 active:scale-95"
-                                        title="Open share options"
+                                        onClick={() => {
+                                            if (navigator.share && getShareUrl()) {
+                                                navigator.share({
+                                                    title: "Invest with Glofi Estate",
+                                                    text: getShareMessage(),
+                                                    url: getShareUrl(),
+                                                }).catch(() => handleCopyMessage());
+                                            } else {
+                                                handleCopyMessage();
+                                            }
+                                        }}
+                                        disabled={!getShareUrl()}
+                                        className="w-full py-2.5 px-4 rounded-xl text-xs font-bold tracking-wide transition-all flex items-center justify-center gap-2 shadow-glow-primary cursor-pointer border-0 bg-[var(--color-primary-300)] text-black hover:opacity-95 active:scale-95 disabled:opacity-50"
+                                        title="Share invite message"
                                     >
                                         <svg className="w-4 h-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg>
-                                        <span>Share Invite</span>
+                                        <span>{copiedMessage ? "Copied Message!" : "Share Invite"}</span>
                                     </button>
                                 </div>
                             </div>
 
                             <div className="grid grid-cols-1 min-[480px]:grid-cols-3 gap-2.5 sm:gap-4 lg:gap-6">
-
-                                <div className="relative group bg-[var(--card-surface)] border border-[var(--sidebar-border)] rounded-xl sm:rounded-[16px] p-3 sm:p-4 lg:p-5 hover:border-[var(--sidebar-active-text)]/30 transition-all cursor-default shadow-sm flex flex-col justify-between" title="Referrals">
-                                    <div className="absolute -top-7 left-1/2 -translate-x-1/2 px-2 py-0.5 bg-neutral-900 border border-neutral-700 text-white text-[10px] font-semibold rounded shadow-lg opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity duration-150 z-30 whitespace-nowrap">
-                                        Referrals
-                                    </div>
+                                <div className="relative group bg-[var(--card-surface)] border border-[var(--sidebar-border)] rounded-xl sm:rounded-[16px] p-3 sm:p-4 lg:p-5 hover:border-[var(--sidebar-active-text)]/30 transition-all cursor-default shadow-sm flex flex-col justify-between">
                                     <div className="flex items-center justify-between gap-1.5 mb-2 sm:mb-3">
-                                        <p className="text-[9px] sm:text-[11px] uppercase font-bold text-[var(--color-text-muted)] tracking-wider truncate">REFERRALS</p>
-                                        <div className="shrink-0 text-[var(--sidebar-active-text)] w-6 h-6 sm:w-7 sm:h-7 lg:w-8 lg:h-8 flex items-center justify-center bg-[var(--sidebar-active-text)]/10 rounded-full group-hover:scale-110 transition-transform">
+                                        <p className="text-[9px] sm:text-[11px] uppercase font-bold text-[var(--color-text-muted)] tracking-wider truncate">TOTAL REFERRED</p>
+                                        <div className="shrink-0 text-[var(--sidebar-active-text)] w-6 h-6 sm:w-7 sm:h-7 lg:w-8 lg:h-8 flex items-center justify-center bg-[var(--sidebar-active-text)]/10 rounded-full">
                                             <svg className="w-3 h-3 sm:w-3.5 sm:h-3.5 lg:w-4 lg:h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
                                         </div>
                                     </div>
-                                    <p className="text-xl sm:text-2xl lg:text-[28px] font-black text-[var(--header-text)] leading-none">{profileData?.referralsCount || 0}</p>
+                                    <p className="text-xl sm:text-2xl lg:text-[28px] font-black text-[var(--header-text)] leading-none">
+                                        {referralSummary?.totalReferred ?? profileData?.referralsCount ?? 0}
+                                    </p>
                                 </div>
 
-                                <div className="relative group bg-[var(--card-surface)] border border-[var(--sidebar-border)] rounded-xl sm:rounded-[16px] p-3 sm:p-4 lg:p-5 hover:border-[var(--sidebar-active-text)]/30 transition-all cursor-default shadow-sm flex flex-col justify-between" title="Converted">
-                                    <div className="absolute -top-7 left-1/2 -translate-x-1/2 px-2 py-0.5 bg-neutral-900 border border-neutral-700 text-white text-[10px] font-semibold rounded shadow-lg opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity duration-150 z-30 whitespace-nowrap">
-                                        Converted
-                                    </div>
+                                <div className="relative group bg-[var(--card-surface)] border border-[var(--sidebar-border)] rounded-xl sm:rounded-[16px] p-3 sm:p-4 lg:p-5 hover:border-[var(--sidebar-active-text)]/30 transition-all cursor-default shadow-sm flex flex-col justify-between">
                                     <div className="flex items-center justify-between gap-1.5 mb-2 sm:mb-3">
-                                        <p className="text-[9px] sm:text-[11px] uppercase font-bold text-[var(--color-text-muted)] tracking-wider truncate">CONVERTED</p>
-                                        <div className="shrink-0 text-[var(--sidebar-active-text)] w-6 h-6 sm:w-7 sm:h-7 lg:w-8 lg:h-8 flex items-center justify-center bg-[var(--sidebar-active-text)]/10 rounded-full group-hover:scale-110 transition-transform">
+                                        <p className="text-[9px] sm:text-[11px] uppercase font-bold text-[var(--color-text-muted)] tracking-wider truncate">ACTIVE INVESTORS</p>
+                                        <div className="shrink-0 text-[var(--sidebar-active-text)] w-6 h-6 sm:w-7 sm:h-7 lg:w-8 lg:h-8 flex items-center justify-center bg-[var(--sidebar-active-text)]/10 rounded-full">
                                             <svg className="w-3 h-3 sm:w-3.5 sm:h-3.5 lg:w-4 lg:h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
                                         </div>
                                     </div>
-                                    <p className="text-xl sm:text-2xl lg:text-[28px] font-black text-[var(--header-text)] leading-none">{profileData?.convertedCount || 0}</p>
+                                    <p className="text-xl sm:text-2xl lg:text-[28px] font-black text-[var(--header-text)] leading-none">
+                                        {referralSummary?.totalInvested ?? profileData?.convertedCount ?? 0}
+                                    </p>
                                 </div>
 
-                                <div className="relative group bg-[var(--card-surface)] border border-[var(--sidebar-border)] rounded-xl sm:rounded-[16px] p-3 sm:p-4 lg:p-5 hover:border-[var(--sidebar-active-text)]/30 transition-all cursor-default shadow-sm flex flex-col justify-between" title="Earned">
-                                    <div className="absolute -top-7 left-1/2 -translate-x-1/2 px-2 py-0.5 bg-neutral-900 border border-neutral-700 text-white text-[10px] font-semibold rounded shadow-lg opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity duration-150 z-30 whitespace-nowrap">
-                                        Earned
-                                    </div>
+                                <div className="relative group bg-[var(--card-surface)] border border-[var(--sidebar-border)] rounded-xl sm:rounded-[16px] p-3 sm:p-4 lg:p-5 hover:border-[var(--sidebar-active-text)]/30 transition-all cursor-default shadow-sm flex flex-col justify-between">
                                     <div className="flex items-center justify-between gap-1.5 mb-2 sm:mb-3">
-                                        <p className="text-[9px] sm:text-[11px] uppercase font-bold text-[var(--color-text-muted)] tracking-wider truncate">EARNED</p>
-                                        <div className="shrink-0 text-[var(--sidebar-active-text)] w-6 h-6 sm:w-7 sm:h-7 lg:w-8 lg:h-8 flex items-center justify-center bg-[var(--sidebar-active-text)]/10 rounded-full group-hover:scale-110 transition-transform">
+                                        <p className="text-[9px] sm:text-[11px] uppercase font-bold text-[var(--color-text-muted)] tracking-wider truncate">TOTAL EARNED</p>
+                                        <div className="shrink-0 text-[var(--sidebar-active-text)] w-6 h-6 sm:w-7 sm:h-7 lg:w-8 lg:h-8 flex items-center justify-center bg-[var(--sidebar-active-text)]/10 rounded-full">
                                             <svg className="w-3 h-3 sm:w-3.5 sm:h-3.5 lg:w-4 lg:h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 12 20 22 4 22 4 12"></polyline><rect x="2" y="7" width="20" height="5"></rect><line x1="12" y1="22" x2="12" y2="7"></line><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"></path><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"></path></svg>
                                         </div>
                                     </div>
-                                    <p className="text-xl sm:text-2xl lg:text-[28px] font-black text-[var(--header-text)] leading-none">{profileData?.referralEarnings || 0}</p>
+                                    <p className="text-xl sm:text-2xl lg:text-[28px] font-black text-[var(--header-text)] leading-none">
+                                        ₹{Number(referralSummary?.totalEarned ?? profileData?.referralEarnings ?? 0).toLocaleString("en-IN")}
+                                    </p>
                                 </div>
                             </div>
                         </div>
-                    )} */}
+                    )}
 
                     {activeTab === "Support" && (
                         <div className="max-w-[980px]">

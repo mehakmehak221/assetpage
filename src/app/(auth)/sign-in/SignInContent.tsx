@@ -160,7 +160,7 @@ function SignInPageContent() {
                 <p className="text-neutral-500 text-sm font-montserrat">
                     Don&apos;t have an account?{" "}
                     <Link
-                        href={`/sign-up?role=${encodeURIComponent(userType)}`}
+                        href={`/sign-up?role=${encodeURIComponent(userType)}${searchParams.get("referralCode") ? `&referralCode=${encodeURIComponent(searchParams.get("referralCode")!)}` : searchParams.get("ref") ? `&ref=${encodeURIComponent(searchParams.get("ref")!)}` : ""}`}
                         className="text-[var(--color-primary-500)] font-semibold hover:text-[var(--color-primary-600)] transition-colors"
                     >
                         Create Account

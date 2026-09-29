@@ -529,6 +529,10 @@ export function applySignUpApiErrors(
                 "Password must include upper and lowercase letters, a number, a special character, and be at least 8 characters long."
             );
             setErrorMsg("");
+        } else if (flatMessage.toLowerCase().includes("referr") || flatMessage.toLowerCase().includes("referral")) {
+            clearFields();
+            setReferralError(flatMessage);
+            setErrorMsg("");
         } else {
             clearFields();
             setErrorMsg(flatMessage || "We couldn't create your account. Please check your details and try again.");

@@ -16,10 +16,21 @@ const rowVariants: Variants = {
 
 function getTypeColor(type) {
     if (!type) return "bg-[var(--color-status-info-bg)] text-[var(--color-status-info)] border-[var(--color-status-info-border)]";
-    const t = type.toUpperCase();
+    const t = String(type).toUpperCase();
     if (t === "BUY" || t === "PURCHASE") return "bg-[#E6FAF5] text-[#019C80] border-[#8FE2D1]";
     if (t === "SELL" || t === "RESALE") return "bg-[#FFF5E8] text-[#B96A00] border-[#F3C27C]";
+    if (t === "REFERRAL_REWARD" || t === "REWARD") return "bg-[#E6FAF5] text-[#019C80] border-[#8FE2D1]";
+    if (t === "WITHDRAWAL" || t === "WITHDRAW") return "bg-[#FFEAEA] text-[#C8372D] border-[#F4A7A1]";
     return "bg-[var(--color-status-info-bg)] text-[var(--color-status-info)] border-[var(--color-status-info-border)]";
+}
+
+function formatType(type) {
+    if (!type) return "-";
+    const t = String(type).toUpperCase();
+    if (t === "REFERRAL_REWARD") return "Referral reward";
+    if (t === "PURCHASE") return "Buy";
+    if (t === "RESALE") return "Sell";
+    return String(type).replace(/_/g, " ");
 }
 
 function getStatusColor(status) {
@@ -127,11 +138,11 @@ export default function TransactionsPage() {
                                             <td className="px-5 py-4 text-sm text-[var(--color-text-muted)]">{formatDate(tx.createdAt || tx.date)}</td>
                                             <td className="px-5 py-4">
                                                 <span className={`inline-flex px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider border ${getTypeColor(tx.type)}`}>
-                                                    {tx.type}
+                                                    {formatType(tx.type)}
                                                 </span>
                                             </td>
                                             <td className="px-5 py-4 text-sm text-[var(--header-text)] font-medium">
-                                                {tx.asset?.title || tx.assetTitle || tx.asset || "-"}
+                                                {tx.asset?.title || tx.assetTitle || tx.asset || (String(tx.type).toUpperCase().includes("REFERRAL") ? "Referral Bonus" : "-")}
                                             </td>
                                             <td className="px-5 py-4 text-sm text-[var(--header-text)] font-semibold">
                                                 {formatAmount(tx.amount, tx.currency)}
@@ -166,14 +177,14 @@ export default function TransactionsPage() {
                             >
                                 <div className="flex items-center justify-between mb-3">
                                     <span className={`inline-flex px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider border ${getTypeColor(tx.type)}`}>
-                                        {tx.type}
+                                        {formatType(tx.type)}
                                     </span>
                                     <span className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider border ${getStatusColor(tx.status)}`}>
                                         {tx.status?.toUpperCase() === "COMPLETED" ? "✓" : "◎"} {tx.status}
                                     </span>
                                 </div>
                                 <h3 className="text-base font-bold text-[var(--header-text)] mb-4">
-                                    {tx.asset?.title || tx.assetTitle || tx.asset || "-"}
+                                    {tx.asset?.title || tx.assetTitle || tx.asset || (String(tx.type).toUpperCase().includes("REFERRAL") ? "Referral Bonus" : "-")}
                                 </h3>
                                 <div className="grid grid-cols-2 gap-4 text-xs bg-[var(--sidebar-active-bg)]/30 rounded-lg p-3">
                                     <div>

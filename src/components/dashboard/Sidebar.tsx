@@ -30,6 +30,7 @@ const INVESTOR_NAV_ITEMS = [
     { href: "/dashboard/investor/secondary-marketplace", icon: SecondaryMarketplaceIcon, label: "Secondary Marketplace" },
     { href: "/dashboard/investor/portfolio", icon: PortfolioIcon, label: "Portfolio" },
     { href: "/dashboard/investor/transactions", icon: TransactionsIcon, label: "Transactions" },
+    { href: "/dashboard/investor/referrals", icon: LeadIcon, label: "Refer & Earn" },
     { href: "/dashboard/investor/rewards", icon: DollarIcon, label: "Rewards" },
     { href: "/dashboard/investor/account", icon: AccountIcon, label: "Account" },
 ];
