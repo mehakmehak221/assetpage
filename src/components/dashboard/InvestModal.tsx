@@ -51,8 +51,8 @@ export default function InvestModal({
     const subtotal = quantity * price;
     const safeDiscount = Math.max(0, Math.min(Number(discountAmount) || 0, subtotal));
     const netSubtotal = Math.max(0, subtotal - safeDiscount);
-    const fee = netSubtotal * 0.02;
-    const total = netSubtotal + fee;
+    const fee = 0;
+    const total = netSubtotal;
 
     const formatCurrency = (val) => {
         const num = Number(val) || 0;
@@ -144,10 +144,6 @@ export default function InvestModal({
                                     <span className="text-[var(--sidebar-active-text)] font-extrabold">- {formatCurrency(safeDiscount)}</span>
                                 </div>
                             ) : null}
-                            <div className="flex items-center justify-between text-sm">
-                                <span className="text-[var(--color-text-muted)] font-medium">Fee (2%)</span>
-                                <span className="text-[var(--header-text)] font-extrabold">{formatCurrency(fee)}</span>
-                            </div>
                             <div className="h-px bg-[var(--background)] my-1" />
                             <div className="flex items-center justify-between">
                                 <span className="text-sm font-bold text-[var(--header-text)]">Total</span>

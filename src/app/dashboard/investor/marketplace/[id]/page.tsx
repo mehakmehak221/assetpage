@@ -28,7 +28,7 @@ import {
 } from "@/store/api/investmentApi";
 import { useGetKycStatusQuery } from "@/store/api/kycApi";
 import { useGetUserCouponsQuery, useValidateCouponMutation } from "@/store/api/rewardsApi";
-// import { openRazorpayCheckout } from "@/utils/razorpay";
+import { openRazorpayCheckout } from "@/utils/razorpay";
 
 import { API_URL } from "@/constants";
 
@@ -171,15 +171,13 @@ export default function PropertyDetailPage() {
     ].filter(doc => doc.url);
 
     const handleInvestNow = () => {
-        showToast("Coming Soon");
+        setInvestOpen(true);
     };
 
     const handleVerifyPay = async (qty: number, total: number, discount: number = 0) => {
         setInvestQuantity(qty);
         setPendingInvestment({ quantity: qty, total, discount });
 
-        // Razorpay checkout commented out
-        /*
         try {
             const couponToApply = couponMatchesSelection ? (couponCode.trim() || sharedCouponCode) : undefined;
             const orderResponse = (await createInvestment({
@@ -233,7 +231,6 @@ export default function PropertyDetailPage() {
             const errorMsg = err?.data?.message || err?.message || "Failed to initiate payment. Please try again.";
             showToast(errorMsg, "error");
         }
-        */
     };
 
     const handlePaymentSuccess = () => {
