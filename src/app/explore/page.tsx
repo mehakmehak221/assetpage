@@ -178,7 +178,7 @@ export default function ExplorePage() {
                         </p>
                         <p className="text-sm text-neutral-500 font-medium">
                             {saleTypeFilter === "FRACTIONAL"
-                                ? `Invest fractionally starting from ${currency.symbol}15,000.`
+                                ? `Invest fractionally starting from ${currency.symbol}10,000.`
                                 : saleTypeFilter === "PREMIUM"
                                     ? `Curated ultra-prime assets with min. valuation of ₹2 Cr and ₹1 Lakh min. share investment.`
                                     : "Acquire complete institutional assets as a single whole transaction."}
@@ -295,9 +295,20 @@ export default function ExplorePage() {
 
                 <AnimatePresence mode="wait">
                     {isLoading ? (
-                        <div className="flex flex-col items-center justify-center p-24 gap-4">
-                            <div className="w-12 h-12 border-2 border-[#00DAAF]/20 border-t-[#00DAAF] rounded-full animate-spin" />
-                            <p className="text-sm text-neutral-500 font-medium animate-pulse">Loading Institutional Assets...</p>
+                        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 sm:gap-8 w-full">
+                            {[1, 2, 3].map((i) => (
+                                <div key={i} className="bg-white border border-neutral-200/60 rounded-md overflow-hidden animate-pulse shadow-sm">
+                                    <div className="h-64 sm:h-72 bg-neutral-200" />
+                                    <div className="p-5 sm:p-6 space-y-4">
+                                        <div className="h-5 bg-neutral-200 rounded w-3/4" />
+                                        <div className="h-4 bg-neutral-100 rounded w-1/2" />
+                                        <div className="pt-4 border-t border-neutral-100 grid grid-cols-2 gap-3">
+                                            <div className="h-10 bg-neutral-100 rounded" />
+                                            <div className="h-10 bg-neutral-100 rounded" />
+                                        </div>
+                                    </div>
+                                </div>
+                            ))}
                         </div>
                     ) : isError ? (
                         <div className="text-center p-24 bg-white rounded-md border border-neutral-200 shadow-sm">

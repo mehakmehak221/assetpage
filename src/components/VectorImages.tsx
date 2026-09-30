@@ -1016,9 +1016,8 @@ export const DamacLogo = () => (
         data-name="Layer 1"
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 406.78 49.69"
-        xmlnsXlink="http://www.w3.org/1999/xlink"
-        width="160"
-        height="24"
+        preserveAspectRatio="xMidYMid meet"
+        className="w-full h-full max-h-8"
         style={{ display: 'block' }}
         role="img"
         aria-label="DAMAC Properties"

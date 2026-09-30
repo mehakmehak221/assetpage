@@ -29,8 +29,8 @@ export default function HeroSection() {
                     </motion.h1>
 
                     <motion.p className="hero-description" variants={heroItem}>
-                        No-Fee Checking Account With Cash Back Rewards. Enjoy Fee-Free Banking And Earn
-                        Cash Back On Your Everyday Purchases.
+                        Access institutional-grade commercial and premium residential real estate.
+                        Earn consistent monthly rental yield and long-term capital appreciation starting from ₹10,000.
                     </motion.p>
 
                     <motion.div className="hero-cta-row" variants={heroItem}>
