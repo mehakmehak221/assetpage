@@ -171,13 +171,15 @@ export default function PropertyDetailPage() {
     ].filter(doc => doc.url);
 
     const handleInvestNow = () => {
-        setInvestOpen(true);
+        showToast("Coming Soon");
     };
 
     const handleVerifyPay = async (qty: number, total: number, discount: number = 0) => {
         setInvestQuantity(qty);
         setPendingInvestment({ quantity: qty, total, discount });
 
+
+        /*
         try {
             const couponToApply = couponMatchesSelection ? (couponCode.trim() || sharedCouponCode) : undefined;
             const orderResponse = (await createInvestment({
@@ -231,6 +233,7 @@ export default function PropertyDetailPage() {
             const errorMsg = err?.data?.message || err?.message || "Failed to initiate payment. Please try again.";
             showToast(errorMsg, "error");
         }
+        */
     };
 
     const handlePaymentSuccess = () => {

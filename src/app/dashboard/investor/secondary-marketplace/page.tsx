@@ -107,8 +107,9 @@ export default function SecondaryMarketplacePage() {
 
     const handleBuyFractions = (_asset: any) => {
         setViewingAssetId(null);
-        setSelectedAsset(_asset);
-        setIsPaymentModalOpen(true);
+        showToast("Coming Soon");
+        // setSelectedAsset(_asset);
+        // setIsPaymentModalOpen(true);
     };
 
     const handleViewDetail = (id) => {
@@ -209,7 +210,7 @@ export default function SecondaryMarketplacePage() {
                 </motion.div>
 
 
-                <PaymentModal
+                {/* <PaymentModal
                     isOpen={isPaymentModalOpen}
                     onClose={() => setIsPaymentModalOpen(false)}
                     flow="secondary"
@@ -230,7 +231,7 @@ export default function SecondaryMarketplacePage() {
                             }
                             : null
                     }
-                />
+                /> */}
 
                 <DetailModal
                     id={viewingAssetId}
