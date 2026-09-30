@@ -48,9 +48,7 @@ export default function InvestorReferralsPage() {
   const {
     data: referralsData,
     isLoading: isReferralsLoading,
-    isFetching: isReferralsFetching,
     error: referralsError,
-    refetch: refetchReferrals,
   } = useGetInvestorReferralsQuery(undefined, {
     pollingInterval: 15000,
   });
@@ -58,7 +56,6 @@ export default function InvestorReferralsPage() {
   const {
     data: summaryData,
     isLoading: isSummaryLoading,
-    refetch: refetchSummary,
   } = useGetInvestorReferralSummaryQuery(undefined, {
     pollingInterval: 15000,
   });
@@ -245,10 +242,10 @@ export default function InvestorReferralsPage() {
       </div>
 
       {/* Referral Link & Code Section */}
-      <div className="rounded-2xl border border-[var(--sidebar-border)] bg-[var(--card-surface)] p-5 sm:p-6 mb-8 shadow-sm">
+      <div className="rounded-2xl border border-[var(--sidebar-border)] bg-[var(--card-surface)] p-4 sm:p-6 mb-8 shadow-sm">
         <div className="mb-4">
           <h2 className="text-base font-bold text-[var(--foreground)]">Your Exclusive Referral Link</h2>
-          <p className="text-xs text-[var(--color-text-muted)] mt-0.5">
+          <p className="text-xs text-[var(--color-text-muted)] mt-0.5 leading-relaxed">
             Share this link or your referral code. The signup page will automatically capture and attribute your referral.
           </p>
         </div>
@@ -267,39 +264,42 @@ export default function InvestorReferralsPage() {
           </div>
         ) : (
           <div className="space-y-4">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-3 sm:gap-4">
               {/* Code Box */}
-              <div className="md:col-span-1 rounded-xl border border-[var(--sidebar-border)] bg-[var(--background)] p-3.5 flex flex-col justify-between">
+              <div className="lg:col-span-4 rounded-xl border border-[var(--sidebar-border)] bg-[var(--background)] p-3.5 sm:p-4 flex flex-col justify-between gap-3">
                 <span className="text-[10px] font-bold uppercase tracking-wider text-[var(--color-text-muted)]">
                   Referral Code
                 </span>
-                <div className="flex items-center justify-between gap-2 mt-2">
-                  <span className="text-lg font-black tracking-widest text-[var(--foreground)] font-mono">
+                <div className="flex items-center justify-between gap-2 min-w-0">
+                  <span className="text-base sm:text-lg font-black tracking-widest text-[var(--foreground)] font-mono truncate min-w-0 select-all">
                     {referralCode}
                   </span>
                   <button
                     onClick={handleCopyCode}
-                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[var(--sidebar-active-bg)] hover:bg-[var(--sidebar-border)] text-xs font-semibold text-[var(--foreground)] transition-colors border border-[var(--sidebar-border)] cursor-pointer"
+                    className="inline-flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-lg bg-[var(--sidebar-active-bg)] hover:bg-[var(--sidebar-border)] text-xs font-semibold text-[var(--foreground)] transition-colors border border-[var(--sidebar-border)] cursor-pointer shrink-0 active:scale-95"
                   >
-                    <CopyIcon className="h-3.5 w-3.5" />
+                    <CopyIcon className="h-3.5 w-3.5 shrink-0" />
                     <span>{copiedCode ? "Copied!" : "Copy"}</span>
                   </button>
                 </div>
               </div>
 
-              <div className="md:col-span-2 rounded-xl border border-[var(--sidebar-border)] bg-[var(--background)] p-3.5 flex flex-col justify-between">
+              {/* Link Box */}
+              <div className="lg:col-span-8 rounded-xl border border-[var(--sidebar-border)] bg-[var(--background)] p-3.5 sm:p-4 flex flex-col justify-between gap-3">
                 <span className="text-[10px] font-bold uppercase tracking-wider text-[var(--color-text-muted)]">
                   Shareable Link
                 </span>
-                <div className="flex items-center justify-between gap-2 mt-2">
-                  <span className="text-xs font-medium text-[var(--foreground)] truncate font-mono select-all">
-                    {referralLink}
-                  </span>
+                <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2.5 min-w-0">
+                  <div className="min-w-0 flex-1 bg-[var(--field-surface)] sm:bg-transparent rounded-lg px-2.5 py-1.5 sm:p-0 border sm:border-0 border-[var(--sidebar-border)]">
+                    <span className="text-xs font-medium text-[var(--foreground)] truncate block font-mono select-all" title={referralLink}>
+                      {referralLink}
+                    </span>
+                  </div>
                   <button
                     onClick={handleCopyLink}
-                    className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-[var(--color-primary-300)] text-black text-xs font-bold uppercase tracking-wider border-0 shadow-sm hover:opacity-90 transition-all shrink-0 cursor-pointer"
+                    className="inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-lg bg-[var(--color-primary-300)] text-black text-xs font-bold uppercase tracking-wider border-0 shadow-sm hover:opacity-90 transition-all shrink-0 cursor-pointer w-full sm:w-auto active:scale-95"
                   >
-                    <CopyIcon className="h-3.5 w-3.5" />
+                    <CopyIcon className="h-3.5 w-3.5 shrink-0" />
                     <span>{copiedLink ? "Copied Link!" : "Copy Link"}</span>
                   </button>
                 </div>
@@ -308,22 +308,22 @@ export default function InvestorReferralsPage() {
 
             {/* Quick Share Buttons */}
             <div className="pt-2 flex flex-wrap items-center gap-2 text-xs">
-              <span className="text-[var(--color-text-muted)] font-medium mr-1">Share via:</span>
+              <span className="text-[var(--color-text-muted)] font-medium mr-1 w-full sm:w-auto">Share via:</span>
               <button
                 onClick={handleShareWhatsApp}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-[var(--sidebar-border)] bg-[var(--background)] hover:bg-[#25D366]/10 hover:text-[#25D366] hover:border-[#25D366]/30 transition-colors cursor-pointer text-xs font-semibold"
+                className="flex-1 sm:flex-initial inline-flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-lg border border-[var(--sidebar-border)] bg-[var(--background)] hover:bg-[#25D366]/10 hover:text-[#25D366] hover:border-[#25D366]/30 transition-colors cursor-pointer text-xs font-semibold"
               >
                 WhatsApp
               </button>
               <button
                 onClick={handleShareTwitter}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-[var(--sidebar-border)] bg-[var(--background)] hover:bg-[var(--sidebar-border)] transition-colors cursor-pointer text-xs font-semibold"
+                className="flex-1 sm:flex-initial inline-flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-lg border border-[var(--sidebar-border)] bg-[var(--background)] hover:bg-[var(--sidebar-border)] transition-colors cursor-pointer text-xs font-semibold"
               >
                 X / Twitter
               </button>
               <button
                 onClick={handleNativeShare}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-[var(--sidebar-border)] bg-[var(--background)] hover:bg-[var(--sidebar-border)] transition-colors cursor-pointer text-xs font-semibold"
+                className="flex-1 sm:flex-initial inline-flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-lg border border-[var(--sidebar-border)] bg-[var(--background)] hover:bg-[var(--sidebar-border)] transition-colors cursor-pointer text-xs font-semibold"
               >
                 <ShareIcon className="h-3.5 w-3.5" />
                 More options
@@ -335,31 +335,16 @@ export default function InvestorReferralsPage() {
 
       {/* Referred People List */}
       <div className="rounded-2xl border border-[var(--sidebar-border)] bg-[var(--card-surface)] shadow-sm overflow-hidden">
-        <div className="px-5 py-4 border-b border-[var(--sidebar-border)] flex items-center justify-between">
-          <div>
+        <div className="px-4 sm:px-6 py-4 border-b border-[var(--sidebar-border)] flex items-center justify-between gap-3">
+          <div className="min-w-0 flex-1">
             <h2 className="text-base font-bold text-[var(--foreground)]">Referred People</h2>
             <p className="text-xs text-[var(--color-text-muted)] mt-0.5">
               Live status of users who joined with your referral link.
             </p>
           </div>
-          <div className="flex items-center gap-2">
-            <button
-              onClick={() => {
-                refetchReferrals();
-                refetchSummary();
-              }}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[var(--background)] hover:bg-[var(--sidebar-active-bg)] text-xs font-semibold text-[var(--foreground)] border border-[var(--sidebar-border)] transition-colors cursor-pointer"
-              title="Refresh status"
-            >
-              <svg className={`w-3.5 h-3.5 ${isReferralsFetching ? "animate-spin text-[#00DAAF]" : "text-[var(--color-text-muted)]"}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-              </svg>
-              <span>{isReferralsFetching ? "Refreshing..." : "Refresh"}</span>
-            </button>
-            <span className="text-xs font-semibold text-[var(--color-text-muted)] bg-[var(--background)] px-2.5 py-1 rounded-full border border-[var(--sidebar-border)]">
-              Total: {referralsList.length}
-            </span>
-          </div>
+          <span className="text-xs font-semibold text-[var(--color-text-muted)] bg-[var(--background)] px-3 py-1 rounded-full border border-[var(--sidebar-border)] shrink-0 whitespace-nowrap">
+            Total: {referralsList.length}
+          </span>
         </div>
 
         {isReferralsLoading ? (
@@ -393,14 +378,14 @@ export default function InvestorReferralsPage() {
         ) : (
           <>
             {/* Desktop Table View */}
-            <div className="hidden md:block overflow-x-auto">
-              <table className="w-full text-left text-sm whitespace-nowrap">
+            <div className="hidden lg:block overflow-x-auto">
+              <table className="w-full text-left text-sm whitespace-nowrap min-w-[620px]">
                 <thead>
                   <tr className="border-b border-[var(--sidebar-border)] bg-[var(--background)]/50 text-[10px] font-bold uppercase tracking-wider text-[var(--color-text-muted)]">
-                    <th className="px-5 py-3.5">Referred User</th>
-                    <th className="px-5 py-3.5">Joined Date</th>
-                    <th className="px-5 py-3.5">Investment Status</th>
-                    <th className="px-5 py-3.5 text-right">Reward Status</th>
+                    <th className="px-6 py-3.5 min-w-[180px]">Referred User</th>
+                    <th className="px-6 py-3.5 min-w-[120px]">Joined Date</th>
+                    <th className="px-6 py-3.5 min-w-[150px]">Investment Status</th>
+                    <th className="px-6 py-3.5 text-right min-w-[160px]">Reward Status</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-[var(--sidebar-border)] font-medium">
@@ -414,27 +399,34 @@ export default function InvestorReferralsPage() {
                         key={ref.id}
                         className="hover:bg-[var(--sidebar-active-bg)]/50 transition-colors"
                       >
-                        <td className="px-5 py-4 text-[var(--foreground)] font-semibold">
-                          {ref.name || "Anonymous Investor"}
+                        <td className="px-6 py-4">
+                          <div className="flex items-center gap-3">
+                            <div className="w-8 h-8 rounded-full bg-[var(--color-primary-300)]/15 border border-[var(--color-primary-300)]/30 flex items-center justify-center text-xs font-bold text-[var(--color-primary-300)] shrink-0">
+                              {(ref.name || "U")[0]?.toUpperCase()}
+                            </div>
+                            <span className="text-[var(--foreground)] font-semibold truncate max-w-[180px]">
+                              {ref.name || "Anonymous Investor"}
+                            </span>
+                          </div>
                         </td>
-                        <td className="px-5 py-4 text-xs text-[var(--color-text-muted)] font-mono">
+                        <td className="px-6 py-4 text-xs text-[var(--color-text-muted)] font-mono">
                           {formatDate(ref.joinedAt)}
                         </td>
-                        <td className="px-5 py-4">
+                        <td className="px-6 py-4">
                           {hasInvested ? (
-                            <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-2.5 py-1 rounded-full">
+                            <span className="inline-flex items-center gap-1.5 text-[11px] font-semibold text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-2.5 py-1 rounded-full">
                               <svg className="h-3 w-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                                 <polyline points="20 6 9 17 4 12" />
                               </svg>
                               <span>Invested</span>
                             </span>
                           ) : (
-                            <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-[var(--color-text-muted)] bg-[var(--background)] border border-[var(--sidebar-border)] px-2.5 py-1 rounded-full">
+                            <span className="inline-flex items-center gap-1.5 text-[11px] font-semibold text-[var(--color-text-muted)] bg-[var(--background)] border border-[var(--sidebar-border)] px-2.5 py-1 rounded-full">
                               <span>Joined</span>
                             </span>
                           )}
                         </td>
-                        <td className="px-5 py-4 text-right">
+                        <td className="px-6 py-4 text-right">
                           {hasInvested && rewardPaid ? (
                             <div className="inline-flex flex-col items-end">
                               <span className="text-xs font-bold text-emerald-400">
@@ -461,46 +453,59 @@ export default function InvestorReferralsPage() {
               </table>
             </div>
 
-            {/* Mobile Card View */}
-            <div className="md:hidden divide-y divide-[var(--sidebar-border)]">
+            {/* Mobile / Tablet Card View */}
+            <div className="block lg:hidden divide-y divide-[var(--sidebar-border)]">
               {referralsList.map((ref) => {
                 const hasInvested = Boolean(ref.hasInvested);
                 const rewardPaid = Boolean(ref.rewardPaid);
                 const rewardAmount = ref.rewardAmount;
 
                 return (
-                  <div key={ref.id} className="p-4 space-y-2">
-                    <div className="flex items-start justify-between gap-2">
-                      <div>
-                        <p className="text-sm font-bold text-[var(--foreground)]">
-                          {ref.name || "Anonymous Investor"}
-                        </p>
-                        <p className="text-xs text-[var(--color-text-muted)] mt-0.5">
-                          Joined {formatDate(ref.joinedAt)}
-                        </p>
+                  <div key={ref.id} className="p-4 sm:p-5 space-y-3 hover:bg-[var(--sidebar-active-bg)]/30 transition-colors">
+                    <div className="flex items-start justify-between gap-3">
+                      <div className="flex items-center gap-2.5 min-w-0">
+                        <div className="w-8 h-8 rounded-full bg-[var(--color-primary-300)]/15 border border-[var(--color-primary-300)]/30 flex items-center justify-center text-xs font-bold text-[var(--color-primary-300)] shrink-0">
+                          {(ref.name || "U")[0]?.toUpperCase()}
+                        </div>
+                        <div className="min-w-0">
+                          <p className="text-sm font-bold text-[var(--foreground)] truncate">
+                            {ref.name || "Anonymous Investor"}
+                          </p>
+                          <p className="text-[11px] text-[var(--color-text-muted)] font-mono">
+                            Joined {formatDate(ref.joinedAt)}
+                          </p>
+                        </div>
                       </div>
 
                       {hasInvested ? (
-                        <span className="text-[10px] font-bold uppercase tracking-wider text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-2 py-0.5 rounded-full">
-                          Invested
+                        <span className="inline-flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-2 py-0.5 rounded-full shrink-0">
+                          <svg className="h-2.5 w-2.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                            <polyline points="20 6 9 17 4 12" />
+                          </svg>
+                          <span>Invested</span>
                         </span>
                       ) : (
-                        <span className="text-[10px] font-bold uppercase tracking-wider text-[var(--color-text-muted)] bg-[var(--background)] border border-[var(--sidebar-border)] px-2 py-0.5 rounded-full">
+                        <span className="text-[10px] font-bold uppercase tracking-wider text-[var(--color-text-muted)] bg-[var(--background)] border border-[var(--sidebar-border)] px-2 py-0.5 rounded-full shrink-0">
                           Joined
                         </span>
                       )}
                     </div>
 
-                    <div className="pt-1 flex items-center justify-between text-xs border-t border-[var(--sidebar-border)]/50 mt-2">
-                      <span className="text-[var(--color-text-muted)]">Reward:</span>
+                    <div className="pt-2 flex items-center justify-between text-xs border-t border-[var(--sidebar-border)]/50">
+                      <span className="text-[var(--color-text-muted)] font-medium">Reward Status</span>
                       {hasInvested && rewardPaid ? (
-                        <span className="font-bold text-emerald-400">
-                          +{formatMoney(rewardAmount)} (Credited)
-                        </span>
+                        <div className="text-right">
+                          <span className="font-bold text-emerald-400">
+                            +{formatMoney(rewardAmount)}
+                          </span>
+                          <span className="text-[10px] text-emerald-400/80 block">
+                            Credited {formatDate(ref.rewardPaidAt || ref.investedAt)}
+                          </span>
+                        </div>
                       ) : hasInvested ? (
-                        <span className="text-[var(--color-text-muted)]">Invested</span>
+                        <span className="text-[var(--color-text-muted)]">Invested (No Campaign)</span>
                       ) : (
-                        <span className="text-[var(--color-text-muted)]">Awaiting Investment</span>
+                        <span className="text-[var(--color-text-muted)]">Pending Investment</span>
                       )}
                     </div>
                   </div>
