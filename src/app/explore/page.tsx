@@ -56,7 +56,7 @@ function PillDropdown({ label, options, value, onChange, placeholder, disabled =
                 className={`flex justify-between items-center bg-neutral-50 border border-neutral-200/80 rounded-md px-4 py-1.5 text-xs font-Montserrat cursor-pointer transition-all min-w-0 sm:min-w-[150px] w-full sm:w-auto ${disabled ? 'opacity-50 cursor-not-allowed' : 'hover:border-neutral-300'} ${isOpen ? 'border-[#00DAAF] shadow-sm' : ''}`}
             >
                 <span className={`truncate ${value ? "text-neutral-900 font-medium" : "text-neutral-400"}`}>
-                     {value || placeholder}
+                    {value || placeholder}
                 </span>
                 <svg className={`w-3 h-3 text-neutral-400 shrink-0 transition-transform ${isOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
@@ -178,7 +178,7 @@ export default function ExplorePage() {
                         </p>
                         <p className="text-sm text-neutral-500 font-medium">
                             {saleTypeFilter === "FRACTIONAL"
-                                ? `Invest fractionally starting from ${currency.symbol}10,000 ($100).`
+                                ? `Invest fractionally starting from ${currency.symbol}10,000.`
                                 : saleTypeFilter === "PREMIUM"
                                     ? `Curated ultra-prime assets with min. valuation of ₹2 Cr and ₹1 Lakh min. share investment.`
                                     : "Acquire complete institutional assets as a single whole transaction."}
@@ -194,11 +194,10 @@ export default function ExplorePage() {
                                     <button
                                         key={type}
                                         onClick={() => setSaleTypeFilter(type)}
-                                        className={`relative flex-1 sm:flex-initial px-3.5 sm:px-5 py-2 rounded-md text-xs font-bold transition-colors duration-300 cursor-pointer border-0 bg-transparent z-10 flex items-center justify-center gap-1.5 whitespace-nowrap ${
-                                            isSelected
+                                        className={`relative flex-1 sm:flex-initial px-3.5 sm:px-5 py-2 rounded-md text-xs font-bold transition-colors duration-300 cursor-pointer border-0 bg-transparent z-10 flex items-center justify-center gap-1.5 whitespace-nowrap ${isSelected
                                                 ? "text-[#00B28F]"
                                                 : "text-neutral-500 hover:text-neutral-900"
-                                        }`}
+                                            }`}
                                     >
                                         {isSelected && (
                                             <motion.div
@@ -311,42 +310,14 @@ export default function ExplorePage() {
                             ))}
                         </div>
                     ) : isError ? (
-                        <div className="text-center p-16 sm:p-20 bg-white rounded-2xl border border-neutral-200 shadow-sm max-w-2xl mx-auto">
-                            <h3 className="text-xl font-bold text-neutral-900 mb-2">Marketplace Connecting...</h3>
-                            <p className="text-neutral-500 text-sm mb-6">Live institutional inventory is syncing with the asset registry. You can retry or explore our curated properties.</p>
-                            <div className="flex justify-center gap-4">
-                                <button onClick={() => window.location.reload()} className="px-6 py-2.5 bg-[#006D5B] hover:bg-[#005244] text-white rounded-md text-xs font-bold transition-all shadow-sm">Refresh Catalog</button>
-                                <Link href="/" className="px-6 py-2.5 bg-neutral-100 hover:bg-neutral-200 border border-neutral-200 rounded-md text-xs font-bold transition-all text-neutral-800">Return Home</Link>
-                            </div>
+                        <div className="text-center p-24 bg-white rounded-md border border-neutral-200 shadow-sm">
+                            <p className="text-neutral-500 mb-4">Error loading assets. Please try again later.</p>
+                            <button onClick={() => window.location.reload()} className="px-6 py-2 bg-neutral-100 hover:bg-neutral-200 border border-neutral-200 rounded-md text-xs font-bold transition-all text-neutral-800">Retry</button>
                         </div>
                     ) : assets.length === 0 ? (
-                        activeCategory === "Dubai Skyscrapers" ? (
-                            <div className="text-center p-12 sm:p-16 bg-white rounded-2xl border border-[#00DAAF]/30 shadow-sm max-w-2xl mx-auto">
-                                <span className="inline-block text-[11px] font-extrabold uppercase tracking-wider bg-[#00DAAF]/10 text-[#006D5B] px-3.5 py-1.5 rounded-full border border-[#00DAAF]/20 mb-4">
-                                    UAE Expansion • $250M+ Pipeline Under MOU
-                                </span>
-                                <h3 className="text-2xl font-black text-neutral-900 mb-2 tracking-tight">Dubai Skyscraper Allocation Opening Soon</h3>
-                                <p className="text-neutral-500 text-sm leading-relaxed mb-6">
-                                    Our UAE portfolio is currently in institutional MOU &amp; SPV structuring phase. Allocations will open first to priority waitlist members.
-                                </p>
-                                <div className="flex flex-col sm:flex-row justify-center gap-3">
-                                    <Link href="/sign-in" className="px-6 py-3 bg-[#006D5B] hover:bg-[#005244] text-white rounded-md text-xs font-bold uppercase tracking-wider transition-all shadow-sm">
-                                        Join Priority Waitlist
-                                    </Link>
-                                    <button onClick={() => setActiveCategory("All")} className="px-6 py-3 bg-neutral-100 hover:bg-neutral-200 border border-neutral-200 rounded-md text-xs font-bold uppercase tracking-wider transition-all text-neutral-800">
-                                        View All Active Assets
-                                    </button>
-                                </div>
-                            </div>
-                        ) : (
-                            <div className="text-center p-16 sm:p-20 bg-white rounded-2xl border border-dashed border-neutral-200 shadow-sm max-w-xl mx-auto">
-                                <p className="text-neutral-700 font-bold text-base mb-2">No properties matched this filter.</p>
-                                <p className="text-neutral-400 text-xs mb-6">Try selecting a different category or clearing country/state filters.</p>
-                                <button onClick={() => { setActiveCategory("All"); setCountryFilter(""); setStateFilter(""); setCityFilter(""); }} className="px-5 py-2.5 bg-[#00DAAF]/10 text-[#006D5B] hover:bg-[#00DAAF]/20 border border-[#00DAAF]/30 rounded-md text-xs font-bold transition-all">
-                                    Reset All Filters
-                                </button>
-                            </div>
-                        )
+                        <div className="text-center p-24 bg-white rounded-md border border-dashed border-neutral-200 shadow-sm">
+                            <p className="text-neutral-500 font-medium">No assets found in this category.</p>
+                        </div>
                     ) : (
                         <motion.div
                             key={activeCategory}
