@@ -195,7 +195,7 @@ export default function InvestorReferralsPage() {
       )}
 
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
-        <div className="rounded-2xl border border-[var(--sidebar-border)] bg-[var(--card-surface)] p-5 shadow-sm">
+        <div className="rounded-xl border border-[var(--sidebar-border)] bg-[var(--card-surface)] p-5 shadow-sm">
           <div className="flex items-center justify-between">
             <p className="text-[10px] font-bold uppercase tracking-wider text-[var(--color-text-muted)]">
               Total Referred
@@ -204,13 +204,13 @@ export default function InvestorReferralsPage() {
               <UserGroupIcon className="h-4 w-4" />
             </span>
           </div>
-          <p className="mt-3 text-3xl font-black text-[var(--foreground)] font-montserrat">
+          <p className="mt-3 text-2xl sm:text-3xl font-bold text-[var(--foreground)]">
             {isSummaryLoading || isReferralsLoading ? "—" : totalReferred}
           </p>
           <p className="mt-1 text-xs text-[var(--color-text-muted)]">Users registered with your code</p>
         </div>
 
-        <div className="rounded-2xl border border-[var(--sidebar-border)] bg-[var(--card-surface)] p-5 shadow-sm">
+        <div className="rounded-xl border border-[var(--sidebar-border)] bg-[var(--card-surface)] p-5 shadow-sm">
           <div className="flex items-center justify-between">
             <p className="text-[10px] font-bold uppercase tracking-wider text-[var(--color-text-muted)]">
               Total Invested
@@ -219,13 +219,13 @@ export default function InvestorReferralsPage() {
               <DollarIcon className="h-4 w-4" />
             </span>
           </div>
-          <p className="mt-3 text-3xl font-black text-[var(--foreground)] font-montserrat">
+          <p className="mt-3 text-2xl sm:text-3xl font-bold text-[var(--foreground)]">
             {isSummaryLoading || isReferralsLoading ? "—" : totalInvested}
           </p>
           <p className="mt-1 text-xs text-[var(--color-text-muted)]">Completed active investments</p>
         </div>
 
-        <div className="rounded-2xl border border-[var(--sidebar-border)] bg-[var(--card-surface)] p-5 shadow-sm">
+        <div className="rounded-xl border border-[var(--sidebar-border)] bg-[var(--card-surface)] p-5 shadow-sm">
           <div className="flex items-center justify-between">
             <p className="text-[10px] font-bold uppercase tracking-wider text-[var(--color-text-muted)]">
               Total Earned
@@ -234,7 +234,7 @@ export default function InvestorReferralsPage() {
               <SparkleIcon className="h-4 w-4" />
             </span>
           </div>
-          <p className="mt-3 text-3xl font-black text-[var(--foreground)] font-montserrat">
+          <p className="mt-3 text-2xl sm:text-3xl font-bold text-[var(--foreground)]">
             {isSummaryLoading ? "—" : formatMoney(totalEarned)}
           </p>
           <p className="mt-1 text-xs text-[var(--color-text-muted)]">Credited to your wallet balance</p>
@@ -242,7 +242,7 @@ export default function InvestorReferralsPage() {
       </div>
 
       {/* Referral Link & Code Section */}
-      <div className="rounded-2xl border border-[var(--sidebar-border)] bg-[var(--card-surface)] p-4 sm:p-6 mb-8 shadow-sm">
+      <div className="rounded-xl border border-[var(--sidebar-border)] bg-[var(--card-surface)] p-4 sm:p-6 mb-8 shadow-sm">
         <div className="mb-4">
           <h2 className="text-base font-bold text-[var(--foreground)]">Your Exclusive Referral Link</h2>
           <p className="text-xs text-[var(--color-text-muted)] mt-0.5 leading-relaxed">
@@ -271,7 +271,7 @@ export default function InvestorReferralsPage() {
                   Referral Code
                 </span>
                 <div className="flex items-center justify-between gap-2 min-w-0">
-                  <span className="text-base sm:text-lg font-black tracking-widest text-[var(--foreground)] font-mono truncate min-w-0 select-all">
+                  <span className="text-base sm:text-lg font-bold tracking-wider text-[var(--foreground)] font-mono truncate min-w-0 select-all">
                     {referralCode}
                   </span>
                   <button
