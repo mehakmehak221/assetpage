@@ -275,11 +275,17 @@ function SignInPageContent() {
 
             <p className="text-center text-xs text-neutral-500 mt-8 font-montserrat leading-relaxed px-1">
                 By clicking Login you agree to GloFi Estates{" "}
-                <Link href="/terms" className="text-neutral-600 hover:text-neutral-900 underline-offset-2 hover:underline">
+                <Link
+                    href="/terms"
+                    className="text-[var(--color-primary-500)] font-semibold underline underline-offset-4 hover:text-[var(--color-primary-600)] transition-colors"
+                >
                     Terms &amp; Conditions
                 </Link>{" "}
                 and{" "}
-                <Link href="/privacy-policy" className="text-neutral-600 hover:text-neutral-900 underline-offset-2 hover:underline">
+                <Link
+                    href="/privacy-policy"
+                    className="text-[var(--color-primary-500)] font-semibold underline underline-offset-4 hover:text-[var(--color-primary-600)] transition-colors"
+                >
                     Privacy Policy
                 </Link>
                 .
