@@ -10,9 +10,9 @@ import {
 } from '@/lib/landingAnimations';
 
 const STATS = [
-    { value: '20', label: 'Premium Assets' },
-    { value: '₹5,000 Cr+', label: 'Assets of Worth' },
-    { value: '100k+', label: 'Registered Investors' },
+    { value: '20,000+', label: 'Retail Waitlist Signups' },
+    { value: '$250M+', label: 'Assets Signed & Under MOU' },
+    { value: 'Beta Live', label: 'iOS & Android App' },
 ] as const;
 
 export default function ValueSection() {

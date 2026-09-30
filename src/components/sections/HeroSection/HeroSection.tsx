@@ -29,8 +29,9 @@ export default function HeroSection() {
                     </motion.h1>
 
                     <motion.p className="hero-description" variants={heroItem}>
-                        Access institutional-grade commercial and premium residential real estate.
-                        Earn consistent monthly rental yield and long-term capital appreciation starting from ₹10,000.
+                        Start with institutional real estate, build a global financial ecosystem around it.
+                        Access Grade-A commercial and premium residential assets with monthly rental yield,
+                        asset-backed credit, and secondary liquidity starting from ₹10,000.
                     </motion.p>
 
                     <motion.div className="hero-cta-row" variants={heroItem}>

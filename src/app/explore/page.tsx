@@ -178,7 +178,7 @@ export default function ExplorePage() {
                         </p>
                         <p className="text-sm text-neutral-500 font-medium">
                             {saleTypeFilter === "FRACTIONAL"
-                                ? `Invest fractionally starting from ${currency.symbol}10,000.`
+                                ? `Invest fractionally starting from ${currency.symbol}10,000 ($100).`
                                 : saleTypeFilter === "PREMIUM"
                                     ? `Curated ultra-prime assets with min. valuation of ₹2 Cr and ₹1 Lakh min. share investment.`
                                     : "Acquire complete institutional assets as a single whole transaction."}
@@ -311,14 +311,42 @@ export default function ExplorePage() {
                             ))}
                         </div>
                     ) : isError ? (
-                        <div className="text-center p-24 bg-white rounded-md border border-neutral-200 shadow-sm">
-                            <p className="text-neutral-500 mb-4">Error loading assets. Please try again later.</p>
-                            <button onClick={() => window.location.reload()} className="px-6 py-2 bg-neutral-100 hover:bg-neutral-200 border border-neutral-200 rounded-md text-xs font-bold transition-all text-neutral-800">Retry</button>
+                        <div className="text-center p-16 sm:p-20 bg-white rounded-2xl border border-neutral-200 shadow-sm max-w-2xl mx-auto">
+                            <h3 className="text-xl font-bold text-neutral-900 mb-2">Marketplace Connecting...</h3>
+                            <p className="text-neutral-500 text-sm mb-6">Live institutional inventory is syncing with the asset registry. You can retry or explore our curated properties.</p>
+                            <div className="flex justify-center gap-4">
+                                <button onClick={() => window.location.reload()} className="px-6 py-2.5 bg-[#006D5B] hover:bg-[#005244] text-white rounded-md text-xs font-bold transition-all shadow-sm">Refresh Catalog</button>
+                                <Link href="/" className="px-6 py-2.5 bg-neutral-100 hover:bg-neutral-200 border border-neutral-200 rounded-md text-xs font-bold transition-all text-neutral-800">Return Home</Link>
+                            </div>
                         </div>
                     ) : assets.length === 0 ? (
-                        <div className="text-center p-24 bg-white rounded-md border border-dashed border-neutral-200 shadow-sm">
-                            <p className="text-neutral-500 font-medium">No assets found in this category.</p>
-                        </div>
+                        activeCategory === "Dubai Skyscrapers" ? (
+                            <div className="text-center p-12 sm:p-16 bg-white rounded-2xl border border-[#00DAAF]/30 shadow-sm max-w-2xl mx-auto">
+                                <span className="inline-block text-[11px] font-extrabold uppercase tracking-wider bg-[#00DAAF]/10 text-[#006D5B] px-3.5 py-1.5 rounded-full border border-[#00DAAF]/20 mb-4">
+                                    UAE Expansion • $250M+ Pipeline Under MOU
+                                </span>
+                                <h3 className="text-2xl font-black text-neutral-900 mb-2 tracking-tight">Dubai Skyscraper Allocation Opening Soon</h3>
+                                <p className="text-neutral-500 text-sm leading-relaxed mb-6">
+                                    Our UAE portfolio is currently in institutional MOU &amp; SPV structuring phase. Allocations will open first to priority waitlist members.
+                                </p>
+                                <div className="flex flex-col sm:flex-row justify-center gap-3">
+                                    <Link href="/sign-in" className="px-6 py-3 bg-[#006D5B] hover:bg-[#005244] text-white rounded-md text-xs font-bold uppercase tracking-wider transition-all shadow-sm">
+                                        Join Priority Waitlist
+                                    </Link>
+                                    <button onClick={() => setActiveCategory("All")} className="px-6 py-3 bg-neutral-100 hover:bg-neutral-200 border border-neutral-200 rounded-md text-xs font-bold uppercase tracking-wider transition-all text-neutral-800">
+                                        View All Active Assets
+                                    </button>
+                                </div>
+                            </div>
+                        ) : (
+                            <div className="text-center p-16 sm:p-20 bg-white rounded-2xl border border-dashed border-neutral-200 shadow-sm max-w-xl mx-auto">
+                                <p className="text-neutral-700 font-bold text-base mb-2">No properties matched this filter.</p>
+                                <p className="text-neutral-400 text-xs mb-6">Try selecting a different category or clearing country/state filters.</p>
+                                <button onClick={() => { setActiveCategory("All"); setCountryFilter(""); setStateFilter(""); setCityFilter(""); }} className="px-5 py-2.5 bg-[#00DAAF]/10 text-[#006D5B] hover:bg-[#00DAAF]/20 border border-[#00DAAF]/30 rounded-md text-xs font-bold transition-all">
+                                    Reset All Filters
+                                </button>
+                            </div>
+                        )
                     ) : (
                         <motion.div
                             key={activeCategory}
