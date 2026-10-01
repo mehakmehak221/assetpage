@@ -20,8 +20,8 @@ const CONTACTS = [
     },
     {
         name: 'Girish Ahirwar',
-        phone: '+91 95999 70225',
-        telHref: 'tel:+919599970225',
+        phone: '+91 87911 56224',
+        telHref: 'tel:+918791156224',
         email: 'girish@glofiestates.com',
         emailHref: 'mailto:girish@glofiestates.com',
     },
