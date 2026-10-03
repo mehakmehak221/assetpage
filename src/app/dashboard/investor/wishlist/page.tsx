@@ -13,15 +13,13 @@ import { useCurrency } from "@/providers/CurrencyProvider";
 import { API_URL } from "@/constants";
 import { type SaleType } from "@/utils/assetUtils";
 
-const CATEGORIES = ["All", "Commercial", "Residential", "Industrial", "Warehousing", "Land"];
+import { CATEGORIES } from "@/data/propertyData";
 
-const CATEGORY_MAP: Record<string, string | undefined> = {
-  All: undefined,
-  Commercial: "COMMERCIAL",
-  Residential: "RESIDENTIAL",
-  Industrial: "INDUSTRIAL",
-  Warehousing: "WAREHOUSING",
-  Land: "LAND",
+const CATEGORY_MAP: Record<string, string[]> = {
+  "Dubai Skyscrapers": ["DUBAI_SKYSCRAPER", "DUBAISKYSCRAPER", "DUBAISKYSCRAPERS", "SKYSCRAPER"],
+  "Land Parcels": ["LAND_PARCEL", "LANDPARCEL", "LANDPARCELS", "LAND"],
+  "Commercial Real Estate": ["COMMERCIAL_REAL_ESTATE", "COMMERCIALREALESTATE", "COMMERCIAL"],
+  "Residential": ["RESIDENTIAL"],
 };
 
 const SALE_TYPES: { label: string; value?: SaleType }[] = [
@@ -90,8 +88,17 @@ export default function WishlistPage() {
       }
       if (activeCategory && activeCategory !== "All") {
         const propCat = String(property.category || "").toUpperCase().replace(/[\s_-]+/g, "");
-        const targetCat = (CATEGORY_MAP[activeCategory] || activeCategory).toUpperCase().replace(/[\s_-]+/g, "");
-        if (propCat !== targetCat) return false;
+        const allowedAliases = CATEGORY_MAP[activeCategory];
+        if (allowedAliases && allowedAliases.length > 0) {
+          const isMatch = allowedAliases.some((alias) => {
+            const cleanAlias = alias.toUpperCase().replace(/[\s_-]+/g, "");
+            return propCat === cleanAlias || propCat.includes(cleanAlias) || cleanAlias.includes(propCat);
+          });
+          if (!isMatch) return false;
+        } else {
+          const target = activeCategory.toUpperCase().replace(/[\s_-]+/g, "");
+          if (!propCat.includes(target) && !target.includes(propCat)) return false;
+        }
       }
       return true;
     });
