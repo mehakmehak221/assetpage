@@ -23,9 +23,11 @@ import {
     FinancialIcon,
     SupportIcon,
 } from "@/components/VectorImages";
+import { SavedPropertiesIcon } from "@/components/dashboard/investor/WishlistHeartButton";
 
 const NAV_ITEMS = [
     { href: "/dashboard/investor/marketplace", icon: MarketplaceIcon, label: "Marketplace" },
+    { href: "/dashboard/investor/wishlist", icon: SavedPropertiesIcon, label: "Saved Properties" },
     { href: "/dashboard/investor/secondary-marketplace", icon: SecondaryMarketplaceIcon, label: "Secondary Marketplace" },
     { href: "/dashboard/investor/portfolio", icon: PortfolioIcon, label: "Portfolio" },
     { href: "/dashboard/investor/transactions", icon: TransactionsIcon, label: "Transactions" },

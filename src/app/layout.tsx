@@ -46,6 +46,8 @@ import GlobalToast from "@/components/GlobalToast";
 import Script from "next/script";
 import TrackingBootstrap from "@/components/TrackingBootstrap";
 
+import { WishlistProvider } from "@/providers/WishlistProvider";
+
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en">
@@ -66,11 +68,13 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       <body className={`${montserrat.variable} antialiased bg-[var(--background)] theme-purple`}>
         <CurrencyProvider>
           <StoreProvider>
-            <GlobalToast />
-            <Suspense fallback={null}>
-              <TrackingBootstrap />
-            </Suspense>
-            {children}
+            <WishlistProvider>
+              <GlobalToast />
+              <Suspense fallback={null}>
+                <TrackingBootstrap />
+              </Suspense>
+              {children}
+            </WishlistProvider>
           </StoreProvider>
         </CurrencyProvider>
       </body>

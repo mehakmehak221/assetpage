@@ -166,6 +166,38 @@ export const assetApi = baseApi.injectEndpoints({
         method: 'GET',
       }),
     }),
+    getWishlist: builder.query<any, {
+      limit?: number;
+      page?: number;
+      saleType?: SaleType;
+      category?: string;
+    } | void>({
+      query: (arg) => {
+        const { limit = 50, page = 1, saleType, category } = arg || {};
+        const params = new URLSearchParams({ limit: String(limit), page: String(page) });
+        if (saleType) params.append('saleType', saleType);
+        if (category) params.append('category', category);
+        return {
+          url: `assets/wishlist?${params.toString()}`,
+          method: 'GET',
+        };
+      },
+      providesTags: ['Wishlist'],
+    }),
+    addToWishlist: builder.mutation<{ message: string }, string | number>({
+      query: (id) => ({
+        url: `assets/${id}/wishlist`,
+        method: 'POST',
+      }),
+      invalidatesTags: ['Wishlist'],
+    }),
+    removeFromWishlist: builder.mutation<{ message: string }, string | number>({
+      query: (id) => ({
+        url: `assets/${id}/wishlist`,
+        method: 'DELETE',
+      }),
+      invalidatesTags: ['Wishlist'],
+    }),
   }),
 });
 
@@ -186,4 +218,7 @@ export const {
   useGetAssetIrrCurveQuery,
   useGetAssetRentalScheduleQuery,
   useGetAssetProjectedValuationQuery,
+  useGetWishlistQuery,
+  useAddToWishlistMutation,
+  useRemoveFromWishlistMutation,
 } = assetApi;
