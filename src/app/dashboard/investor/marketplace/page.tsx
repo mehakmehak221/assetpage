@@ -238,11 +238,7 @@ export default function MarketplacePage() {
                     Discover Assets
                 </h1>
                 <p className="text-sm text-[var(--color-text-muted)] font-medium">
-                    {saleTypeFilter === "FRACTIONAL"
-                        ? `Institutional-grade real estate. Invest fractionally from ${currency.symbol}10,000.`
-                        : saleTypeFilter === "PREMIUM"
-                            ? `Curated ultra-prime assets with min. valuation of ₹2 Cr and ₹1 Lakh min. share investment.`
-                            : "Acquire complete institutional assets as a single whole transaction."}
+                    Institutional-grade real estate. Invest fractionally from {currency.symbol}10,000.
                 </p>
             </div>
 

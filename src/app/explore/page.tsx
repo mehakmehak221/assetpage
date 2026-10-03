@@ -177,11 +177,7 @@ export default function ExplorePage() {
                             Institutional-grade real estate. Digitally simplified.
                         </p>
                         <p className="text-sm text-neutral-500 font-medium">
-                            {saleTypeFilter === "FRACTIONAL"
-                                ? `Invest fractionally starting from ${currency.symbol}10,000.`
-                                : saleTypeFilter === "PREMIUM"
-                                    ? `Curated ultra-prime assets with min. valuation of ₹2 Cr and ₹1 Lakh min. share investment.`
-                                    : "Acquire complete institutional assets as a single whole transaction."}
+                            Invest fractionally starting from {currency.symbol}10,000.
                         </p>
                     </div>
 
