@@ -95,7 +95,7 @@ export default function HeroSection() {
                 </motion.div>
 
                 <motion.figure
-                    className="hero-section__visual"
+                    className="hero-section__visual hidden lg:flex"
                     initial={{ opacity: 0, scale: 0.92, y: 28 }}
                     animate={
                         reduceMotion

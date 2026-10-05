@@ -6,12 +6,17 @@
     width: 100%;
     min-height: 0;
     overflow: hidden;
+    background-color: #021127;
   }
 
   .hero-section__bg {
     position: absolute;
-    inset: 0;
+    top: -2px;
+    bottom: -2px;
+    left: -2px;
+    right: -2px;
     z-index: 0;
+    background-color: #021127;
     background-image:
       linear-gradient(180deg,
         rgba(2, 17, 39, 0.9) 0%,
@@ -21,7 +26,6 @@
     background-size: cover;
     background-position: center top;
     background-repeat: no-repeat;
-    transform: scale(1.01);
   }
 
   @media (min-width: 768px) {
@@ -39,7 +43,10 @@
 
   .hero-section__grid {
     position: absolute;
-    inset: 0;
+    top: -2px;
+    bottom: -2px;
+    left: -2px;
+    right: -2px;
     z-index: 1;
     background:
       radial-gradient(circle at 76% 8%, rgba(26, 233, 203, 0.28) 0%, rgba(26, 233, 203, 0) 28%),
@@ -298,7 +305,7 @@
   .hero-section__visual {
     position: relative;
     z-index: 2;
-    display: flex;
+    display: none;
     align-items: flex-end;
     justify-content: center;
     width: 100%;
@@ -337,6 +344,7 @@
 
   @media (min-width: 1024px) {
     .hero-section__visual {
+      display: flex;
       grid-column: 2;
       grid-row: 1;
       align-self: center;

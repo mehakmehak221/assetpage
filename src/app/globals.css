@@ -342,6 +342,15 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     overflow-x: hidden;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  html::-webkit-scrollbar,
+  body::-webkit-scrollbar {
+    display: none;
+    width: 0;
+    height: 0;
   }
 
   section[id],
@@ -356,6 +365,8 @@
     line-height: 1.6;
     overflow-x: hidden;
     min-height: 100vh;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
   }
 
   h1,
@@ -376,6 +387,14 @@
   --font-display: var(--font-satoshi);
   --font-sans: var(--font-satoshi);
   font-family: var(--font-satoshi);
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.landing-page::-webkit-scrollbar {
+  display: none;
+  width: 0;
+  height: 0;
 }
 
 
@@ -794,7 +813,9 @@
 }
 
 ::-webkit-scrollbar {
-  width: 4px;
+  width: 0px;
+  height: 0px;
+  display: none;
 }
 
 ::-webkit-scrollbar-track {
@@ -802,8 +823,7 @@
 }
 
 ::-webkit-scrollbar-thumb {
-  background: white/10;
-  border-radius: 10px;
+  background: transparent;
 }
 
 .custom-calendar-picker::-webkit-calendar-picker-indicator {
