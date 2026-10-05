@@ -97,11 +97,9 @@ export default function EcosystemSection() {
                             className="mt-4 sm:mt-5 text-[#0A0D14] font-bold text-[32px] sm:text-4xl md:text-5xl lg:text-[52px] leading-[1.1] tracking-tight"
                             variants={fadeUp}
                         >
-                            {t('One Ecosystem.')}
+                            {t('One')} <span className="text-[#01a586] italic font-semibold">{t('Ecosystem.')}</span>
                             <br />
-                            <span className="text-[#01a586] italic font-semibold">
-                                {t('Real Value.')}
-                            </span>
+                            {t('Real')} <span className="text-[#01a586] italic font-semibold">{t('Value.')}</span>
                         </motion.h2>
 
                         <motion.h3
