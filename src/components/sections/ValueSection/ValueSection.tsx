@@ -21,63 +21,68 @@ export default function ValueSection() {
     return (
         <section
             id="values"
-            className="bg-[#004852] w-full flex justify-center overflow-hidden border-t border-b border-[#00F4C4]/30"
+            className="bg-[#004852] w-full flex justify-center overflow-hidden border-t border-b border-[#00F4C4]/25"
         >
-            <div className="w-full bg-[#004852] py-20 sm:py-24 md:py-32 z-10">
+            <div className="w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-7 md:py-8 z-10">
                 <motion.div
-                    className="max-w-6xl mx-auto px-4 sm:px-6 flex flex-col md:flex-row items-center justify-around gap-8 md:gap-4"
+                    className="flex flex-col sm:flex-row items-center justify-between sm:justify-around gap-6 sm:gap-4"
                     {...viewProps}
-                    variants={staggerContainer(0.18, 0.05)}
+                    variants={staggerContainer(0.12, 0.04)}
                 >
+                    {/* Stat 1 */}
                     <motion.div
                         className="flex flex-col items-center text-center"
                         variants={fadeUpSubtle}
                     >
-                        <motion.div variants={scaleIn} whileHover={{ scale: 1.06 }}>
-                            <span className="text-3xl sm:text-4xl md:text-5xl font-Montserrat font-bold text-white tracking-tight block">
+                        <motion.div variants={scaleIn} whileHover={{ scale: 1.04 }}>
+                            <span className="text-2xl sm:text-3xl md:text-[34px] font-bold text-white tracking-tight block leading-none">
                                 {STATS[0].value}
                             </span>
-                            <span className="text-sm sm:text-base text-white font-Montserrat mt-2 font-medium block">
+                            <span className="text-xs sm:text-sm md:text-[15px] text-white/90 mt-1.5 font-normal block tracking-normal">
                                 {STATS[0].label}
                             </span>
                         </motion.div>
                     </motion.div>
 
+                    {/* Separator Dot 1 */}
                     <motion.div
-                        className="hidden md:block w-2.5 h-2.5 rounded-full bg-white shadow-[0_0_12px_#00F4C4] shrink-0"
+                        className="hidden sm:block w-2.5 h-2.5 rounded-full bg-white shrink-0"
                         variants={fadeIn}
                         aria-hidden
                     />
 
+                    {/* Stat 2 */}
                     <motion.div
                         className="flex flex-col items-center text-center"
                         variants={fadeUpSubtle}
                     >
-                        <motion.div variants={scaleIn} whileHover={{ scale: 1.06 }}>
-                            <span className="text-3xl sm:text-4xl md:text-5xl font-Montserrat font-bold text-white tracking-tight block">
+                        <motion.div variants={scaleIn} whileHover={{ scale: 1.04 }}>
+                            <span className="text-2xl sm:text-3xl md:text-[34px] font-bold text-white tracking-tight block leading-none">
                                 {STATS[1].value}
                             </span>
-                            <span className="text-sm sm:text-base text-white font-Montserrat mt-2 font-medium block">
+                            <span className="text-xs sm:text-sm md:text-[15px] text-white/90 mt-1.5 font-normal block tracking-normal">
                                 {STATS[1].label}
                             </span>
                         </motion.div>
                     </motion.div>
 
+                    {/* Separator Dot 2 */}
                     <motion.div
-                        className="hidden md:block w-2.5 h-2.5 rounded-full bg-white shadow-[0_0_12px_#00F4C4] shrink-0"
+                        className="hidden sm:block w-2.5 h-2.5 rounded-full bg-white shrink-0"
                         variants={fadeIn}
                         aria-hidden
                     />
 
+                    {/* Stat 3 */}
                     <motion.div
                         className="flex flex-col items-center text-center"
                         variants={fadeUpSubtle}
                     >
-                        <motion.div variants={scaleIn} whileHover={{ scale: 1.06 }}>
-                            <span className="text-3xl sm:text-4xl md:text-5xl font-Montserrat font-bold text-white tracking-tight block">
+                        <motion.div variants={scaleIn} whileHover={{ scale: 1.04 }}>
+                            <span className="text-2xl sm:text-3xl md:text-[34px] font-bold text-white tracking-tight block leading-none">
                                 {STATS[2].value}
                             </span>
-                            <span className="text-sm sm:text-base text-white font-Montserrat mt-2 font-medium block">
+                            <span className="text-xs sm:text-sm md:text-[15px] text-white/90 mt-1.5 font-normal block tracking-normal">
                                 {STATS[2].label}
                             </span>
                         </motion.div>

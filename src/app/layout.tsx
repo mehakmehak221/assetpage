@@ -1,5 +1,5 @@
 import { ReactNode, Suspense } from "react";
-import { Montserrat, Poppins } from "next/font/google";
+import { Inter, Montserrat, Poppins } from "next/font/google";
 import "./satoshi.css";
 import "./globals.css";
 import { StoreProvider } from "@/store/StoreProvider";
@@ -8,6 +8,13 @@ const montserrat = Montserrat({
   variable: "--font-montserrat",
   subsets: ["latin"],
   weight: ["300", "400", "500", "600", "700", "800", "900"],
+  display: "swap",
+});
+
+const inter = Inter({
+  variable: "--font-inter",
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "600", "700"],
   display: "swap",
 });
 
@@ -63,7 +70,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           `}
         </Script>
       </head>
-      <body className={`${montserrat.variable} antialiased bg-[var(--background)] theme-purple`}>
+      <body className={`${montserrat.variable} ${inter.variable} ${poppins.variable} antialiased bg-[var(--background)] theme-purple`}>
         <CurrencyProvider>
           <StoreProvider>
             <GlobalToast />

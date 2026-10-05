@@ -66,24 +66,23 @@ export default function GlobalScaleSection() {
                     viewport={{ once: true, margin: "-100px" }}
                     variants={containerVariants}
                 >
-                    {/* Left Content */}
+
                     <div className="flex flex-col items-start max-w-xl w-full lg:w-[45%] z-20">
                         <motion.div variants={itemVariants} className="flex items-center gap-2 bg-white rounded-full px-4 py-1.5 mb-6 sm:mb-8 border border-gray-100 shadow-[0_2px_8px_rgba(0,0,0,0.04)] w-max">
                             <FlameIcon />
                             <span className="text-[#1A1F1C] text-[11px] sm:text-xs font-bold tracking-wider uppercase">Global Access</span>
                         </motion.div>
 
-                        <motion.h2 variants={itemVariants} className="text-[#1A1F1C] text-4xl sm:text-5xl lg:text-[3.5rem] font-bold leading-tight tracking-tight mb-6">
+                        <motion.h2 variants={itemVariants} className="text-[#1A1F1C] text-[26px] sm:text-3xl md:text-4xl lg:text-[46px] font-bold leading-[1.18] tracking-tight mb-4 sm:mb-6">
                             A Smarter Way to Own<br className="hidden sm:block" /> Real Estate
                         </motion.h2>
 
-                        <motion.p variants={itemVariants} className="text-[#4A5568] text-lg sm:text-xl leading-relaxed">
+                        <motion.p variants={itemVariants} className="text-[#4A5568] text-sm sm:text-base md:text-lg leading-relaxed">
                             Glofi simplifies premium real estate investing through structured fractional ownership, transparent transactions, and curated global opportunities.
                         </motion.p>
                     </div>
 
 
-                    {/* Mobile/Tablet Image Container - Stays in the normal flow inside motion.div, hidden on desktop */}
                     <motion.div
                         className="lg:hidden w-full z-10 mt-6 flex justify-center"
                         initial={{ opacity: 0, y: 50, rotateX: 12, z: -40, transformPerspective: 1200 }}
@@ -106,7 +105,6 @@ export default function GlobalScaleSection() {
                 </motion.div>
             </div>
 
-            {/* Desktop Image Container - Absolutely positioned at the bottom right corner of the section to sit perfectly flush with the bottom border */}
             <motion.div
                 className="hidden lg:block lg:absolute lg:right-0 lg:bottom-0 lg:w-[50%] xl:w-[55%] lg:max-w-[750px] xl:max-w-[850px] z-10 pointer-events-none"
                 initial={{ opacity: 0, y: 80, rotateX: 15, z: -60, transformPerspective: 1200 }}

@@ -51,8 +51,7 @@ export default function JoinNewGenerationSection() {
                     <div className="join-new-gen__content">
                         <motion.h2 className="join-new-gen__title" variants={fadeUp}>
                             Start Building Real Estate
-                        </motion.h2>
-                        <motion.h2 className="join-new-gen__title" variants={fadeUp}>
+                            <br />
                             Portfolio
                         </motion.h2>
 

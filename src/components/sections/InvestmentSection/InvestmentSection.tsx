@@ -35,8 +35,8 @@ export default function InvestmentSection() {
     };
 
     const itemVariants: Variants = {
-        hidden: { 
-            opacity: 0, 
+        hidden: {
+            opacity: 0,
             y: 40,
             rotateX: 12,
             z: -40,
@@ -84,7 +84,7 @@ export default function InvestmentSection() {
 
                     {/* Title */}
                     <motion.h2
-                        className="text-white text-2xl sm:text-3xl md:text-4xl lg:text-[2.5rem] font-semibold text-center leading-tight tracking-tight"
+                        className="text-white text-2xl sm:text-3xl md:text-4xl lg:text-[2.5rem] font-bold text-center leading-tight tracking-tight"
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}

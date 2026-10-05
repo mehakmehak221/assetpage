@@ -105,6 +105,7 @@
 
   --font-poppins: var(--font-poppins);
   --font-montserrat: var(--font-montserrat);
+  --font-inter: var(--font-inter);
 
   /* Semantic UI Variables */
   --color-bg-surface-subtle: color-mix(in srgb, white, transparent 95%);
@@ -371,7 +372,6 @@
 
 /* Landing page — Figma uses Satoshi for all marketing content */
 .landing-page {
-  --font-montserrat: var(--font-satoshi);
   --font-primary: var(--font-satoshi);
   --font-display: var(--font-satoshi);
   --font-sans: var(--font-satoshi);

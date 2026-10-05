@@ -1,5 +1,8 @@
 import Navbar from "@/components/sections/Navbar/Navbar";
 import HeroSection from "@/components/sections/HeroSection/HeroSection";
+import AboutGlofiSection from "@/components/sections/AboutGlofiSection/AboutGlofiSection";
+import GlobalStructureSection from "@/components/sections/GlobalStructureSection/GlobalStructureSection";
+import UAEOperatingArmsSection from "@/components/sections/UAEOperatingArmsSection/UAEOperatingArmsSection";
 import AssetPartnersSection from "@/components/sections/AssetPartnersSection/AssetPartnersSection";
 import WorkingInstructionsSection from "@/components/sections/WorkingInstructionsSection/WorkingInstructionsSection";
 import PremiumPropertySection from "@/components/sections/PremiumPropertySection/PremiumPropertySection";
@@ -21,6 +24,9 @@ export default function Home() {
       <Navbar />
       <main className="w-full overflow-x-hidden">
         <HeroSection />
+        <AboutGlofiSection />
+        <GlobalStructureSection />
+        <UAEOperatingArmsSection />
         <AssetPartnersSection />
         <WorkingInstructionsSection />
         <ValuesSection />

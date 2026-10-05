@@ -93,10 +93,10 @@ export function useLandingMotion() {
     const viewProps = reduceMotion
         ? { initial: 'visible' as const, animate: 'visible' as const }
         : {
-              initial: 'hidden' as const,
-              whileInView: 'visible' as const,
-              viewport: landingViewport,
-          };
+            initial: 'hidden' as const,
+            whileInView: 'visible' as const,
+            viewport: landingViewport,
+        };
 
     const loadProps = reduceMotion
         ? { initial: 'visible' as const, animate: 'visible' as const }

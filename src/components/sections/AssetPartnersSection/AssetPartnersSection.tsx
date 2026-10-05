@@ -33,7 +33,7 @@ export default function AssetPartnersSection() {
         <section className="asset-partners-section w-full flex flex-col items-center bg-[#F6F9F8] py-20 sm:py-24 lg:py-32">
             <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <motion.h2
-                    className="text-center text-[#111111] font-semibold tracking-[-0.045em] text-[clamp(1.5rem,2.7vw,2.35rem)] leading-tight mb-8 sm:mb-10"
+                    className="text-center text-[#0A0D14] font-montserrat font-bold text-2xl sm:text-3xl md:text-4xl lg:text-[44px] leading-tight tracking-tight mb-8 sm:mb-12"
                     {...viewProps}
                     variants={fadeUp}
                 >
