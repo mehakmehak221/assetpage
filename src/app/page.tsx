@@ -1,6 +1,7 @@
 import Navbar from "@/components/sections/Navbar/Navbar";
 import HeroSection from "@/components/sections/HeroSection/HeroSection";
 import AboutGlofiSection from "@/components/sections/AboutGlofiSection/AboutGlofiSection";
+import EcosystemSection from "@/components/sections/EcosystemSection/EcosystemSection";
 import GlobalStructureSection from "@/components/sections/GlobalStructureSection/GlobalStructureSection";
 import UAEOperatingArmsSection from "@/components/sections/UAEOperatingArmsSection/UAEOperatingArmsSection";
 import AssetPartnersSection from "@/components/sections/AssetPartnersSection/AssetPartnersSection";
@@ -15,6 +16,7 @@ import GlofiCopyrightSection from "@/components/sections/GlofiCopyrightSection/G
 import AppDownloadSection from "@/components/sections/AppDownloadSection/AppDownloadSection";
 import CookieSection from "@/components/sections/CookieSection/CookieSection";
 import ValuesSection from "@/components/sections/ValueSection/ValueSection";
+import CompleteExperienceSection from "@/components/sections/CompleteExperienceSection/CompleteExperienceSection";
 import HowItWorksSection from "@/components/HowItWorksSection/HowItWorksSection";
 import LandingReferralWidget from "@/components/sections/LandingReferralWidget/LandingReferralWidget";
 
@@ -25,11 +27,13 @@ export default function Home() {
       <main className="w-full overflow-x-hidden">
         <HeroSection />
         <AboutGlofiSection />
+        <EcosystemSection />
         <GlobalStructureSection />
         <UAEOperatingArmsSection />
+        <CompleteExperienceSection />
+        <ValuesSection />
         <AssetPartnersSection />
         <WorkingInstructionsSection />
-        <ValuesSection />
         <HowItWorksSection />
         <InvestmentSection />
         <GlobalScaleSection />

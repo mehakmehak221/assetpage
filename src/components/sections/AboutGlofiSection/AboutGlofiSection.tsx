@@ -96,7 +96,7 @@ export default function AboutGlofiSection() {
                         </div>
 
                         <motion.div
-                            className="mt-5 sm:mt-6 p-6 sm:p-7 md:p-8 rounded-[24px] sm:rounded-[28px] border border-[#E5E7EB] bg-white shadow-[0_4px_24px_rgba(0,0,0,0.02)] space-y-4 font-inter font-normal text-sm sm:text-[15px] leading-relaxed text-left text-[#505151] max-w-[489px] w-full"
+                            className="mt-5 sm:mt-6 p-6 sm:p-7 md:p-8 rounded-[24px] sm:rounded-[28px] border border-[#E5E7EB] bg-white shadow-[0_4px_24px_rgba(0,0,0,0.02)] space-y-4 font-inter font-normal text-sm sm:text-[15px] leading-relaxed text-left text-[#505151] w-full lg:max-w-[489px]"
                             variants={fadeUp}
                         >
                             <p>
@@ -116,7 +116,7 @@ export default function AboutGlofiSection() {
                         {...viewProps}
                         variants={slideFromRight}
                     >
-                        <div className="relative w-full h-[360px] sm:h-[440px] lg:h-full min-h-[380px] max-w-[580px] lg:max-w-[600px] rounded-[28px] sm:rounded-[36px] overflow-hidden group transition-transform duration-500 hover:scale-[1.01]">
+                        <div className="relative w-full h-full min-h-[360px] sm:min-h-[440px] lg:min-h-0 rounded-[28px] sm:rounded-[36px] overflow-hidden group transition-transform duration-500 hover:scale-[1.01]">
                             <Image
                                 src="/assets/images/secondsection.webp"
                                 alt={t('GloFi - A Real Asset Bank For Global Tomorrow')}
