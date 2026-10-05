@@ -5,11 +5,11 @@ import { motion } from 'framer-motion';
 import {
     fadeUp,
     fadeUpSubtle,
-    slideFromLeft,
     slideFromRight,
     staggerContainer,
     useLandingMotion,
 } from '@/lib/landingAnimations';
+import { useI18n } from '@/providers/LocaleProvider';
 
 function FlameIcon() {
     return (
@@ -52,6 +52,7 @@ function FlameIcon() {
 
 export default function AboutGlofiSection() {
     const { viewProps } = useLandingMotion();
+    const { t } = useI18n();
 
     return (
         <section
@@ -71,26 +72,26 @@ export default function AboutGlofiSection() {
                                 variants={fadeUpSubtle}
                             >
                                 <FlameIcon />
-                                <span>ABOUT GLOFI</span>
+                                <span>{t('ABOUT GLOFI')}</span>
                             </motion.span>
 
                             <motion.h2
                                 className="mt-4 sm:mt-5 text-[#0A0D14] font-montserrat font-bold text-[26px] sm:text-3xl md:text-4xl lg:text-[46px] leading-[1.18] tracking-tight"
                                 variants={fadeUp}
                             >
-                                A{' '}
+                                {t('A')}{' '}
                                 <span className="text-[#01a586] italic font-semibold font-montserrat">
-                                    Real Asset Bank
+                                    {t('Real Asset Bank')}
                                 </span>{' '}
-                                For
-                                <br className="hidden sm:inline" /> Global Tomorrow
+                                {t('For')}
+                                <br className="hidden sm:inline" /> {t('Global Tomorrow')}
                             </motion.h2>
 
                             <motion.h3
                                 className="mt-3 sm:mt-3.5 text-[#0A0D14] font-bold text-sm sm:text-base md:text-lg tracking-[-0.02em] font-montserrat"
                                 variants={fadeUpSubtle}
                             >
-                                A New Home for Real-World Value.
+                                {t('A New Home for Real-World Value.')}
                             </motion.h3>
                         </div>
 
@@ -99,19 +100,13 @@ export default function AboutGlofiSection() {
                             variants={fadeUp}
                         >
                             <p>
-                                All your real estate investments in one platform - curated,
-                                accessible and transparent. GloFi Estates connects global real
-                                assets with global opportunity, enabling you to invest track and
-                                grow wealth with confidence.
+                                {t('All your real estate investments in one platform - curated, accessible and transparent. GloFi Estates connects global real assets with global opportunity, enabling you to invest track and grow wealth with confidence.')}
                             </p>
                             <p>
-                                From landmark properties to emerging opportunities, GloFi brings
-                                real assets into a connected global ecosystem - making
-                                discovery, access, and participation simpler.
+                                {t('From landmark properties to emerging opportunities, GloFi brings real assets into a connected global ecosystem - making discovery, access, and participation simpler.')}
                             </p>
                             <p>
-                                A global ecosystem built around real assets - connecting people,
-                                properties, and opportunity across markets.
+                                {t('A global ecosystem built around real assets - connecting people, properties, and opportunity across markets.')}
                             </p>
                         </motion.div>
                     </motion.div>
@@ -124,7 +119,7 @@ export default function AboutGlofiSection() {
                         <div className="relative w-full h-[360px] sm:h-[440px] lg:h-full min-h-[380px] max-w-[580px] lg:max-w-[600px] rounded-[28px] sm:rounded-[36px] overflow-hidden group transition-transform duration-500 hover:scale-[1.01]">
                             <Image
                                 src="/assets/images/secondsection.webp"
-                                alt="GloFi - A Real Asset Bank For Global Tomorrow"
+                                alt={t('GloFi - A Real Asset Bank For Global Tomorrow')}
                                 fill
                                 className="object-cover block"
                                 sizes="(max-width: 1023px) 100vw, (max-width: 1280px) 48vw, 600px"

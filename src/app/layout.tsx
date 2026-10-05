@@ -1,5 +1,6 @@
 import { ReactNode, Suspense } from "react";
 import { Inter, Montserrat, Poppins } from "next/font/google";
+import { getServerLocale } from "@/lib/i18n/server";
 import "./satoshi.css";
 import "./globals.css";
 import { StoreProvider } from "@/store/StoreProvider";
@@ -49,13 +50,16 @@ export const metadata = {
 };
 
 import { CurrencyProvider } from "@/providers/CurrencyProvider";
+import { LocaleProvider } from "@/providers/LocaleProvider";
 import GlobalToast from "@/components/GlobalToast";
 import Script from "next/script";
 import TrackingBootstrap from "@/components/TrackingBootstrap";
 
-export default function RootLayout({ children }: { children: ReactNode }) {
+export default async function RootLayout({ children }: { children: ReactNode }) {
+  const locale = await getServerLocale();
+
   return (
-    <html lang="en">
+    <html lang={locale} data-locale={locale} suppressHydrationWarning>
       <head>
         <Script
           src="https://www.googletagmanager.com/gtag/js?id=G-Z15Q0W903Y"
@@ -70,16 +74,18 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           `}
         </Script>
       </head>
-      <body className={`${montserrat.variable} ${inter.variable} ${poppins.variable} antialiased bg-[var(--background)] theme-purple`}>
-        <CurrencyProvider>
-          <StoreProvider>
-            <GlobalToast />
-            <Suspense fallback={null}>
-              <TrackingBootstrap />
-            </Suspense>
-            {children}
-          </StoreProvider>
-        </CurrencyProvider>
+      <body data-locale={locale} className={`${montserrat.variable} ${inter.variable} ${poppins.variable} antialiased bg-[var(--background)] theme-purple`}>
+        <LocaleProvider initialLocale={locale}>
+          <CurrencyProvider>
+            <StoreProvider>
+              <GlobalToast />
+              <Suspense fallback={null}>
+                <TrackingBootstrap />
+              </Suspense>
+              {children}
+            </StoreProvider>
+          </CurrencyProvider>
+        </LocaleProvider>
       </body>
     </html>
   );

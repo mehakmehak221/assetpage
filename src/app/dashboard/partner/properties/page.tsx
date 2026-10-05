@@ -3,6 +3,7 @@
 import { useMemo, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
+import { useI18n } from "@/providers/LocaleProvider";
 import {
     MapPinIcon,
     PropertyIcon,
@@ -42,6 +43,7 @@ const formatValuation = (val) => {
 const EDITABLE_STATUSES = new Set(["DRAFT", "LIVE", "SUSPENDED", "REJECTED", "UNDER_REVIEW", "PENDING_REVIEW"]);
 
 function StatusBadge({ status }: { status: string }) {
+    const { t } = useI18n();
     const s = (status || "").toUpperCase();
     const isLive = s === "LIVE";
     const isSuspended = s === "SUSPENDED";
@@ -71,12 +73,13 @@ function StatusBadge({ status }: { status: string }) {
     return (
         <span className={`inline-flex items-center gap-1.5 text-[9px] font-bold tracking-[0.12em] font-montserrat uppercase rounded-full px-2.5 py-1 border whitespace-nowrap ${cls}`}>
             <span className={`w-1.5 h-1.5 rounded-full flex-shrink-0 ${dot}`} />
-            {status}
+            {t(status)}
         </span>
     );
 }
 
 function PropertyCard({ property, index, onDelete, onSubmitForReview, onEdit, onShare }) {
+    const { t } = useI18n();
     const propertyImage = property.images && property.images.length > 0 ? property.images[0] : null;
     const status = (property.status || "").toUpperCase();
     const isDraft = status === "DRAFT";
@@ -122,14 +125,14 @@ function PropertyCard({ property, index, onDelete, onSubmitForReview, onEdit, on
 
                     <div className="absolute left-4 top-4">
                         <span className="inline-flex items-center rounded-full bg-black/50 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.2em] text-white backdrop-blur-sm">
-                            {property.status || "LIVE"}
+                            {t(property.status || "LIVE")}
                         </span>
                     </div>
 
                     <div className="absolute bottom-4 left-4 flex flex-wrap items-center gap-1.5">
                         {property.category && (
                             <span className="rounded-full bg-white/95 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.18em] text-black shadow-sm">
-                                {property.category.replace(/_/g, " ")}
+                                {t(property.category)}
                             </span>
                         )}
                         {property.saleType === "PREMIUM" && (
@@ -169,17 +172,17 @@ function PropertyCard({ property, index, onDelete, onSubmitForReview, onEdit, on
 
                     <div className="mt-5 grid grid-cols-2 gap-3 sm:gap-4 xl:grid-cols-4">
                         <div className="min-w-0 rounded-2xl border border-[var(--sidebar-border)] bg-[var(--background)] p-3 sm:p-4">
-                            <span className="block text-[9px] font-bold uppercase tracking-[0.18em] text-[var(--sidebar-text)] opacity-55">Valuation</span>
+                            <span className="block text-[9px] font-bold uppercase tracking-[0.18em] text-[var(--sidebar-text)] opacity-55">{t("Valuation")}</span>
                             <span className="mt-2 block break-words text-sm font-bold leading-tight text-[var(--foreground)] sm:text-base">
                                 {formatValuation(property.valuation)}
                             </span>
                         </div>
                         <div className="min-w-0 rounded-2xl border border-[var(--sidebar-border)] bg-[var(--background)] p-3 sm:p-4">
-                            <span className="block text-[9px] font-bold uppercase tracking-[0.18em] text-[var(--sidebar-text)] opacity-55">Return</span>
+                            <span className="block text-[9px] font-bold uppercase tracking-[0.18em] text-[var(--sidebar-text)] opacity-55">{t("Return")}</span>
                             <span className="mt-2 block text-sm font-bold text-emerald-500 sm:text-base">{annualReturn}%</span>
                         </div>
                         <div className="min-w-0 rounded-2xl border border-[var(--sidebar-border)] bg-[var(--background)] p-3 sm:p-4">
-                            <span className="block text-[9px] font-bold uppercase tracking-[0.18em] text-[var(--sidebar-text)] opacity-55">Fractions</span>
+                            <span className="block text-[9px] font-bold uppercase tracking-[0.18em] text-[var(--sidebar-text)] opacity-55">{t("Fractions")}</span>
                             <span className="mt-2 block text-sm font-bold leading-tight text-[var(--foreground)] sm:text-base">
                                 {soldFractions}
                                 {totalFractions > 0 && (
@@ -188,7 +191,7 @@ function PropertyCard({ property, index, onDelete, onSubmitForReview, onEdit, on
                             </span>
                         </div>
                         <div className="min-w-0 rounded-2xl border border-[var(--sidebar-border)] bg-[var(--background)] p-3 sm:p-4">
-                            <span className="block text-[9px] font-bold uppercase tracking-[0.18em] text-[var(--sidebar-text)] opacity-55">Investors</span>
+                            <span className="block text-[9px] font-bold uppercase tracking-[0.18em] text-[var(--sidebar-text)] opacity-55">{t("Investors")}</span>
                             <span className="mt-2 block text-sm font-bold text-[var(--foreground)] sm:text-base">{property.investorCount || 0}</span>
                         </div>
                     </div>
@@ -196,7 +199,7 @@ function PropertyCard({ property, index, onDelete, onSubmitForReview, onEdit, on
                     {isLive && totalFractions > 0 && (
                         <div className="mt-5">
                             <div className="mb-2 flex items-center justify-between">
-                                <span className="text-[10px] font-bold uppercase tracking-[0.18em] text-[var(--sidebar-text)] opacity-55">Sold Progress</span>
+                                <span className="text-[10px] font-bold uppercase tracking-[0.18em] text-[var(--sidebar-text)] opacity-55">{t("Sold Progress")}</span>
                                 <span className="text-[10px] font-bold uppercase tracking-[0.18em] text-[var(--sidebar-active-text)]">{soldPct.toFixed(1)}%</span>
                             </div>
                             <div className="h-2 overflow-hidden rounded-full bg-[var(--sidebar-border)]">
@@ -219,8 +222,8 @@ function PropertyCard({ property, index, onDelete, onSubmitForReview, onEdit, on
                             <span className="inline-flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-md bg-black/8">
                                 <ShareIcon className="h-4 w-4 flex-shrink-0" />
                             </span>
-                            <span className="leading-none sm:hidden">{isDraft ? "Generate" : "Share"}</span>
-                            <span className="hidden leading-none sm:inline">{isDraft ? "Generate Share" : "Share Asset"}</span>
+                            <span className="leading-none sm:hidden">{isDraft ? t("Generate") : t("Share")}</span>
+                            <span className="hidden leading-none sm:inline">{isDraft ? t("Generate Share") : t("Share Asset")}</span>
                         </button>
                         {(canEdit || isDraft) ? (
                             <div className="flex flex-wrap gap-2 sm:justify-end items-center">
@@ -235,8 +238,8 @@ function PropertyCard({ property, index, onDelete, onSubmitForReview, onEdit, on
                                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                                             </svg>
                                         </span>
-                                        <span className="hidden sm:inline">Edit Listing</span>
-                                        <span className="sm:hidden">Edit</span>
+                                        <span className="hidden sm:inline">{t("Edit Listing")}</span>
+                                        <span className="sm:hidden">{t("Edit")}</span>
                                     </button>
                                 )}
                                 {isDraft && (
@@ -250,7 +253,7 @@ function PropertyCard({ property, index, onDelete, onSubmitForReview, onEdit, on
                                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                                             </svg>
                                         </span>
-                                        Submit
+                                        {t("Submit")}
                                     </button>
                                 )}
                                 {isDraft && (
@@ -264,7 +267,7 @@ function PropertyCard({ property, index, onDelete, onSubmitForReview, onEdit, on
                                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                                             </svg>
                                         </span>
-                                        Delete
+                                        {t("Delete")}
                                     </button>
                                 )}
                             </div>
@@ -277,6 +280,7 @@ function PropertyCard({ property, index, onDelete, onSubmitForReview, onEdit, on
 }
 
 export default function PartnerPropertiesPage() {
+    const { t } = useI18n();
     const [isAddingNew, setIsAddingNew] = useState(false);
     const [editId, setEditId] = useState(null);
     const [showKycModal, setShowKycModal] = useState(false);
@@ -429,7 +433,7 @@ export default function PartnerPropertiesPage() {
                                 transition={{ duration: 0.4 }}
                             >
                                 <h1 className="text-xl lg:text-2xl font-semibold text-[var(--foreground)] font-montserrat">
-                                    Properties
+                                    {t("Properties")}
                                 </h1>
                             </motion.div>
 
@@ -443,7 +447,7 @@ export default function PartnerPropertiesPage() {
                                 className="flex items-center gap-2 bg-[var(--sidebar-active-bg)] hover:bg-[var(--sidebar-active-text)]/20 hover:scale-[1.02] active:scale-[0.98] text-[var(--sidebar-active-text)] px-4 py-2 rounded-md text-sm font-medium font-montserrat transition-all cursor-pointer"
                             >
                                 <span className="text-lg leading-none">+</span>
-                                New Listing
+                                {t("New Listing")}
                             </motion.button>
                         </div>
 
@@ -490,18 +494,18 @@ export default function PartnerPropertiesPage() {
                                         </svg>
                                     </div>
                                     <h3 className="text-lg font-semibold text-[var(--foreground)] mb-2">
-                                        {isKycRequired ? "Identity Verification Required" : isKybRequired ? "Business Verification Required" : "Error Loading Properties"}
+                                        {isKycRequired ? t("Identity Verification Required") : isKybRequired ? t("Business Verification Required") : t("Error Loading Properties")}
                                     </h3>
                                     <p className="text-sm text-[var(--color-text-muted)] mb-6 max-w-xs mx-auto">
                                         {isKycRequired
                                             ? kycStatus === 'UNDER_REVIEW'
-                                                ? "Your identity verification is currently under review. This process typically takes 24-48 hours."
-                                                : "You need to complete your identity verification before you can manage or list properties."
+                                                ? t("Your identity verification is currently under review. This process typically takes 24-48 hours.")
+                                                : t("You need to complete your identity verification before you can manage or list properties.")
                                             : isKybRequired
                                                 ? kybStatus === 'UNDER_REVIEW'
-                                                    ? "Your business verification is currently under review. This process typically takes 2-5 business days."
-                                                    : "You need to complete your business verification (KYB) before you can manage or list properties."
-                                                : "We encountered an error while loading your properties. Please try again later."}
+                                                    ? t("Your business verification is currently under review. This process typically takes 2-5 business days.")
+                                                    : t("You need to complete your business verification (KYB) before you can manage or list properties.")
+                                                : t("We encountered an error while loading your properties. Please try again later.")}
                                     </p>
 
                                     {(isKycRequired || isKybRequired) && (
@@ -509,13 +513,13 @@ export default function PartnerPropertiesPage() {
                                             {(isKycRequired && kycStatus === 'UNDER_REVIEW') && (
                                                 <div className="flex items-center gap-2 px-4 py-2 bg-[#F79009]/10 border border-[#F79009]/20 rounded-md text-[#F79009] text-sm font-bold animate-pulse">
                                                     <span className="w-2 h-2 rounded-full bg-[#F79009]" />
-                                                    STATUS: UNDER REVIEW (KYC)
+                                                    {t("STATUS: UNDER REVIEW (KYC)")}
                                                 </div>
                                             )}
                                             {(isKybRequired && kybStatus === 'UNDER_REVIEW') && (
                                                 <div className="flex items-center gap-2 px-4 py-2 bg-[#F79009]/10 border border-[#F79009]/20 rounded-md text-[#F79009] text-sm font-bold animate-pulse">
                                                     <span className="w-2 h-2 rounded-full bg-[#F79009]" />
-                                                    STATUS: UNDER REVIEW (KYB)
+                                                    {t("STATUS: UNDER REVIEW (KYB)")}
                                                 </div>
                                             )}
 
@@ -540,15 +544,15 @@ export default function PartnerPropertiesPage() {
                                                 className={`px-10 py-4 ${(isKycRequired && kycStatus === 'UNDER_REVIEW') || (isKybRequired && kybStatus === 'UNDER_REVIEW') ? 'bg-[#1A1F1C] text-[var(--color-text-muted)] border border-[var(--sidebar-border)]' : 'bg-[var(--color-primary-300)] text-black shadow-glow-primary'} rounded-md text-base font-bold hover:scale-[1.02] active:scale-[0.98] transition-all font-montserrat cursor-pointer`}
                                             >
                                                 {isKycRequired
-                                                    ? kycStatus === 'UNDER_REVIEW' ? "Refresh KYC Status" : "Verify Identity Now"
-                                                    : kybStatus === 'UNDER_REVIEW' ? "Refresh KYB Status" : "Verify Business Now"}
+                                                    ? kycStatus === 'UNDER_REVIEW' ? t("Refresh KYC Status") : t("Verify Identity Now")
+                                                    : kybStatus === 'UNDER_REVIEW' ? t("Refresh KYB Status") : t("Verify Business Now")}
                                             </button>
                                         </div>
                                     )}
                                 </div>
                             ) : data?.data?.length === 0 ? (
                                 <div className="text-center p-12 text-[var(--color-text-muted)] border border-dashed border-[var(--color-border-subtle)] rounded-md">
-                                    No properties found.
+                                    {t("No properties found.")}
                                 </div>
                             ) : (
                                 data?.data?.map((prop, i) => (
@@ -569,8 +573,8 @@ export default function PartnerPropertiesPage() {
                             <section className="w-full rounded-md border border-[var(--sidebar-border)] bg-[var(--card-surface)] p-6">
                                 <div className="mb-6 flex items-center justify-between gap-3">
                                     <div>
-                                        <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-[var(--sidebar-text)] opacity-60">Share Activity</p>
-                                        <h2 className="mt-2 text-xl font-bold text-[var(--foreground)] font-montserrat">Shared properties</h2>
+                                        <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-[var(--sidebar-text)] opacity-60">{t("Share Activity")}</p>
+                                        <h2 className="mt-2 text-xl font-bold text-[var(--foreground)] font-montserrat">{t("Shared properties")}</h2>
                                     </div>
                                     <SparkleIcon className="h-5 w-5 text-[var(--sidebar-text)] opacity-50" />
                                 </div>
@@ -578,11 +582,11 @@ export default function PartnerPropertiesPage() {
                                 {sharedLoading ? (
                                     <div className="flex items-center gap-3 text-sm text-[var(--sidebar-text)] opacity-60">
                                         <div className="h-4 w-4 animate-spin rounded-full border-2 border-[var(--color-primary-300)]/20 border-t-[var(--color-primary-300)]" />
-                                        Loading shared properties...
+                                        {t("Loading shared properties...")}
                                     </div>
                                 ) : sharedAssets.length === 0 ? (
                                     <div className="rounded-2xl border border-dashed border-[var(--sidebar-border)] bg-[var(--background)]/60 p-5 text-sm text-[var(--sidebar-text)] opacity-60">
-                                        No share links yet. Use the Share button on any property to generate your first link.
+                                        {t("No share links yet. Use the Share button on any property to generate your first link.")}
                                     </div>
                                 ) : (
                                     <div className="space-y-3">
@@ -600,7 +604,7 @@ export default function PartnerPropertiesPage() {
                                                 <div className="flex items-start justify-between gap-3">
                                                     <div className="min-w-0">
                                                         <p className="truncate text-sm font-bold text-[var(--foreground)] font-montserrat">
-                                                            {item.asset?.title || "Untitled asset"}
+                                                            {item.asset?.title || t("Untitled asset")}
                                                         </p>
                                                         <p className="mt-1 text-[11px] text-[var(--sidebar-text)] opacity-60">
                                                             {item.code} • {new Date(item.createdAt).toLocaleDateString()}
@@ -608,16 +612,16 @@ export default function PartnerPropertiesPage() {
                                                     </div>
                                                     <div className="flex shrink-0 flex-col items-end gap-1">
                                                         <span className="rounded-full bg-[var(--sidebar-active-bg)] px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider text-[var(--sidebar-active-text)] whitespace-nowrap">
-                                                            {item.stats?.totalClicks || 0} clicks
+                                                            {item.stats?.totalClicks || 0} {t("clicks")}
                                                         </span>
                                                         <span className="rounded-full bg-[var(--sidebar-active-bg)] px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider text-[var(--sidebar-active-text)] whitespace-nowrap">
-                                                            {item.stats?.investmentsCount || 0} invests
+                                                            {item.stats?.investmentsCount || 0} {t("invests")}
                                                         </span>
                                                     </div>
                                                 </div>
 
                                                 <div className="mt-3 flex flex-col gap-2 sm:flex-row sm:items-center">
-                                                    <div className="min-w-0 flex-1 rounded-xl border border-[var(--sidebar-border)] bg-[var(--background)] px-3 py-2 text-xs text-[var(--sidebar-text)] opacity-70">
+                                                    <div className="min-w-0 flex-1 rounded-xl border border-[var(--sidebar-border)] bg-[var(--background)]/75 px-3 py-2 text-xs text-[var(--sidebar-text)] opacity-70">
                                                         <span className="block truncate" title={item.shareUrl}>{item.shareUrl}</span>
                                                     </div>
                                                     <button
@@ -629,7 +633,7 @@ export default function PartnerPropertiesPage() {
                                                         className="inline-flex h-10 w-full items-center justify-center gap-2 rounded-xl border border-[var(--sidebar-border)] px-4 text-xs font-bold uppercase tracking-wider text-[var(--foreground)] sm:w-auto"
                                                     >
                                                         <CopyIcon className="h-4 w-4" />
-                                                        {copiedShareId === item.id ? "Copied" : "Copy"}
+                                                        {copiedShareId === item.id ? t("Copied") : t("Copy")}
                                                     </button>
                                                 </div>
                                             </div>
@@ -641,25 +645,25 @@ export default function PartnerPropertiesPage() {
                             <section className="w-full rounded-md border border-[var(--sidebar-border)] bg-[var(--card-surface)] p-6">
                                 <div className="flex items-center justify-between gap-3 mb-5">
                                     <div>
-                                        <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-[var(--sidebar-text)] opacity-60">Performance</p>
-                                        <h2 className="mt-2 text-xl font-bold text-[var(--foreground)] font-montserrat">Share report</h2>
+                                        <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-[var(--sidebar-text)] opacity-60">{t("Performance")}</p>
+                                        <h2 className="mt-2 text-xl font-bold text-[var(--foreground)] font-montserrat">{t("Share report")}</h2>
                                     </div>
                                     <ChartLineIcon className="h-5 w-5 text-[var(--sidebar-text)] opacity-50" />
                                 </div>
 
                                 <div className="rounded-2xl border border-[var(--sidebar-border)] bg-[var(--background)]/75 p-4 mb-4">
-                                    <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-[var(--sidebar-text)] opacity-60">Selected Asset</p>
+                                    <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-[var(--sidebar-text)] opacity-60">{t("Selected Asset")}</p>
                                     <div className="mt-2 flex items-start justify-between gap-3">
                                         <div className="min-w-0">
                                             <p className="truncate text-sm font-bold text-[var(--foreground)] font-montserrat">
-                                                {shareReport?.asset?.title || sharedAssets.find((item) => String(item.assetId) === String(selectedShareReportAssetId))?.asset?.title || "Asset report"}
+                                                {shareReport?.asset?.title || sharedAssets.find((item) => String(item.assetId) === String(selectedShareReportAssetId))?.asset?.title || t("Asset report")}
                                             </p>
                                             <p className="mt-1 text-xs text-[var(--sidebar-text)] opacity-60">
-                                                {shareReport?.asset?.location || sharedAssets.find((item) => String(item.assetId) === String(selectedShareReportAssetId))?.asset?.location || "No location"}
+                                                {shareReport?.asset?.location || sharedAssets.find((item) => String(item.assetId) === String(selectedShareReportAssetId))?.asset?.location || t("No location")}
                                             </p>
                                         </div>
                                         <span className="rounded-full bg-[var(--sidebar-active-bg)] px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-[var(--sidebar-active-text)]">
-                                            {shareReport?.links?.length || 0} links
+                                            {shareReport?.links?.length || 0} {t("links")}
                                         </span>
                                     </div>
                                 </div>
@@ -668,7 +672,7 @@ export default function PartnerPropertiesPage() {
                                     {shareSummary.map((item) => (
                                         <div key={item.label} className="min-w-0 rounded-2xl border border-[var(--sidebar-border)] bg-[var(--background)] p-4">
                                             <div className="flex items-center justify-between">
-                                                <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-[var(--sidebar-text)] opacity-60">{item.label}</p>
+                                                <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-[var(--sidebar-text)] opacity-60">{t(item.label)}</p>
                                                 <item.icon className="h-4 w-4 text-[var(--sidebar-text)] opacity-50" />
                                             </div>
                                             <p className="mt-4 break-words text-xl font-bold text-[var(--foreground)] font-montserrat sm:text-2xl">{item.value}</p>
@@ -677,7 +681,7 @@ export default function PartnerPropertiesPage() {
                                 </div>
 
                                 <div className="mt-3 rounded-2xl border border-[var(--sidebar-border)] bg-[var(--background)] p-4">
-                                    <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-[var(--sidebar-text)] opacity-60">Conversion Rate</p>
+                                    <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-[var(--sidebar-text)] opacity-60">{t("Conversion Rate")}</p>
                                     <p className="mt-3 text-2xl font-bold text-[var(--color-primary-300)] font-montserrat">
                                         {shareReport?.summary.conversionRate || 0}%
                                     </p>
@@ -686,7 +690,7 @@ export default function PartnerPropertiesPage() {
                                 <div className="mt-4 space-y-3 max-h-[460px] overflow-auto pr-1">
                                     {!selectedShareReportAssetId ? (
                                         <div className="rounded-2xl border border-dashed border-[var(--sidebar-border)] bg-[var(--background)]/60 p-5 text-sm text-[var(--sidebar-text)] opacity-60">
-                                            Select a shared property to inspect its report.
+                                            {t("Select a shared property to inspect its report.")}
                                         </div>
                                     ) : reportLoading ? (
                                         <div className="flex items-center gap-3 text-sm text-[var(--sidebar-text)] opacity-60">

@@ -9,6 +9,7 @@ import {
     staggerContainer,
     useLandingMotion,
 } from '@/lib/landingAnimations';
+import { useI18n } from '@/providers/LocaleProvider';
 
 function FlameIcon() {
     return (
@@ -49,59 +50,54 @@ function FlameIcon() {
     );
 }
 
-const MARKET_NODES = [
-    {
-        image: '/assets/images/holding1.webp',
-        alt: 'India Operating Sub. - India Gate',
-        badge: 'ACTIVE OPERATING SUBSIDIARY',
-        title: 'India Operating Sub.',
-        description:
-            'Full-spectrum real asset origination, institutional warehousing, and onshore special purpose vehicle capitalization for premium high-growth corridors.',
-    },
-    {
-        image: '/assets/images/holding2.webp',
-        alt: 'US Domestic Ops - Statue of Liberty',
-        badge: 'STRATEGIC MARKET NODE',
-        title: 'US Domestic Ops',
-        description:
-            'Tier-1 North American commercial towers, biomedical life sciences facilities, and multi-state cold storage infrastructure deployments.',
-    },
-    {
-        image: '/assets/images/holding4.webp',
-        alt: 'UAE Holding Co. - Dubai Museum of the Future',
-        badge: 'ACTIVE OPERATING HUB',
-        title: 'UAE Holding Co.',
-        description:
-            'Cross-border capital routing, sovereign co-investment syndicates, and master corporate operational vehicle directly driving regional execution entities.',
-    },
-    {
-        image: '/assets/images/holding3.webp',
-        alt: 'Saudi Arabia Node - City and Coastal Skyline',
-        badge: 'STRATEGIC EXPANSION NODE',
-        title: 'Saudi Arabia Node',
-        description:
-            'Capital syndication and sovereign alignment across Vision2030 giga-projects, hospitality enclaves, and premium real asset joint ventures.',
-    },
-    {
-        image: '/assets/images/holding5.webp',
-        alt: 'Brazil Expansion - Christ the Redeemer',
-        badge: 'STRATEGIC EXPANSION NODE',
-        title: 'Brazil Expansion',
-        description:
-            'Institutional real estate acquisition, agricultural sovereign reserves, and major logistics gateways spanning South America.',
-    },
-    {
-        image: '/assets/images/holding6.webp',
-        alt: 'London Europe Hub - Big Ben & Westminster',
-        badge: 'STRATEGIC EXPANSION NODE',
-        title: 'London Europe Hub',
-        description:
-            'Multi-family office capital aggregation, institutional syndication desks, and outbound gateway for prime Western European real estate investments.',
-    },
-];
-
 export default function GlobalStructureSection() {
     const { viewProps } = useLandingMotion();
+    const { t } = useI18n();
+
+    const MARKET_NODES = [
+        {
+            image: '/assets/images/holding1.webp',
+            alt: t('India Operating Sub. - India Gate'),
+            badge: t('ACTIVE OPERATING SUBSIDIARY'),
+            title: t('India Operating Sub.'),
+            description: t('Full-spectrum real asset origination, institutional warehousing, and onshore special purpose vehicle capitalization for premium high-growth corridors.'),
+        },
+        {
+            image: '/assets/images/holding2.webp',
+            alt: t('US Domestic Ops - Statue of Liberty'),
+            badge: t('STRATEGIC MARKET NODE'),
+            title: t('US Domestic Ops'),
+            description: t('Tier-1 North American commercial towers, biomedical life sciences facilities, and multi-state cold storage infrastructure deployments.'),
+        },
+        {
+            image: '/assets/images/holding4.webp',
+            alt: t('UAE Holding Co. - Dubai Museum of the Future'),
+            badge: t('ACTIVE OPERATING HUB'),
+            title: t('UAE Holding Co.'),
+            description: t('Cross-border capital routing, sovereign co-investment syndicates, and master corporate operational vehicle directly driving regional execution entities.'),
+        },
+        {
+            image: '/assets/images/holding3.webp',
+            alt: t('Saudi Arabia Node - City and Coastal Skyline'),
+            badge: t('STRATEGIC EXPANSION NODE'),
+            title: t('Saudi Arabia Node'),
+            description: t('Capital syndication and sovereign alignment across Vision2030 giga-projects, hospitality enclaves, and premium real asset joint ventures.'),
+        },
+        {
+            image: '/assets/images/holding5.webp',
+            alt: t('Brazil Expansion - Christ the Redeemer'),
+            badge: t('STRATEGIC EXPANSION NODE'),
+            title: t('Brazil Expansion'),
+            description: t('Institutional real estate acquisition, agricultural sovereign reserves, and major logistics gateways spanning South America.'),
+        },
+        {
+            image: '/assets/images/holding6.webp',
+            alt: t('London Europe Hub - Big Ben & Westminster'),
+            badge: t('STRATEGIC EXPANSION NODE'),
+            title: t('London Europe Hub'),
+            description: t('Multi-family office capital aggregation, institutional syndication desks, and outbound gateway for prime Western European real estate investments.'),
+        },
+    ];
 
     return (
         <section
@@ -120,23 +116,23 @@ export default function GlobalStructureSection() {
                         variants={fadeUpSubtle}
                     >
                         <FlameIcon />
-                        <span>GLOBAL STRUCTURE</span>
+                        <span>{t('GLOBAL STRUCTURE')}</span>
                     </motion.span>
 
                     <motion.h2
                         className="text-[#000000] font-montserrat font-bold text-[26px] sm:text-3xl md:text-4xl lg:text-[46px] leading-[1.18] tracking-tight text-center"
                         variants={fadeUp}
                     >
-                        One Holding Company.
+                        {t('One Holding Company.')}
                         <br />
-                        Six Global Markets.
+                        {t('Six Global Markets.')}
                     </motion.h2>
 
                     <motion.p
                         className="mt-3 sm:mt-3.5 text-[#414141] font-montserrat font-normal text-sm sm:text-[15px] md:text-base leading-relaxed text-center max-w-[860px] mx-auto"
                         variants={fadeUpSubtle}
                     >
-                        GloFi Estates operates within a USA-based holding structure, connecting regional entities, local fiduciary expertise, and sovereign-grade real asset portfolios across strategic liquidity centers.
+                        {t('GloFi Estates operates within a USA-based holding structure, connecting regional entities, local fiduciary expertise, and sovereign-grade real asset portfolios across strategic liquidity centers.')}
                     </motion.p>
                 </motion.div>
 
@@ -151,18 +147,18 @@ export default function GlobalStructureSection() {
                                 <path d="M6 1L1.2 2.8V6.6C1.2 9.5 3.2 12.1 6 12.8C8.8 12.1 10.8 9.5 10.8 6.6V2.8L6 1Z" stroke="#412D00" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" fill="none" />
                             </svg>
 
-                            <span>APEX FIDUCIARY ENTITY</span>
+                            <span>{t('APEX FIDUCIARY ENTITY')}</span>
                         </span>
                     </div>
 
                     <div className="relative w-full rounded-[28px] sm:rounded-[32px] bg-[#43A982] p-6 sm:p-8 md:p-9 shadow-[0_28px_60px_-10px_rgba(18,70,50,0.48),_0_15px_30px_-10px_rgba(0,0,0,0.28)] text-white">
                         <div className="text-[11px] sm:text-xs tracking-[0.14em] uppercase text-white/95 font-semibold mb-2">
-                            DELAWARE JURISDICTION • LEGAL &amp; CAPITAL NEXUS
+                            {t('DELAWARE JURISDICTION • LEGAL & CAPITAL NEXUS')}
                         </div>
 
                         <div className="flex items-center justify-between gap-4">
                             <h3 className="text-2xl sm:text-3xl md:text-[34px] font-bold text-white tracking-tight leading-snug">
-                                GloFi Estates — USA Holding Co.
+                                {t('GloFi Estates — USA Holding Co.')}
                             </h3>
                             <div className="w-12 h-12 rounded-full bg-[#007E5F] flex items-center justify-center shrink-0 shadow-sm">
                                 <svg width="22" height="18" viewBox="0 0 24 20" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -174,42 +170,41 @@ export default function GlobalStructureSection() {
                         </div>
 
                         <p className="mt-2.5 text-white/95 text-xs sm:text-[14px] leading-relaxed max-w-2xl">
-                            Supreme corporate governing board overseeing inter-entity treasury transfers,
-                            master compliance charters, and institutional LP allocations.
+                            {t('Supreme corporate governing board overseeing inter-entity treasury transfers, master compliance charters, and institutional LP allocations.')}
                         </p>
 
                         <div className="mt-6 rounded-[22px] bg-[#1D5A45] p-4.5 sm:p-5 md:px-7">
                             <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 sm:gap-6 text-left">
                                 <div>
                                     <div className="text-[10px] sm:text-[11px] tracking-wider text-[#B7FFD6] font-bold uppercase">
-                                        INCORPORATION
+                                        {t('INCORPORATION')}
                                     </div>
                                     <div className="text-xs sm:text-[13.5px] md:text-sm font-bold text-white mt-1">
-                                        DE, Series C-Corp
+                                        {t('DE, Series C-Corp')}
                                     </div>
                                 </div>
                                 <div>
                                     <div className="text-[10px] sm:text-[11px] tracking-wider text-[#B7FFD6] font-bold uppercase">
-                                        MASTER ASSETS
+                                        {t('MASTER ASSETS')}
                                     </div>
                                     <div className="text-xs sm:text-[13.5px] md:text-sm font-bold text-white mt-1">
-                                        $1.84B AUM
+                                        {t('$1.84B AUM')}
                                     </div>
                                 </div>
                                 <div>
                                     <div className="text-[10px] sm:text-[11px] tracking-wider text-[#B7FFD6] font-bold uppercase">
-                                        FIDUCIARY VAULT
+                                        {t('FIDUCIARY VAULT')}
                                     </div>
                                     <div className="text-xs sm:text-[13.5px] md:text-sm font-bold text-white mt-1">
-                                        Qualified Custody
+                                        {t('Qualified Custody')}
                                     </div>
                                 </div>
                                 <div>
                                     <div className="text-[10px] sm:text-[11px] tracking-wider text-[#B7FFD6] font-bold uppercase">
-                                        REGULATORY TIER
+                                        {t('REGULATORY TIER')}
                                     </div>
                                     <div className="text-xs sm:text-[13.5px] md:text-sm font-bold text-white mt-1">
-                                        Reg D / Reg S
+                                        {t('Reg D / Reg S')}
                                     </div>
                                 </div>
                             </div>

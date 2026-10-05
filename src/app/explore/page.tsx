@@ -12,6 +12,7 @@ import { MapPinIcon, TrendingUpIcon, VerifiedIcon, SecondaryMarketplaceIcon, Sha
 import Link from "next/link";
 
 import { useCurrency } from "@/providers/CurrencyProvider";
+import { useI18n } from "@/providers/LocaleProvider";
 
 const DROPDOWN_STYLES = `
   .dropdown-scroll::-webkit-scrollbar {
@@ -30,6 +31,7 @@ const DROPDOWN_STYLES = `
 `;
 
 function PillDropdown({ label, options, value, onChange, placeholder, disabled = false }) {
+    const { t } = useI18n();
     const [isOpen, setIsOpen] = useState(false);
     const [searchTerm, setSearchTerm] = useState("");
     const dropdownRef = useRef<HTMLDivElement>(null);
@@ -75,7 +77,7 @@ function PillDropdown({ label, options, value, onChange, placeholder, disabled =
                             <input
                                 type="text"
                                 autoFocus
-                                placeholder="Search..."
+                                placeholder={t("Search...")}
                                 value={searchTerm}
                                 onChange={(e) => setSearchTerm(e.target.value)}
                                 className="w-full bg-neutral-50 border border-neutral-200 rounded-md px-3 py-1.5 text-[10px] text-neutral-800 focus:outline-none focus:border-[#00DAAF]/50 font-Montserrat"
@@ -140,6 +142,7 @@ const cardVariants: Variants = {
 
 export default function ExplorePage() {
     const { formatPrice, currency } = useCurrency();
+    const { t } = useI18n();
     const [activeCategory, setActiveCategory] = useState("All");
     const [countryFilter, setCountryFilter] = useState("");
     const [stateFilter, setStateFilter] = useState("");
@@ -170,14 +173,16 @@ export default function ExplorePage() {
 
                 <div className="flex flex-col gap-6 mb-8 bg-white p-6 sm:p-8 rounded-md border border-neutral-200/60 shadow-sm relative z-20">
                     <div className="flex flex-col gap-4">
-                        <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tighter bg-gradient-to-r from-[#00B28F] to-[#00DAAF] bg-clip-text text-transparent">
-                            Discover Assets
+                        <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tighter bg-gradient-to-r from-[#00B28F] to-[#00DAAF] bg-clip-text text-transparent py-1.5 leading-snug">
+                            {t("Discover Assets")}
                         </h1>
                         <p className="text-sm sm:text-base text-neutral-500 max-w-xl font-medium leading-relaxed mb-0.5">
-                            Institutional-grade real estate. Digitally simplified.
+                            {t("Institutional-grade assets. Digitally simplified.")}
                         </p>
                         <p className="text-sm text-neutral-500 font-medium">
-                            Invest fractionally starting from {currency.symbol}10,000.
+                            {saleTypeFilter === "FRACTIONAL"
+                                ? `${t("Institutional-grade real estate. Invest fractionally from")} ${currency.symbol}10,000.`
+                                : t("Acquire complete institutional assets as a single whole transaction.")}
                         </p>
                     </div>
 
@@ -203,7 +208,7 @@ export default function ExplorePage() {
                                             />
                                         )}
                                         {type === "FRACTIONAL"
-                                            ? "Fractional Real Estate"
+                                            ? t("Fractional Real Estate")
                                             : type === "PREMIUM"
                                                 ? (
                                                     <span className="inline-flex items-center gap-1.5">
@@ -211,7 +216,7 @@ export default function ExplorePage() {
                                                         GloFi Premium
                                                     </span>
                                                 )
-                                                : "Whole Properties"}
+                                                : t("Whole Properties")}
                                     </button>
                                 );
                             })}
@@ -229,14 +234,14 @@ export default function ExplorePage() {
                                         : "bg-neutral-50 text-neutral-500 border-neutral-200 hover:border-neutral-300 hover:bg-neutral-100"
                                         }`}
                                 >
-                                    {cat}
+                                    {t(cat)}
                                 </button>
                             ))}
                         </div>
 
                         <div className="flex flex-col sm:flex-row flex-wrap gap-4 sm:gap-6 items-stretch sm:items-center border-t border-neutral-100 pt-5">
                             <PillDropdown
-                                label="Country"
+                                label={t("Country")}
                                 options={Country.getAllCountries()}
                                 value={countryFilter}
                                 onChange={(opt) => {
@@ -246,10 +251,10 @@ export default function ExplorePage() {
                                     setCityFilter("");
                                     setStateIsoCode("");
                                 }}
-                                placeholder="Select Country"
+                                placeholder={t("Select Country")}
                             />
                             <PillDropdown
-                                label="State"
+                                label={t("State")}
                                 options={countryIsoCode ? State.getStatesOfCountry(countryIsoCode) : []}
                                 value={stateFilter}
                                 onChange={(opt) => {
@@ -257,17 +262,17 @@ export default function ExplorePage() {
                                     setStateFilter(opt.name);
                                     setCityFilter("");
                                 }}
-                                placeholder="Select State"
+                                placeholder={t("Select State")}
                                 disabled={!countryIsoCode}
                             />
                             <PillDropdown
-                                label="City"
+                                label={t("City")}
                                 options={(countryIsoCode && stateIsoCode) ? City.getCitiesOfState(countryIsoCode, stateIsoCode) : []}
                                 value={cityFilter}
                                 onChange={(opt) => {
                                     setCityFilter(opt.name);
                                 }}
-                                placeholder="Select City"
+                                placeholder={t("Select City")}
                                 disabled={!stateIsoCode}
                             />
                             {(countryFilter || stateFilter || cityFilter) && (
@@ -281,7 +286,7 @@ export default function ExplorePage() {
                                     }}
                                     className="text-xs font-bold text-neutral-400 hover:text-neutral-600 transition-colors py-2 px-3 hover:bg-neutral-50 rounded-md"
                                 >
-                                    Clear Filters
+                                    {t("Clear Filters")}
                                 </button>
                             )}
                         </div>
@@ -378,12 +383,12 @@ export default function ExplorePage() {
 
                                                 <div className="absolute bottom-3 left-3 flex items-center gap-1.5 z-10">
                                                     <span className="px-3.5 py-1.5 rounded-full text-[11px] font-bold capitalize bg-white text-[#111111] shadow-md tracking-wide">
-                                                        {property.category.replace(/_/g, ' ').toLowerCase()}
+                                                        {t(property.category.toUpperCase()) || property.category.replace(/_/g, ' ').toLowerCase()}
                                                     </span>
                                                     {property.saleType === 'PREMIUM' && (
                                                         <span className="px-2.5 py-1.5 rounded-full text-[10px] font-black uppercase bg-gradient-to-r from-amber-400 to-amber-500 text-black shadow-md tracking-wider flex items-center gap-1">
                                                             <StarIcon className="w-3 h-3 fill-black shrink-0" />
-                                                            PREMIUM
+                                                            {t("PREMIUM")}
                                                         </span>
                                                     )}
                                                 </div>
@@ -395,7 +400,7 @@ export default function ExplorePage() {
                                                             ? 'bg-[#FF5C5C] text-[#FF5C5C]'
                                                             : 'bg-[#E8940C] text-[#E8940C]'
                                                         }`} />
-                                                    {riskLevel} RISK
+                                                    {t("{risk} RISK", { risk: t(riskLevel) })}
                                                 </span>
 
                                                 <button
@@ -431,12 +436,12 @@ export default function ExplorePage() {
                                                 <div className="bg-[#F9FAFB] border border-neutral-200/80 rounded-md p-3 sm:p-4 mb-6 shadow-sm">
                                                     <div className="grid grid-cols-3 divide-x divide-neutral-200/65 text-center items-center">
                                                         <div className="min-w-0 px-1 flex flex-col justify-center">
-                                                            <p className="text-[9px] sm:text-[10px] font-bold text-neutral-400 mb-1 truncate">Valuation</p>
+                                                            <p className="text-[9px] sm:text-[10px] font-bold text-neutral-400 mb-1 truncate">{t("Valuation")}</p>
                                                             <p className="text-[11px] min-[400px]:text-xs sm:text-[15px] font-extrabold text-neutral-900 whitespace-nowrap leading-tight">{formatPrice(property.valuation, true)}</p>
                                                         </div>
                                                         <div className="min-w-0 px-1 flex flex-col justify-center">
                                                             <p className="text-[9px] sm:text-[10px] font-bold text-neutral-400 mb-1 truncate">
-                                                                {property.saleType === 'WHOLE' ? 'Whole Price' : 'Per Fraction'}
+                                                                {property.saleType === 'WHOLE' ? t('Whole Price') : t('Per Fraction')}
                                                             </p>
                                                             <p className="text-[11px] min-[400px]:text-xs sm:text-[15px] font-extrabold text-neutral-900 whitespace-nowrap leading-tight">
                                                                 {formatPrice(
@@ -448,9 +453,9 @@ export default function ExplorePage() {
                                                             </p>
                                                         </div>
                                                         <div className="relative group/tip min-w-0 px-1 flex flex-col justify-center">
-                                                            <p className="text-[9px] sm:text-[10px] font-bold text-neutral-400 mb-1 truncate cursor-default" title="Potential Annual Return">Potential Annual Return</p>
+                                                            <p className="text-[9px] sm:text-[10px] font-bold text-neutral-400 mb-1 truncate cursor-default" title={t("Potential Annual Return")}>{t("Potential Annual Return")}</p>
                                                             <div className="absolute -top-8 left-1/2 -translate-x-1/2 hidden group-hover/tip:flex items-center px-2 py-0.5 bg-neutral-900 text-white text-[10px] font-semibold rounded shadow-xl border border-neutral-700 whitespace-nowrap z-30 pointer-events-none">
-                                                                Potential Annual Return
+                                                                {t("Potential Annual Return")}
                                                                 <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1.5 h-1.5 bg-neutral-900 rotate-45 border-r border-b border-neutral-700" />
                                                             </div>
                                                             <p className="text-[11px] min-[400px]:text-xs sm:text-[15px] font-extrabold text-[#00B28F] whitespace-nowrap leading-tight">{formattedYield}%</p>
@@ -461,8 +466,8 @@ export default function ExplorePage() {
                                                 {/* Funding Progress */}
                                                 <div className="mb-6">
                                                     <div className="flex justify-between items-center mb-2 text-[12px] font-bold text-neutral-400">
-                                                        <span>{fundedPercentage}% funded</span>
-                                                        <span>{property.availableFractions?.toLocaleString()} left</span>
+                                                        <span>{t("{percent}% funded", { percent: fundedPercentage })}</span>
+                                                        <span>{t("{count} left", { count: property.availableFractions?.toLocaleString() })}</span>
                                                     </div>
                                                     <div className="w-full h-2.5 bg-[#00DAAF]/20 rounded-full overflow-hidden">
                                                         <motion.div
@@ -480,7 +485,7 @@ export default function ExplorePage() {
                                                     prefetch={false}
                                                     className="relative z-[3] block pointer-events-auto w-full py-3.5 rounded-md border-[1.5px] border-[#006D5B] bg-transparent text-neutral-900 hover:bg-[#006D5B] hover:text-white text-sm font-extrabold uppercase tracking-wide text-center transition-all duration-300 active:scale-[0.99]"
                                                 >
-                                                    View Details
+                                                    {t("View Details")}
                                                 </Link>
                                             </div>
                                         </div>

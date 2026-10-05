@@ -4,10 +4,12 @@ import { motion, Variants } from "framer-motion";
 import { useRouter } from "next/navigation";
 import { TrendingUpIcon, SecondaryMarketplaceIcon, VerifiedIcon } from "@/components/VectorImages";
 import { EarlyStarterClaimWidget } from "./EarlyStarterClaimWidget";
+import { useI18n } from "@/providers/LocaleProvider";
 
 
 export function CommunityStatusBanner() {
   const router = useRouter();
+  const { t } = useI18n();
 
   const avatars = [
     { initials: "R", color: "#00DAAF" },
@@ -24,7 +26,7 @@ export function CommunityStatusBanner() {
       className="flex items-center justify-between gap-2.5 sm:gap-4 px-3.5 py-3 sm:px-5 sm:py-4 bg-[var(--marketplace-banner-bg)] border border-[var(--marketplace-banner-border)] rounded-xl cursor-pointer shadow-sm mb-3 sm:mb-4 group"
     >
       <p className="text-sm sm:text-base lg:text-[17px] font-black text-[var(--marketplace-banner-text-primary)] tracking-tight whitespace-nowrap">
-        ₹62.1 Lacs <span className="font-medium text-[var(--marketplace-banner-text-secondary)]">invested</span>
+        {t("₹62.1 Lacs")} <span className="font-medium text-[var(--marketplace-banner-text-secondary)]">{t("invested")}</span>
       </p>
 
       <div className="flex items-center gap-2 sm:gap-3 shrink-0">
@@ -50,7 +52,8 @@ export function CommunityStatusBanner() {
   );
 }
 
-export function FeatureBannerSmall({ icon: Icon, title, subtitle, color, onClick }) {
+export function FeatureBannerSmall({ icon: Icon, title, subtitle, color, onClick }: { icon: any; title: string; subtitle: string; color: string; onClick: () => void }) {
+  const { t } = useI18n();
   return (
     <motion.div
       whileHover={{ y: -3, scale: 1.01 }}
@@ -78,10 +81,10 @@ export function FeatureBannerSmall({ icon: Icon, title, subtitle, color, onClick
 
         <div className="min-w-0 flex-1">
           <h3 className="text-xs sm:text-[13px] lg:text-sm font-extrabold text-[var(--marketplace-feature-card-title)] leading-tight tracking-tight line-clamp-2">
-            {title}
+            {t(title)}
           </h3>
           <p className="text-[10px] sm:text-[11px] text-[var(--marketplace-feature-card-subtitle)] font-semibold uppercase tracking-wider mt-0.5 font-montserrat line-clamp-1">
-            {subtitle}
+            {t(subtitle)}
           </p>
         </div>
       </div>
@@ -100,6 +103,7 @@ export function FeatureBannerSmall({ icon: Icon, title, subtitle, color, onClick
 
 export function InvestorBanners() {
   const router = useRouter();
+  const { t } = useI18n();
 
   const containerVariants: Variants = {
     hidden: { opacity: 0 },
@@ -140,7 +144,7 @@ export function InvestorBanners() {
           <FeatureBannerSmall
             icon={TrendingUpIcon}
             title="Get over 92% return"
-            subtitle="within 5 years"
+            subtitle="WITHIN 5 YEARS"
             color="#00DAAF"
             onClick={() => router.push("/dashboard/investor/returns-calculator")}
           />
@@ -150,7 +154,7 @@ export function InvestorBanners() {
           <FeatureBannerSmall
             icon={SecondaryMarketplaceIcon}
             title="Buy and Sell Anytime"
-            subtitle="Zero lock-in period"
+            subtitle="ZERO LOCK-IN PERIOD"
             color="#2E86DE"
             onClick={() => router.push("/dashboard/investor/secondary-marketplace")}
           />
@@ -160,7 +164,7 @@ export function InvestorBanners() {
           <FeatureBannerSmall
             icon={VerifiedIcon}
             title="Only Top Properties"
-            subtitle="Institutional grade"
+            subtitle="INSTITUTIONAL GRADE"
             color="#12B76A"
             onClick={() => { }}
           />

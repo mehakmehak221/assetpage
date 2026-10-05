@@ -7,6 +7,8 @@ import { motion, AnimatePresence, Variants } from "framer-motion";
 import Avatar from "@/components/ui/Avatar";
 import { useLogoutMutation } from "@/store/api/authApi";
 import { removeCookie } from "@/utils/cookieUtils";
+import LanguageSwitcher from "@/components/i18n/LanguageSwitcher";
+import { useI18n } from "@/providers/LocaleProvider";
 import {
     CloseIcon,
     MarketplaceIcon,
@@ -88,6 +90,7 @@ export default function MobileDrawer({ isOpen, onClose }: MobileDrawerProps) {
     const activeNavItems = isPartner ? PARTNER_NAV_ITEMS : isAgent ? AGENT_NAV_ITEMS : NAV_ITEMS;
     const [logout] = useLogoutMutation();
     const { data: profileData } = useGetProfileQuery();
+    const { t } = useI18n();
 
     const profile = profileData?.agentProfile || profileData?.partnerProfile || profileData?.investorProfile || {};
     const fullName = profileData?.fullName || profile.fullName || profileData?.name || profile.name || "Guest";
@@ -116,10 +119,11 @@ export default function MobileDrawer({ isOpen, onClose }: MobileDrawerProps) {
         } finally {
             localStorage.removeItem("userType");
             localStorage.removeItem("isLoggedIn");
+            localStorage.removeItem("access_token");
             removeCookie("isLoggedIn");
             removeCookie("access_token");
-            localStorage.setItem("toastMessage", "Logged out successfully");
-            router.push("/sign-in");
+            localStorage.setItem("toastMessage", t("Logged out successfully"));
+            window.location.href = "/sign-in?clear=true";
             onClose();
         }
     };
@@ -152,7 +156,7 @@ export default function MobileDrawer({ isOpen, onClose }: MobileDrawerProps) {
                                 <Avatar src={avatarUrl} name={fullName} size="md" />
                                 <div className="flex flex-col">
                                     <span className="text-sm font-semibold text-[var(--header-text)]">{fullName}</span>
-                                    <span className="text-[10px] text-[var(--color-text-muted)] uppercase tracking-wider">{role}</span>
+                                    <span className="text-[10px] text-[var(--color-text-muted)] uppercase tracking-wider">{t(role)}</span>
                                 </div>
                             </div>
 
@@ -169,7 +173,7 @@ export default function MobileDrawer({ isOpen, onClose }: MobileDrawerProps) {
                         <nav className="flex-1 min-h-0 overflow-y-auto px-4 py-3 flex flex-col gap-1 sm:px-5">
                             <div className="px-1 pt-1 pb-2">
                                 <span className="text-[10px] font-medium text-[var(--panel-chip-text)] tracking-[0.15em] uppercase border border-[var(--panel-chip-border)] font-montserrat bg-[var(--panel-chip-bg)] rounded-full px-3 py-1 inline-block">
-                                    {isPartner ? "Developer Panel" : isAgent ? "Agent Panel" : "Investor Panel"}
+                                    {isPartner ? t("Developer Panel") : isAgent ? t("Agent Panel") : t("Investor Panel")}
                                 </span>
                             </div>
                             {activeNavItems.map((item, i) => {
@@ -191,7 +195,7 @@ export default function MobileDrawer({ isOpen, onClose }: MobileDrawerProps) {
                                                 }`}
                                         >
                                             <item.icon className="w-5 h-5" />
-                                            <span className="text-sm font-medium">{item.label}</span>
+                                            <span className="text-sm font-medium">{t(item.label)}</span>
                                         </Link>
                                     </motion.div>
                                 );
@@ -199,7 +203,10 @@ export default function MobileDrawer({ isOpen, onClose }: MobileDrawerProps) {
                         </nav>
 
                         {/* Footer */}
-                        <div className="px-4 pb-6 pt-3 border-t border-[var(--color-border-subtle)] sm:px-5">
+                        <div className="px-4 pb-6 pt-3 border-t border-[var(--color-border-subtle)] sm:px-5 flex flex-col gap-3">
+                            <div className="px-4 flex justify-start">
+                                <LanguageSwitcher variant="dashboard" />
+                            </div>
                             <motion.div
                                 custom={NAV_ITEMS.length}
                                 variants={itemVariants}
@@ -211,7 +218,7 @@ export default function MobileDrawer({ isOpen, onClose }: MobileDrawerProps) {
                                     className="flex items-center gap-3 px-4 py-3 rounded-lg text-[var(--color-text-muted)] hover:text-[var(--color-status-error)] hover:bg-[var(--color-status-error-bg)] transition-colors cursor-pointer w-full border-0 bg-transparent"
                                 >
                                     <SignOutIcon className="w-5 h-5" />
-                                    <span className="text-sm font-medium">Sign Out</span>
+                                    <span className="text-sm font-medium">{t("Sign Out")}</span>
                                 </button>
                             </motion.div>
                         </div>

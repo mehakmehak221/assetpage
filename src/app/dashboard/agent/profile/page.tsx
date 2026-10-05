@@ -20,6 +20,7 @@ import { API_URL } from "@/constants";
 import { useState } from "react";
 import KYCModal from "@/components/dashboard/KYCModal";
 import SupportTicketComposer from "@/components/dashboard/SupportTicketComposer";
+import { useI18n } from "@/providers/LocaleProvider";
 
 const formatDate = (dateString: string) => {
     if (!dateString) return "N/A";
@@ -68,6 +69,7 @@ const getDocumentUrl = (url: string | null | undefined, defaultFolder: string = 
 };
 
 export default function AgentProfilePage() {
+    const { t } = useI18n();
     const { data: agentData, isLoading: isAgentLoading, refetch: refetchAgentMe } = useGetAgentMeQuery();
     const { data: referralData, isLoading: isReferralLoading } = useGetAgentReferralLinkQuery();
     const { formatPrice } = useCurrency();
@@ -134,7 +136,7 @@ export default function AgentProfilePage() {
             <div className="p-4 sm:p-6 lg:p-8 max-w-[1200px] mx-auto min-h-screen flex items-center justify-center">
                 <div className="text-[var(--foreground)] opacity-50 font-montserrat animate-pulse flex items-center gap-3">
                     <LoadingSpinner />
-                    Loading profile...
+                    {t("Loading profile...")}
                 </div>
             </div>
         );
@@ -161,9 +163,9 @@ export default function AgentProfilePage() {
                 transition={{ duration: 0.3 }}
             >
                 <h1 className="text-3xl font-bold text-[var(--foreground)] font-montserrat tracking-tight">
-                    Agent Profile
+                    {t("Agent Profile")}
                 </h1>
-                <p className="text-sm text-[var(--color-text-muted)] mt-1 font-montserrat">Manage your professional account and credentials</p>
+                <p className="text-sm text-[var(--color-text-muted)] mt-1 font-montserrat">{t("Manage your professional account and credentials")}</p>
             </motion.div>
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -180,7 +182,7 @@ export default function AgentProfilePage() {
                             <div className="w-24 h-24 rounded-2xl bg-[var(--field-surface)] border border-[var(--dashboard-border)] flex items-center justify-center mx-auto overflow-hidden relative">
                                 {profile?.avatarUrl ? (
                                     <div className="relative w-full h-full">
-                                        <Image src={profile.avatarUrl} alt={profile.fullName || "Agent"} fill className="object-cover" />
+                                        <Image src={profile.avatarUrl} alt={profile.fullName || t("Agent")} fill className="object-cover" />
                                     </div>
                                 ) : (
                                     <ProfileIcon className="w-10 h-10 text-[var(--color-text-muted)]" />
@@ -223,16 +225,16 @@ export default function AgentProfilePage() {
                             )}
                         </div>
 
-                        <h2 className="text-xl font-bold text-[var(--foreground)] mb-1 font-montserrat">{profile?.fullName || "Agent Name"}</h2>
-                        <p className="text-xs text-[var(--color-text-muted)] font-montserrat mb-6 uppercase tracking-widest font-bold">Registered Agent</p>
+                        <h2 className="text-xl font-bold text-[var(--foreground)] mb-1 font-montserrat">{profile?.fullName || t("Agent Name")}</h2>
+                        <p className="text-xs text-[var(--color-text-muted)] font-montserrat mb-6 uppercase tracking-widest font-bold">{t("Registered Agent")}</p>
 
                         <div className="space-y-3 pt-6 border-t border-[var(--dashboard-border)]">
                             <div className="flex items-center justify-between text-xs">
-                                <span className="text-[var(--color-text-muted)] font-montserrat">Email</span>
+                                <span className="text-[var(--color-text-muted)] font-montserrat">{t("Email")}</span>
                                 <span className="text-[var(--foreground)] font-medium font-montserrat">{email}</span>
                             </div>
                             <div className="flex items-center justify-between text-xs">
-                                <span className="text-[var(--color-text-muted)] font-montserrat">Member Since</span>
+                                <span className="text-[var(--color-text-muted)] font-montserrat">{t("Member Since")}</span>
                                 <span className="text-[var(--foreground)] font-medium font-montserrat">{formatDate(agentData?.createdAt)}</span>
                             </div>
                         </div>
@@ -244,7 +246,7 @@ export default function AgentProfilePage() {
                             <div className="w-8 h-8 rounded-lg bg-[#00FFCC]/10 flex items-center justify-center text-[#00FFCC]">
                                 <LeadsIcon className="w-4 h-4" />
                             </div>
-                            <h3 className="text-sm font-bold text-[var(--foreground)] font-montserrat">Referral Settings</h3>
+                            <h3 className="text-sm font-bold text-[var(--foreground)] font-montserrat">{t("Referral Settings")}</h3>
                         </div>
 
                         <div className="space-y-4">
@@ -253,7 +255,7 @@ export default function AgentProfilePage() {
                                     <div className="min-w-0">
                                         <div className="flex items-center gap-1.5 mb-1.5">
                                             <span className="w-1.5 h-1.5 rounded-full bg-[#00FFCC] animate-pulse" />
-                                            <label className="text-[10px] font-bold text-[var(--color-text-muted)] uppercase tracking-widest">Referral Code</label>
+                                            <label className="text-[10px] font-bold text-[var(--color-text-muted)] uppercase tracking-widest">{t("Referral Code")}</label>
                                         </div>
                                         <p className="text-lg sm:text-xl font-black text-[#00FFCC] font-mono tracking-[2px] select-all truncate">{referralCode || "N/A"}</p>
                                     </div>
@@ -261,7 +263,7 @@ export default function AgentProfilePage() {
                                         onClick={() => handleCopy(referralCode, 'code')}
                                         className={`w-full text-xs font-bold uppercase cursor-pointer px-4 py-2.5 rounded-xl border transition-all duration-200 flex items-center justify-center gap-1.5 whitespace-nowrap ${copiedCode ? 'bg-[#00FFCC] text-black border-transparent shadow-md' : 'bg-[var(--sidebar-active-bg)] text-[var(--foreground)] border-[var(--dashboard-border)] hover:bg-[#00FFCC] hover:text-black hover:border-[#00FFCC] active:scale-95'}`}
                                     >
-                                        {copiedCode ? "Copied!" : "Copy Code"}
+                                        {copiedCode ? t("Copied!") : t("Copy Code")}
                                     </button>
                                 </div>
                             </div>
@@ -271,7 +273,7 @@ export default function AgentProfilePage() {
                                     <div className="min-w-0">
                                         <div className="flex items-center gap-1.5 mb-1.5">
                                             <span className="w-1.5 h-1.5 rounded-full bg-[#00FFCC] animate-pulse" />
-                                            <label className="text-[10px] font-bold text-[var(--color-text-muted)] uppercase tracking-widest">Sign-up Link</label>
+                                            <label className="text-[10px] font-bold text-[var(--color-text-muted)] uppercase tracking-widest">{t("Sign-up Link")}</label>
                                         </div>
                                         <p className="text-xs font-mono text-[var(--foreground)] opacity-80 truncate bg-[var(--field-surface)]/60 px-2.5 py-1.5 rounded-lg border border-[var(--dashboard-border)] select-all">{referralLink || "N/A"}</p>
                                     </div>
@@ -279,7 +281,7 @@ export default function AgentProfilePage() {
                                         onClick={() => handleCopy(referralLink, 'link')}
                                         className={`w-full text-xs font-bold uppercase cursor-pointer px-4 py-2.5 rounded-xl border transition-all duration-200 flex items-center justify-center gap-1.5 whitespace-nowrap ${copiedLink ? 'bg-[#00FFCC] text-black border-transparent shadow-md' : 'bg-[var(--sidebar-active-bg)] text-[var(--foreground)] border-[var(--dashboard-border)] hover:bg-[#00FFCC] hover:text-black hover:border-[#00FFCC] active:scale-95'}`}
                                     >
-                                        {copiedLink ? "Copied!" : "Copy Link"}
+                                        {copiedLink ? t("Copied!") : t("Copy Link")}
                                     </button>
                                 </div>
                             </div>
@@ -300,8 +302,8 @@ export default function AgentProfilePage() {
                                     <DocumentIcon className="w-5 h-5" />
                                 </div>
                                 <div>
-                                    <h3 className="text-base font-bold text-[var(--foreground)] font-montserrat">Professional Credentials</h3>
-                                    <p className="text-xs text-[var(--color-text-muted)] font-montserrat">Validated real estate licensing information</p>
+                                    <h3 className="text-base font-bold text-[var(--foreground)] font-montserrat">{t("Professional Credentials")}</h3>
+                                    <p className="text-xs text-[var(--color-text-muted)] font-montserrat">{t("Validated real estate licensing information")}</p>
                                 </div>
                             </div>
                             <div className="flex items-center gap-3 self-start sm:self-center">
@@ -311,14 +313,14 @@ export default function AgentProfilePage() {
                                         ? 'bg-[var(--color-status-success-bg)] border-[var(--color-status-success-border)] text-[var(--color-status-success)]'
                                         : 'bg-[var(--color-status-warning-bg)] border-[var(--color-status-warning-border)] text-[var(--color-status-warning)]'
                                     }`}>
-                                    {(status?.isActive === false || userStatus?.isActive === false) ? 'INACTIVE' : status?.isVerified ? 'ACTIVE' : 'PENDING APPROVAL'}
+                                    {(status?.isActive === false || userStatus?.isActive === false) ? t('INACTIVE') : status?.isVerified ? t('ACTIVE') : t('PENDING APPROVAL')}
                                 </div>
                                 {!status?.isVerified && (
                                     <button
                                         onClick={() => setShowKycModal(true)}
                                         className="px-4 py-1.5 rounded-full bg-[#00FFCC] hover:bg-[#00FFCC]/90 text-black text-[10px] font-bold uppercase transition-all whitespace-nowrap border-0 cursor-pointer shadow-sm ml-2 font-montserrat"
                                     >
-                                        Update Details
+                                        {t("Update Details")}
                                     </button>
                                 )}
                             </div>
@@ -326,25 +328,25 @@ export default function AgentProfilePage() {
 
                         <div className="p-8 grid grid-cols-1 md:grid-cols-2 gap-8">
                             <div className="space-y-1">
-                                <p className="text-[11px] font-bold text-[var(--color-text-muted)] uppercase tracking-widest font-montserrat">RERA Registration</p>
-                                <p className="text-base font-bold text-[var(--foreground)] font-montserrat">{profile?.reraNumber || "Not Provided"}</p>
+                                <p className="text-[11px] font-bold text-[var(--color-text-muted)] uppercase tracking-widest font-montserrat">{t("RERA Registration")}</p>
+                                <p className="text-base font-bold text-[var(--foreground)] font-montserrat">{profile?.reraNumber || t("Not Provided")}</p>
                             </div>
                             <div className="space-y-1">
-                                <p className="text-[11px] font-bold text-[var(--color-text-muted)] uppercase tracking-widest font-montserrat">License Expiry</p>
+                                <p className="text-[11px] font-bold text-[var(--color-text-muted)] uppercase tracking-widest font-montserrat">{t("License Expiry")}</p>
                                 <p className={`text-base font-bold font-montserrat ${status?.isReraExpired ? 'text-[var(--color-status-error)]' : 'text-[var(--foreground)]'}`}>
                                     {formatDate(profile?.expiryDate)}
-                                    {status?.isReraExpired && <span className="ml-2 text-[10px] text-[var(--color-status-error)]/60 uppercase">(Expired)</span>}
+                                    {status?.isReraExpired && <span className="ml-2 text-[10px] text-[var(--color-status-error)]/60 uppercase">({t("Expired")})</span>}
                                 </p>
                             </div>
                             <div className="space-y-1">
-                                <p className="text-[11px] font-bold text-[var(--color-text-muted)] uppercase tracking-widest font-montserrat">Commission Rate</p>
+                                <p className="text-[11px] font-bold text-[var(--color-text-muted)] uppercase tracking-widest font-montserrat">{t("Commission Rate")}</p>
                                 <p className="text-base font-bold text-[#00FFCC] font-montserrat">
                                     {profile?.commissionPercent || 1}%
-                                    {profile?.isEarlyAgent && <span className="ml-2 text-[10px] bg-[#00FFCC]/10 px-2 py-0.5 rounded text-[#00FFCC] font-bold">EARLY AGENT</span>}
+                                    {profile?.isEarlyAgent && <span className="ml-2 text-[10px] bg-[#00FFCC]/10 px-2 py-0.5 rounded text-[#00FFCC] font-bold">{t("EARLY AGENT")}</span>}
                                 </p>
                             </div>
                             <div className="space-y-1">
-                                <p className="text-[11px] font-bold text-[var(--color-text-muted)] uppercase tracking-widest font-montserrat">Total Earnings</p>
+                                <p className="text-[11px] font-bold text-[var(--color-text-muted)] uppercase tracking-widest font-montserrat">{t("Total Earnings")}</p>
                                 <p className="text-base font-bold text-[var(--foreground)] font-montserrat">{formatPrice(profile?.totalEarnings || 0)}</p>
                             </div>
                         </div>
@@ -356,30 +358,30 @@ export default function AgentProfilePage() {
                                         <PendingIcon className="w-4 h-4" />
                                     </div>
                                     <div>
-                                        <p className="text-xs font-bold text-[var(--color-status-error)] uppercase tracking-wider mb-1">Action Required: KYC Rejected</p>
+                                        <p className="text-xs font-bold text-[var(--color-status-error)] uppercase tracking-wider mb-1">{t("Action Required: KYC Rejected")}</p>
                                         <div className="text-[11px] text-[var(--color-status-error)]/70 leading-relaxed font-montserrat space-y-2 mt-2">
                                             {(() => {
                                                 const rejectedDocs = [];
-                                                if (kyc.documentStatus === 'REJECTED') rejectedDocs.push(`Identity Proof (${kyc.documentType?.replace('_', ' ') || 'Document'})`);
-                                                if (kyc.addressProofStatus === 'REJECTED') rejectedDocs.push(`Address Proof (${kyc.addressProofType?.replace('_', ' ') || 'Document'})`);
-                                                if (kyc.selfieStatus === 'REJECTED') rejectedDocs.push('Selfie Verification');
+                                                if (kyc.documentStatus === 'REJECTED') rejectedDocs.push(`${t("Identity Proof")} (${kyc.documentType?.replace('_', ' ') || t('Document')})`);
+                                                if (kyc.addressProofStatus === 'REJECTED') rejectedDocs.push(`${t("Address Proof")} (${kyc.addressProofType?.replace('_', ' ') || t('Document')})`);
+                                                if (kyc.selfieStatus === 'REJECTED') rejectedDocs.push(t('Selfie Verification'));
 
                                                 return rejectedDocs.length > 0 ? (
                                                     <div>
-                                                        <span className="font-semibold block mb-0.5 text-[var(--color-status-error)]">Failed Verification Step:</span>
+                                                        <span className="font-semibold block mb-0.5 text-[var(--color-status-error)]">{t("Failed Verification Step:")}</span>
                                                         {rejectedDocs.join(', ')}
                                                     </div>
                                                 ) : null;
                                             })()}
 
                                             <div>
-                                                <span className="font-semibold block mb-0.5 text-[var(--color-status-error)]">Reason for Rejection:</span>
-                                                {kyc.rejectedNote && kyc.rejectedNote.toLowerCase() !== "na" ? kyc.rejectedNote : "Your document submission did not meet our verification standards."}
+                                                <span className="font-semibold block mb-0.5 text-[var(--color-status-error)]">{t("Reason for Rejection:")}</span>
+                                                {kyc.rejectedNote && kyc.rejectedNote.toLowerCase() !== "na" ? kyc.rejectedNote : t("Your document submission did not meet our verification standards.")}
                                             </div>
 
                                             <div>
-                                                <span className="font-semibold block mb-0.5 text-[var(--color-status-error)]">Corrective Action:</span>
-                                                Please click on &quot;Resubmit KYC&quot; and provide clear, valid documents for the failed steps.
+                                                <span className="font-semibold block mb-0.5 text-[var(--color-status-error)]">{t("Corrective Action:")}</span>
+                                                {t("Please click on \"Resubmit KYC\" and provide clear, valid documents for the failed steps.")}
                                             </div>
                                         </div>
                                     </div>
@@ -388,7 +390,7 @@ export default function AgentProfilePage() {
                                     onClick={() => setShowKycModal(true)}
                                     className="px-4 py-2 rounded-lg bg-[var(--color-status-error)] hover:bg-[var(--color-status-error)]/90 text-white text-[10px] font-bold uppercase transition-all whitespace-nowrap border-0 cursor-pointer shadow-sm self-stretch sm:self-auto text-center"
                                 >
-                                    Resubmit KYC
+                                    {t("Resubmit KYC")}
                                 </button>
                             </div>
                         )}
@@ -396,14 +398,14 @@ export default function AgentProfilePage() {
 
 
                     <div className="bg-[var(--card-surface)] border border-[var(--dashboard-border)] rounded-2xl p-8">
-                        <h3 className="text-base font-bold text-[var(--foreground)] font-montserrat mb-8">Documentation Status</h3>
+                        <h3 className="text-base font-bold text-[var(--foreground)] font-montserrat mb-8">{t("Documentation Status")}</h3>
 
                         <div className="space-y-4">
                             {[
-                                { label: "Identity Proof", type: kyc?.documentType, status: kyc?.documentStatus, url: kyc?.documentUrl, folder: "kyc" },
-                                { label: "Address Proof", type: kyc?.addressProofType || "Utility Bill", status: kyc?.addressProofStatus, url: kyc?.addressProofUrl, folder: "kyc" },
-                                { label: "Selfie Verification", type: "Facial Match", status: kyc?.selfieStatus, url: kyc?.selfieUrl, folder: "kyc" },
-                                { label: "RERA Certificate", type: "Professional License", status: status?.isVerified ? "APPROVED" : "UNDER_REVIEW", url: profile?.reraDocumentUrl, folder: "rera" }
+                                { label: t("Identity Proof"), type: kyc?.documentType, status: kyc?.documentStatus, url: kyc?.documentUrl, folder: "kyc" },
+                                { label: t("Address Proof"), type: kyc?.addressProofType || "Utility Bill", status: kyc?.addressProofStatus, url: kyc?.addressProofUrl, folder: "kyc" },
+                                { label: t("Selfie Verification"), type: "Facial Match", status: kyc?.selfieStatus, url: kyc?.selfieUrl, folder: "kyc" },
+                                { label: t("RERA Certificate"), type: "Professional License", status: status?.isVerified ? "APPROVED" : "UNDER_REVIEW", url: profile?.reraDocumentUrl, folder: "rera" }
                             ].map((item, i) => (
                                 <div key={i} className="flex flex-col md:flex-row md:items-center justify-between p-4 rounded-xl bg-[var(--field-surface)] border border-[var(--dashboard-border)] hover:bg-[var(--badge-bg)] gap-4 transition-all hover:border-[#00FFCC]/20">
                                     <div className="flex items-center gap-4">
@@ -412,7 +414,7 @@ export default function AgentProfilePage() {
                                         </div>
                                         <div>
                                             <p className="text-sm font-bold text-[var(--foreground)] font-montserrat m-0 mb-0.5 leading-snug">{item.label}</p>
-                                            <p className="text-[10px] text-[var(--color-text-muted)] font-montserrat uppercase tracking-widest m-0 leading-none">{item.type?.replace('_', ' ') || "N/A"}</p>
+                                            <p className="text-[10px] text-[var(--color-text-muted)] font-montserrat uppercase tracking-widest m-0 leading-none">{t(item.type?.replace('_', ' ') || "N/A")}</p>
                                         </div>
                                     </div>
                                     <div className="flex items-center justify-between md:justify-end gap-6 w-full md:w-auto mt-2 md:mt-0">
@@ -422,7 +424,7 @@ export default function AgentProfilePage() {
                                                 ? 'bg-[var(--color-status-error-bg)] text-[var(--color-status-error)]' :
                                                 'bg-[var(--color-status-warning-bg)] text-[var(--color-status-warning)]'
                                             }`}>
-                                            {item.status?.replace('_', ' ') || "PENDING"}
+                                            {t(item.status?.replace('_', ' ') || "PENDING")}
                                         </div>
                                         <a
                                             href={getDocumentUrl(item.url, item.folder)}
@@ -430,7 +432,7 @@ export default function AgentProfilePage() {
                                             rel="noopener noreferrer"
                                             className={`text-[10px] font-bold text-[#00FFCC] uppercase tracking-wider hover:text-black hover:bg-[#00FFCC] transition-all no-underline px-4 py-1.5 rounded-lg bg-[#00FFCC]/5 border border-[#00FFCC]/20 text-center min-w-[70px] ${!item.url ? 'opacity-20 pointer-events-none' : ''}`}
                                         >
-                                            View
+                                            {t("View")}
                                         </a>
                                     </div>
                                 </div>
@@ -441,7 +443,7 @@ export default function AgentProfilePage() {
                     <div className="max-w-[980px]">
                         <SupportTicketComposer
                             key={email || "agent-support"}
-                            title="Need Help?"
+                            title={t("Need Help?")}
                             defaultEmail={email}
                             compact
                         />

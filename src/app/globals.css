@@ -37,6 +37,12 @@
   --color-success-500: #12B76A;
   --color-success-400: #D0F1E1;
 
+  --font-montserrat-base: "Montserrat", ui-sans-serif, system-ui, sans-serif;
+  --font-poppins-base: "Poppins", ui-sans-serif, system-ui, sans-serif;
+  --font-devanagari-base: "Noto Sans Devanagari", "Nirmala UI", "Mangal", sans-serif;
+  --font-gujarati-base: "Noto Sans Gujarati", "Shruti", "Gujarati Sangam MN", sans-serif;
+  --font-bengali-base: "Noto Sans Bengali", "Vrinda", "Bangla Sangam MN", sans-serif;
+
   --font-sans: var(--font-montserrat), ui-sans-serif, system-ui, sans-serif;
   --font-satoshi: "Satoshi", ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-geist-mono), ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
@@ -103,8 +109,8 @@
   --color-text-dark: #0a0a0a;
 
 
-  --font-poppins: var(--font-poppins);
-  --font-montserrat: var(--font-montserrat);
+  --font-poppins: var(--font-poppins-base), ui-sans-serif, system-ui, sans-serif;
+  --font-montserrat: var(--font-montserrat-base), ui-sans-serif, system-ui, sans-serif;
   --font-inter: var(--font-inter);
 
   /* Semantic UI Variables */
@@ -173,8 +179,60 @@
   --form-surface: #0D1411;
 }
 
+body[data-locale="hi"],
+body[data-locale="mr"] {
+  --font-montserrat: var(--font-devanagari-base), var(--font-montserrat-base), ui-sans-serif, system-ui, sans-serif;
+  --font-poppins: var(--font-devanagari-base), var(--font-poppins-base), ui-sans-serif, system-ui, sans-serif;
+  --font-primary: var(--font-montserrat);
+  --font-display: var(--font-poppins);
+  --font-sans: var(--font-montserrat), ui-sans-serif, system-ui, sans-serif;
+}
+
+body[data-locale="gu"] {
+  --font-montserrat: var(--font-gujarati-base), var(--font-montserrat-base), ui-sans-serif, system-ui, sans-serif;
+  --font-poppins: var(--font-gujarati-base), var(--font-poppins-base), ui-sans-serif, system-ui, sans-serif;
+  --font-primary: var(--font-montserrat);
+  --font-display: var(--font-poppins);
+  --font-sans: var(--font-montserrat), ui-sans-serif, system-ui, sans-serif;
+}
+
+
+body[data-locale="bn"] {
+  --font-montserrat: var(--font-bengali-base), var(--font-montserrat-base), ui-sans-serif, system-ui, sans-serif;
+  --font-poppins: var(--font-bengali-base), var(--font-poppins-base), ui-sans-serif, system-ui, sans-serif;
+  --font-primary: var(--font-montserrat);
+  --font-display: var(--font-poppins);
+  --font-sans: var(--font-montserrat), ui-sans-serif, system-ui, sans-serif;
+}
+
+.auth-panel-heading {
+  font-size: clamp(2.25rem, 4.5vw, 3rem);
+  word-break: break-word;
+  overflow-wrap: break-word;
+  hyphens: auto;
+  max-width: 100%;
+}
+
+.auth-panel-desc {
+  font-size: clamp(0.875rem, 1.6vw, 1rem);
+  max-width: 90%;
+}
+
+body[data-locale="hi"] .auth-panel-heading,
+body[data-locale="mr"] .auth-panel-heading,
+body[data-locale="bn"] .auth-panel-heading {
+  font-size: clamp(1.5rem, 3.25vw, 2.1rem);
+  line-height: 1.35;
+}
+
+body[data-locale="hi"] .auth-panel-desc,
+body[data-locale="mr"] .auth-panel-desc,
+body[data-locale="bn"] .auth-panel-desc {
+  font-size: clamp(0.8rem, 1.4vw, 0.95rem);
+}
+
 .light {
-  /* Semantic Theme Variables - LIGHT */
+
   --header-bg: #FFFFFF;
   --header-text: #1A1F1C;
   --header-border: #E5E7EB;
@@ -383,6 +441,8 @@
 
 /* Landing page — Figma uses Satoshi for all marketing content */
 .landing-page {
+  --font-montserrat: var(--font-satoshi);
+  --font-poppins: var(--font-satoshi);
   --font-primary: var(--font-satoshi);
   --font-display: var(--font-satoshi);
   --font-sans: var(--font-satoshi);
@@ -395,6 +455,34 @@
   display: none;
   width: 0;
   height: 0;
+}
+
+body[data-locale="hi"] .landing-page,
+body[data-locale="mr"] .landing-page {
+  --font-montserrat: var(--font-devanagari-base), var(--font-satoshi), var(--font-montserrat-base), ui-sans-serif, system-ui, sans-serif;
+  --font-poppins: var(--font-devanagari-base), var(--font-satoshi), var(--font-poppins-base), ui-sans-serif, system-ui, sans-serif;
+  --font-primary: var(--font-montserrat);
+  --font-display: var(--font-poppins);
+  --font-sans: var(--font-montserrat), ui-sans-serif, system-ui, sans-serif;
+  font-family: var(--font-montserrat);
+}
+
+body[data-locale="gu"] .landing-page {
+  --font-montserrat: var(--font-gujarati-base), var(--font-satoshi), var(--font-montserrat-base), ui-sans-serif, system-ui, sans-serif;
+  --font-poppins: var(--font-gujarati-base), var(--font-satoshi), var(--font-poppins-base), ui-sans-serif, system-ui, sans-serif;
+  --font-primary: var(--font-montserrat);
+  --font-display: var(--font-poppins);
+  --font-sans: var(--font-montserrat), ui-sans-serif, system-ui, sans-serif;
+  font-family: var(--font-montserrat);
+}
+
+body[data-locale="bn"] .landing-page {
+  --font-montserrat: var(--font-bengali-base), var(--font-satoshi), var(--font-montserrat-base), ui-sans-serif, system-ui, sans-serif;
+  --font-poppins: var(--font-bengali-base), var(--font-satoshi), var(--font-poppins-base), ui-sans-serif, system-ui, sans-serif;
+  --font-primary: var(--font-montserrat);
+  --font-display: var(--font-poppins);
+  --font-sans: var(--font-montserrat), ui-sans-serif, system-ui, sans-serif;
+  font-family: var(--font-montserrat);
 }
 
 

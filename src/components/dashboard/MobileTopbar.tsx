@@ -5,12 +5,15 @@ import Link from "next/link";
 import Image from "next/image";
 
 import { SearchIcon, MenuIcon, BellIcon } from "@/components/VectorImages";
+import { useI18n } from "@/providers/LocaleProvider";
 import MobileDrawer from "./MobileDrawer";
+import LanguageSwitcher from "@/components/i18n/LanguageSwitcher";
 
 export default function MobileTopbar() {
     const [drawerOpen, setDrawerOpen] = useState(false);
     const [searchOpen, setSearchOpen] = useState(false);
     const [isLight, setIsLight] = useState(false);
+    const { t } = useI18n();
 
     useEffect(() => {
         const checkTheme = () => {
@@ -34,36 +37,15 @@ export default function MobileTopbar() {
                         height={32}
                         className="h-8 w-auto object-contain flex-shrink-0"
                     />
-                   
+
                 </Link>
 
                 <div className="flex items-center gap-2">
-                    {searchOpen ? (
-                        <div className="relative animate-fade-in">
-                            <input
-                                type="text"
-                                placeholder="Search..."
-                                autoFocus
-                                onBlur={() => setSearchOpen(false)}
-                                className="w-40 sm:w-56 rounded-lg pl-8 pr-3 py-2 text-sm text-[var(--header-text)] placeholder:[var(--color-text-muted)] bg-[var(--field-surface)] border border-[var(--sidebar-border)] focus:outline-none focus:border-[var(--sidebar-active-text)]/50"
-                            />
-                            <SearchIcon className="w-4 h-4 text-[var(--color-text-muted)] absolute left-2.5 top-1/2 -translate-y-1/2" />
-                        </div>
-                    ) : (
-                        <button
-                            onClick={() => setSearchOpen(true)}
-                            className="p-2 rounded-lg text-[var(--color-text-muted)] hover:text-[var(--header-text)] hover:bg-[var(--sidebar-active-bg)] transition-colors bg-transparent border-0 cursor-pointer"
-                        >
-                            <SearchIcon className="w-5 h-5" />
-                        </button>
-                    )}
-
-            
-
+                    <LanguageSwitcher variant="dashboard" />
                     <button
                         onClick={() => setDrawerOpen(true)}
                         className="p-2 rounded-lg text-[var(--color-text-muted)] hover:text-[var(--header-text)] hover:bg-[var(--sidebar-active-bg)] transition-colors bg-transparent border-0 cursor-pointer"
-                        aria-label="Open menu"
+                        aria-label={t("Open menu")}
                     >
                         <MenuIcon className="w-6 h-6" />
                     </button>

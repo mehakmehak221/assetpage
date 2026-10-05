@@ -4,6 +4,7 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useGetPartnerFinanceQuery, useGetCommissionHistoryQuery, useGetPayoutHistoryQuery } from "@/store/api/partnerApi";
 import { CheckIcon } from "@/components/VectorImages";
+import { useI18n } from "@/providers/LocaleProvider";
 
 const TABS = ["Commissions", "Payouts"];
 
@@ -35,6 +36,7 @@ const formatCurrency = (val) => {
 };
 
 export default function FinancePage() {
+    const { t } = useI18n();
     const [activeTab, setActiveTab] = useState("Commissions");
 
     const { data: partnerFinance } = useGetPartnerFinanceQuery();
@@ -69,7 +71,7 @@ export default function FinancePage() {
 
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
                 <h1 className="text-2xl lg:text-3xl font-semibold text-[var(--foreground)] font-montserrat tracking-tight opacity-90">
-                    Finance
+                    {t("Finance")}
                 </h1>
 
                 <div className="flex overflow-x-auto whitespace-nowrap w-full md:w-auto bg-black/5 dark:bg-white/5 p-1 rounded-md border border-[var(--sidebar-border)] self-start md:self-auto custom-scrollbar-hide">
@@ -93,7 +95,7 @@ export default function FinancePage() {
                                     transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
                                 />
                             )}
-                            <span className="relative z-10">{tab}</span>
+                            <span className="relative z-10">{t(tab)}</span>
                         </button>
                     ))}
                 </div>
@@ -115,7 +117,7 @@ export default function FinancePage() {
                     >
                         <div className="absolute inset-0 bg-[var(--sidebar-active-text)] opacity-[0.03] pointer-events-none" />
                         <p className="text-[9px] font-bold tracking-[1.2px] text-[var(--sidebar-text)] opacity-60 font-montserrat mb-2 uppercase">
-                            {stat.label}
+                            {t(stat.label)}
                         </p>
                         <p className="text-xl font-semibold text-[var(--foreground)] opacity-90 font-montserrat tracking-tight">
                             {formatCurrency(stat.value || 0)}
@@ -137,13 +139,13 @@ export default function FinancePage() {
                     {activeTab === "Commissions" && (
                         <div>
                             <div className="flex items-center justify-between mb-6">
-                                <h2 className="text-[13px] font-medium text-[var(--foreground)] opacity-90 font-montserrat">Commission History</h2>
+                                <h2 className="text-[13px] font-medium text-[var(--foreground)] opacity-90 font-montserrat">{t("Commission History")}</h2>
                                 {isLoadingCommissions && <div className="w-4 h-4 border-2 border-[var(--sidebar-active-text)]/20 border-t-[var(--sidebar-active-text)] rounded-full animate-spin" />}
                             </div>
 
                             {commissionList.length === 0 ? (
                                 <div className="py-12 text-center text-[var(--sidebar-text)] opacity-60 font-montserrat text-sm border border-dashed border-[var(--sidebar-border)] rounded-md">
-                                    No commissions found.
+                                    {t("No commissions found.")}
                                 </div>
                             ) : (
                                 <>
@@ -157,15 +159,15 @@ export default function FinancePage() {
                                                 className="flex items-center justify-between gap-3 py-3 sm:py-3.5 hover:bg-[var(--sidebar-active-bg)]/30 px-2 -mx-2 rounded-md transition-colors group"
                                             >
                                                 <div className="min-w-0">
-                                                    <h3 className="text-[13px] font-medium text-[var(--foreground)] opacity-90 font-montserrat group-hover:text-[var(--sidebar-active-text)] transition-colors truncate">{item.asset?.title || "Commission Payment"}</h3>
+                                                    <h3 className="text-[13px] font-medium text-[var(--foreground)] opacity-90 font-montserrat group-hover:text-[var(--sidebar-active-text)] transition-colors truncate">{item.asset?.title || t("Commission Payment")}</h3>
                                                     <p className="text-[10px] text-[var(--sidebar-text)] opacity-60 font-montserrat mt-0.5">
-                                                        {item.type || 'Sale'} · {(item.date || item.createdAt) ? new Date(item.date || item.createdAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric' }) : "-"}
+                                                        {t(item.type || 'Sale')} · {(item.date || item.createdAt) ? new Date(item.date || item.createdAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric' }) : "-"}
                                                     </p>
                                                 </div>
                                                 <div className="text-right flex-shrink-0">
                                                     <p className="text-[13px] font-semibold text-[var(--sidebar-active-text)] font-montserrat">{formatCurrency(item.amount || 0)}</p>
                                                     <p className="text-[9px] font-bold font-montserrat mt-0.5 uppercase tracking-wider" style={{ color: item.status === "Paid" ? 'var(--sidebar-active-text)' : 'var(--color-status-warning)' }}>
-                                                        {item.status}
+                                                        {t(item.status)}
                                                     </p>
                                                 </div>
                                             </motion.div>
@@ -179,17 +181,17 @@ export default function FinancePage() {
                                                 onClick={() => setCommissionPage(p => Math.max(p - 1, 1))}
                                                 className="px-4 py-2 rounded-lg text-xs font-semibold uppercase tracking-wider border border-[var(--sidebar-border)] bg-transparent text-[var(--sidebar-text)] disabled:opacity-40 hover:border-[var(--sidebar-active-text)]/30 disabled:cursor-not-allowed transition-all cursor-pointer"
                                             >
-                                                Previous
+                                                {t("Previous")}
                                             </button>
                                             <span className="text-xs font-bold text-[var(--sidebar-text)] opacity-60">
-                                                Page {commissionPage} of {totalCommissionPages}
+                                                {t("Page {page} of {total}", { page: commissionPage, total: totalCommissionPages })}
                                             </span>
                                             <button
                                                 disabled={commissionPage === totalCommissionPages}
                                                 onClick={() => setCommissionPage(p => Math.min(p + 1, totalCommissionPages))}
                                                 className="px-4 py-2 rounded-lg text-xs font-semibold uppercase tracking-wider border border-[var(--sidebar-border)] bg-transparent text-[var(--sidebar-text)] disabled:opacity-40 hover:border-[var(--sidebar-active-text)]/30 disabled:cursor-not-allowed transition-all cursor-pointer"
                                             >
-                                                Next
+                                                {t("Next")}
                                             </button>
                                         </div>
                                     )}
@@ -201,13 +203,13 @@ export default function FinancePage() {
                     {activeTab === "Payouts" && (
                         <div>
                             <div className="flex items-center justify-between mb-6">
-                                <h2 className="text-[13px] font-medium text-[var(--foreground)] opacity-90 font-montserrat">Payout History</h2>
+                                <h2 className="text-[13px] font-medium text-[var(--foreground)] opacity-90 font-montserrat">{t("Payout History")}</h2>
                                 {isLoadingPayouts && <div className="w-4 h-4 border-2 border-[var(--sidebar-active-text)]/20 border-t-[var(--sidebar-active-text)] rounded-full animate-spin" />}
                             </div>
 
                             {payoutList.length === 0 ? (
                                 <div className="py-12 text-center text-[var(--sidebar-text)] opacity-60 font-montserrat text-sm border border-dashed border-[var(--sidebar-border)] rounded-md">
-                                    No payouts found.
+                                    {t("No payouts found.")}
                                 </div>
                             ) : (
                                 <>
@@ -221,15 +223,15 @@ export default function FinancePage() {
                                                 className="flex items-center justify-between gap-3 py-3 sm:py-3.5 hover:bg-[var(--sidebar-active-bg)]/30 px-2 -mx-2 rounded-md transition-colors group"
                                             >
                                                 <div className="min-w-0">
-                                                    <h3 className="text-[13px] font-medium text-[var(--foreground)] opacity-90 font-montserrat group-hover:text-[var(--sidebar-active-text)] transition-colors truncate">{item.method || "Bank Transfer"}</h3>
+                                                    <h3 className="text-[13px] font-medium text-[var(--foreground)] opacity-90 font-montserrat group-hover:text-[var(--sidebar-active-text)] transition-colors truncate">{t(item.method || "Bank Transfer")}</h3>
                                                     <p className="text-[10px] text-[var(--sidebar-text)] opacity-60 font-montserrat mt-0.5">
-                                                        {(item.payoutDate || item.createdAt) ? new Date(item.payoutDate || item.createdAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' }) : "-"} · {item.reference || "Completed"}
+                                                        {(item.payoutDate || item.createdAt) ? new Date(item.payoutDate || item.createdAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' }) : "-"} · {t(item.reference || "Completed")}
                                                     </p>
                                                 </div>
                                                 <div className="text-right flex-shrink-0">
                                                     <p className="text-[13px] font-semibold text-[var(--sidebar-active-text)] font-montserrat">{formatCurrency(item.amount || 0)}</p>
                                                     <p className="text-[9px] font-bold font-montserrat mt-0.5 uppercase tracking-wider" style={{ color: item.status === "Completed" ? 'var(--sidebar-active-text)' : 'var(--color-status-warning)' }}>
-                                                        {item.status}
+                                                        {t(item.status)}
                                                     </p>
                                                 </div>
                                             </motion.div>
@@ -243,17 +245,17 @@ export default function FinancePage() {
                                                 onClick={() => setPayoutPage(p => Math.max(p - 1, 1))}
                                                 className="px-4 py-2 rounded-lg text-xs font-semibold uppercase tracking-wider border border-[var(--sidebar-border)] bg-transparent text-[var(--sidebar-text)] disabled:opacity-40 hover:border-[var(--sidebar-active-text)]/30 disabled:cursor-not-allowed transition-all cursor-pointer"
                                             >
-                                                Previous
+                                                {t("Previous")}
                                             </button>
                                             <span className="text-xs font-bold text-[var(--sidebar-text)] opacity-60">
-                                                Page {payoutPage} of {totalPayoutPages}
+                                                {t("Page {page} of {total}", { page: payoutPage, total: totalPayoutPages })}
                                             </span>
                                             <button
                                                 disabled={payoutPage === totalPayoutPages}
                                                 onClick={() => setPayoutPage(p => Math.min(p + 1, totalPayoutPages))}
                                                 className="px-4 py-2 rounded-lg text-xs font-semibold uppercase tracking-wider border border-[var(--sidebar-border)] bg-transparent text-[var(--sidebar-text)] disabled:opacity-40 hover:border-[var(--sidebar-active-text)]/30 disabled:cursor-not-allowed transition-all cursor-pointer"
                                             >
-                                                Next
+                                                {t("Next")}
                                             </button>
                                         </div>
                                     )}

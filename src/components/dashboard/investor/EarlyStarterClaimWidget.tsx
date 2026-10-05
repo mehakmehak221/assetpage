@@ -3,6 +3,7 @@ import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { useGetProfileQuery, useRedeemEarlyStarterMutation } from "@/store/api/authApi";
 import { LoadingSpinner } from "@/components/VectorImages";
+import { useI18n } from "@/providers/LocaleProvider";
 
 const TagIcon = ({ className }: { className?: string }) => (
   <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -36,6 +37,7 @@ const CheckIcon = ({ className }: { className?: string }) => (
 );
 
 export function EarlyStarterClaimWidget() {
+  const { t } = useI18n();
   const { data: profileData, isLoading: isProfileLoading } = useGetProfileQuery();
   const [redeemEarlyStarter, { isLoading: isRedeeming }] = useRedeemEarlyStarterMutation();
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -66,10 +68,10 @@ export function EarlyStarterClaimWidget() {
     }
     try {
       await navigator.clipboard.writeText(shareText);
-      alert("App links copied to your clipboard! You can now paste and share it anywhere.");
+      alert(t("App links copied to your clipboard! You can now paste and share it anywhere."));
     } catch (err) {
       console.error("Failed to copy", err);
-      alert("Failed to copy the link. Please try again.");
+      alert(t("Failed to copy the link. Please try again."));
     }
   };
 
@@ -87,9 +89,9 @@ export function EarlyStarterClaimWidget() {
             </div>
             <div className="min-w-0 flex-1">
               <h3 className="text-white text-sm sm:text-lg lg:text-xl font-bold leading-tight mb-0.5 tracking-tight drop-shadow">
-                5% OFF Waitlist
+                {t("5% OFF Waitlist")}
               </h3>
-              <p className="text-white/70 text-[11px] sm:text-xs lg:text-sm font-medium leading-tight">Early access deal</p>
+              <p className="text-white/70 text-[11px] sm:text-xs lg:text-sm font-medium leading-tight">{t("Early access deal")}</p>
             </div>
           </div>
 
@@ -100,7 +102,7 @@ export function EarlyStarterClaimWidget() {
               : "bg-white text-[#056346] border-transparent hover:bg-white/90 hover:shadow-lg active:scale-95"
               }`}
           >
-            {isClaimed ? "🎉 Claimed" : "Join"}
+            {isClaimed ? `🎉 ${t("Claimed")}` : t("Join")}
           </button>
         </div>
       </motion.div>

@@ -7,6 +7,7 @@ import { useGetMyCertificatesQuery } from "@/store/api/certificatesApi";
 import { useGetKycStatusQuery } from "@/store/api/kycApi";
 import { useUploadFileMutation } from "@/store/api/fileApi";
 import SupportTicketComposer from "@/components/dashboard/SupportTicketComposer";
+import { useI18n } from "@/providers/LocaleProvider";
 import { API_URL } from "@/constants";
 import { Country } from "country-state-city";
 import { Camera, AlertCircle, CheckCircle2 } from "lucide-react";
@@ -25,6 +26,7 @@ const tabContentVariants = {
 };
 
 export default function AccountPage() {
+    const { t } = useI18n();
     const [activeTab, setActiveTab] = useState("Profile");
     const [copiedLink, setCopiedLink] = useState(false);
     const [copiedMessage, setCopiedMessage] = useState(false);
@@ -186,7 +188,7 @@ ${code ? `Referral Code: ${code}\n` : ""}Start building your property portfolio 
                 animate={{ opacity: 1, y: 0 }}
                 className="text-xl sm:text-2xl lg:text-3xl font-bold text-[var(--header-text)] mb-4 sm:mb-6"
             >
-                Account
+                {t("Account")}
             </motion.h1>
 
 
@@ -205,7 +207,7 @@ ${code ? `Referral Code: ${code}\n` : ""}Start building your property portfolio 
                             : "bg-[var(--background)] text-[var(--color-text-muted)] border-[var(--sidebar-border)] hover:border-[var(--sidebar-active-text)]/30 hover:text-[var(--header-text)]"
                             }`}
                     >
-                        {tab}
+                        {t(tab)}
                     </button>
                 ))}
             </motion.div>
@@ -291,7 +293,7 @@ ${code ? `Referral Code: ${code}\n` : ""}Start building your property portfolio 
                                         </div>
                                         <div className="flex items-center gap-1 text-[10px] text-[var(--color-text-muted)] opacity-60">
                                             <AlertCircle className="w-3.5 h-3.5 text-[#00DAAF]" />
-                                            <span>JPG, PNG — max 2 MB</span>
+                                            <span>{t("JPG, PNG — max 2 MB")}</span>
                                         </div>
                                     </div>
 
@@ -308,7 +310,7 @@ ${code ? `Referral Code: ${code}\n` : ""}Start building your property portfolio 
                                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 sm:gap-x-6 gap-y-4 sm:gap-y-6 mb-6 sm:mb-8">
                                         <div className="flex flex-col gap-1.5">
                                             <label className="text-[9px] sm:text-[10px] uppercase tracking-[1.5px] text-[var(--color-text-muted)] font-semibold">
-                                                Full Name
+                                                {t("Full Name")}
                                             </label>
                                             <input
                                                 type="text"
@@ -320,7 +322,7 @@ ${code ? `Referral Code: ${code}\n` : ""}Start building your property portfolio 
 
                                         <div className="flex flex-col gap-1.5">
                                             <label className="text-[9px] sm:text-[10px] uppercase tracking-[1.5px] text-[var(--color-text-muted)] font-semibold">
-                                                Email Address
+                                                {t("Email Address")}
                                             </label>
                                             <input
                                                 type="email"
@@ -332,7 +334,7 @@ ${code ? `Referral Code: ${code}\n` : ""}Start building your property portfolio 
 
                                         <div className="flex flex-col gap-1.5">
                                             <label className="text-[9px] sm:text-[10px] uppercase tracking-[1.5px] text-[var(--color-text-muted)] font-semibold">
-                                                Country
+                                                {t("Country")}
                                             </label>
                                             <div className="relative">
                                                 <select
@@ -340,7 +342,7 @@ ${code ? `Referral Code: ${code}\n` : ""}Start building your property portfolio 
                                                     onChange={(e) => setCountry(e.target.value)}
                                                     className="w-full rounded-md px-3 sm:px-4 py-2.5 sm:py-3.5 text-xs sm:text-sm font-medium text-[var(--header-text)] bg-[var(--field-surface)] border border-[var(--sidebar-border)] transition-all hover:border-[var(--sidebar-active-text)]/30 focus:outline-none focus:border-[var(--sidebar-active-text)]/50 appearance-none cursor-pointer"
                                                 >
-                                                    <option value="">Select Country</option>
+                                                    <option value="">{t("Select Country")}</option>
                                                     {Country.getAllCountries().map((c) => (
                                                         <option key={c.isoCode} value={c.name}>
                                                             {c.name}
@@ -363,7 +365,7 @@ ${code ? `Referral Code: ${code}\n` : ""}Start building your property portfolio 
                                         disabled={isUpdating}
                                         className="px-5 sm:px-6 py-2.5 sm:py-3 rounded-md bg-[#00DAAF] text-black font-bold text-[11px] sm:text-[13px] tracking-wide cursor-pointer border-0 shadow-glow-primary transition-all disabled:opacity-50"
                                     >
-                                        {isUpdating ? "Saving..." : "Save Changes"}
+                                        {isUpdating ? t("Saving...") : t("Save Changes")}
                                     </motion.button>
                                 </>
                             )}
@@ -386,8 +388,8 @@ ${code ? `Referral Code: ${code}\n` : ""}Start building your property portfolio 
                                             </svg>
                                         </div>
                                         <div>
-                                            <h2 className="text-base sm:text-xl font-bold text-[var(--header-text)] mb-0.5 sm:mb-1.5">Verified</h2>
-                                            <p className="text-[11px] sm:text-[13px] text-[var(--color-text-muted)] font-medium">Identity verified successfully</p>
+                                            <h2 className="text-base sm:text-xl font-bold text-[var(--header-text)] mb-0.5 sm:mb-1.5">{t("Verified")}</h2>
+                                            <p className="text-[11px] sm:text-[13px] text-[var(--color-text-muted)] font-medium">{t("Identity verified successfully")}</p>
                                         </div>
                                     </div>
 
@@ -398,8 +400,8 @@ ${code ? `Referral Code: ${code}\n` : ""}Start building your property portfolio 
                                                 <polyline points="22 4 12 14.01 9 11.01"></polyline>
                                             </svg>
                                             <div>
-                                                <p className="text-[11px] sm:text-[13px] font-semibold text-[var(--header-text)] mb-0.5 sm:mb-1">Document Upload</p>
-                                                <p className="text-[10px] sm:text-[11px] text-[var(--color-text-muted)] font-medium">Passport verified</p>
+                                                <p className="text-[11px] sm:text-[13px] font-semibold text-[var(--header-text)] mb-0.5 sm:mb-1">{t("Document Upload")}</p>
+                                                <p className="text-[10px] sm:text-[11px] text-[var(--color-text-muted)] font-medium">{t("Passport verified")}</p>
                                             </div>
                                         </div>
                                         <div className="bg-[var(--card-surface)] border border-[var(--sidebar-border)] rounded-md sm:rounded-md p-3.5 sm:p-5 flex items-start gap-2.5 sm:gap-3.5 hover:border-[var(--sidebar-active-text)]/20 transition-colors">
@@ -408,8 +410,8 @@ ${code ? `Referral Code: ${code}\n` : ""}Start building your property portfolio 
                                                 <polyline points="22 4 12 14.01 9 11.01"></polyline>
                                             </svg>
                                             <div>
-                                                <p className="text-[11px] sm:text-[13px] font-semibold text-[var(--header-text)] mb-0.5 sm:mb-1">Selfie Check</p>
-                                                <p className="text-[10px] sm:text-[11px] text-[var(--color-text-muted)] font-medium">Liveness passed</p>
+                                                <p className="text-[11px] sm:text-[13px] font-semibold text-[var(--header-text)] mb-0.5 sm:mb-1">{t("Selfie Check")}</p>
+                                                <p className="text-[10px] sm:text-[11px] text-[var(--color-text-muted)] font-medium">{t("Liveness passed")}</p>
                                             </div>
                                         </div>
                                         <div className="bg-[var(--card-surface)] border border-[var(--sidebar-border)] rounded-md sm:rounded-md p-3.5 sm:p-5 flex items-start gap-2.5 sm:gap-3.5 hover:border-[var(--color-primary-300)]/20 transition-colors">
@@ -418,8 +420,8 @@ ${code ? `Referral Code: ${code}\n` : ""}Start building your property portfolio 
                                                 <polyline points="22 4 12 14.01 9 11.01"></polyline>
                                             </svg>
                                             <div>
-                                                <p className="text-[11px] sm:text-[13px] font-semibold text-[var(--header-text)] mb-0.5 sm:mb-1">Address Proof</p>
-                                                <p className="text-[10px] sm:text-[11px] text-[var(--color-text-muted)] font-medium">Utility bill verified</p>
+                                                <p className="text-[11px] sm:text-[13px] font-semibold text-[var(--header-text)] mb-0.5 sm:mb-1">{t("Address Proof")}</p>
+                                                <p className="text-[10px] sm:text-[11px] text-[var(--color-text-muted)] font-medium">{t("Utility bill verified")}</p>
                                             </div>
                                         </div>
                                     </div>
@@ -432,8 +434,8 @@ ${code ? `Referral Code: ${code}\n` : ""}Start building your property portfolio 
                                             <polyline points="12 6 12 12 16 14"></polyline>
                                         </svg>
                                     </div>
-                                    <h2 className="text-xl font-bold text-[var(--header-text)] mb-2">Verification Under Review</h2>
-                                    <p className="text-sm text-[var(--color-text-muted)] max-w-md">Your identity verification is currently being processed. You will be notified once it is approved.</p>
+                                    <h2 className="text-xl font-bold text-[var(--header-text)] mb-2">{t("Verification Under Review")}</h2>
+                                    <p className="text-sm text-[var(--color-text-muted)] max-w-md">{t("Your identity verification is currently being processed. You will be notified once it is approved.")}</p>
                                 </div>
                             ) : (
                                 <div className="flex flex-col items-center justify-center py-8 text-center">
@@ -444,13 +446,13 @@ ${code ? `Referral Code: ${code}\n` : ""}Start building your property portfolio 
                                             <line x1="12" y1="16" x2="12.01" y2="16"></line>
                                         </svg>
                                     </div>
-                                    <h2 className="text-xl font-bold text-[var(--header-text)] mb-2">Unverified</h2>
-                                    <p className="text-sm text-[var(--color-text-muted)] max-w-md mb-6">You need to complete your identity verification before you can start investing.</p>
+                                    <h2 className="text-xl font-bold text-[var(--header-text)] mb-2">{t("Unverified")}</h2>
+                                    <p className="text-sm text-[var(--color-text-muted)] max-w-md mb-6">{t("You need to complete your identity verification before you can start investing.")}</p>
                                     <button
                                         onClick={() => window.dispatchEvent(new CustomEvent('open-kyc-modal'))}
                                         className="px-6 py-2.5 rounded-lg bg-[var(--color-status-error)] text-white text-sm font-bold uppercase transition-all hover:opacity-90 border-0 cursor-pointer shadow-sm"
                                     >
-                                        Verify Now
+                                        {t("Verify Now")}
                                     </button>
                                 </div>
                             )}
@@ -462,7 +464,7 @@ ${code ? `Referral Code: ${code}\n` : ""}Start building your property portfolio 
                             <div className="rounded-xl sm:rounded-2xl p-4 sm:p-6 lg:p-7 relative overflow-hidden bg-gradient-to-b from-[var(--background)] to-[var(--color-primary-700)] shadow-glow-primary flex flex-col justify-between">
                                 <div className="absolute right-0 top-0 w-40 h-40 bg-[var(--background)]/10 rounded-full blur-3xl -mr-16 -mt-16 pointer-events-none"></div>
                                 <div>
-                                    <p className="text-[11px] sm:text-[13px] uppercase tracking-[1.5px] font-semibold text-[var(--color-text-muted)] mb-2">INR BALANCE</p>
+                                    <p className="text-[11px] sm:text-[13px] uppercase tracking-[1.5px] font-semibold text-[var(--color-text-muted)] mb-2">{t("INR BALANCE")}</p>
                                     <p className="text-xl sm:text-2xl lg:text-3xl font-bold text-[var(--header-text)] mb-4 sm:mb-6 break-words tracking-tight">₹{profileData?.usdBalance || "0.00"}</p>
                                 </div>
                                 {/* <div className="flex gap-2 w-full mt-auto">
@@ -474,7 +476,7 @@ ${code ? `Referral Code: ${code}\n` : ""}Start building your property portfolio 
                             <div className="rounded-xl sm:rounded-2xl p-4 sm:p-6 lg:p-7 relative overflow-hidden bg-gradient-to-b from-[var(--background)] to-[var(--color-primary-700)] shadow-glow-primary flex flex-col justify-between">
                                 <div className="absolute right-0 top-0 w-40 h-40 bg-[var(--background)]/10 rounded-full blur-3xl -mr-16 -mt-16 pointer-events-none"></div>
                                 <div>
-                                    <p className="text-[11px] sm:text-[13px] uppercase tracking-[1.5px] font-semibold text-[var(--color-text-muted)] mb-2">AED BALANCE</p>
+                                    <p className="text-[11px] sm:text-[13px] uppercase tracking-[1.5px] font-semibold text-[var(--color-text-muted)] mb-2">{t("AED BALANCE")}</p>
                                     <p className="text-xl sm:text-2xl lg:text-3xl font-bold text-[var(--header-text)] mb-4 sm:mb-6 break-words tracking-tight"><span className="text-xs sm:text-sm font-medium opacity-80 mr-1.5">AED</span>{profileData?.aedBalance || "0.00"}</p>
                                 </div>
                                 {/* <div className="flex gap-2 w-full mt-auto">
@@ -486,7 +488,7 @@ ${code ? `Referral Code: ${code}\n` : ""}Start building your property portfolio 
                             <div className="rounded-xl sm:rounded-2xl p-4 sm:p-6 lg:p-7 relative overflow-hidden bg-gradient-to-b from-[var(--background)] to-[var(--color-primary-700)] shadow-glow-primary flex flex-col justify-between sm:col-span-2 lg:col-span-1">
                                 <div className="absolute right-0 top-0 w-40 h-40 bg-[var(--background)]/10 rounded-full blur-3xl -mr-16 -mt-16 pointer-events-none"></div>
                                 <div>
-                                    <p className="text-[11px] sm:text-[13px] uppercase tracking-[1.5px] font-semibold text-[var(--color-text-muted)] mb-2">CRYPTO</p>
+                                    <p className="text-[11px] sm:text-[13px] uppercase tracking-[1.5px] font-semibold text-[var(--color-text-muted)] mb-2">{t("CRYPTO")}</p>
                                     <p className="text-xl sm:text-2xl lg:text-3xl font-bold text-[var(--header-text)] mb-4 sm:mb-6 break-words tracking-tight">{profileData?.cryptoBalance || "0.00"} <span className="text-xs sm:text-sm font-medium opacity-80 ml-1">ETH</span></p>
                                 </div>
                                 {/* <div className="flex gap-2 w-full mt-auto">
@@ -511,29 +513,29 @@ ${code ? `Referral Code: ${code}\n` : ""}Start building your property portfolio 
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="sm:w-3 sm:h-3 text-[var(--color-primary-300)]">
                                                     <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
                                                 </svg>
-                                                Blockchain Verified
+                                                {t("Blockchain Verified")}
                                             </div>
                                             <span className="text-[7px] sm:text-[9px] text-[var(--color-text-muted)] font-mono tracking-wider">{cert.certificateNo || cert.id}</span>
                                         </div>
 
                                         <div className="border border-[var(--sidebar-border)] rounded-md sm:rounded-2xl p-4 sm:p-6 mb-3 sm:mb-5 bg-[var(--field-surface)]">
                                             <div className="text-center">
-                                                <p className="text-[8px] sm:text-[9px] text-[var(--color-text-muted)] uppercase tracking-[1.5px] sm:tracking-[2px] mb-1.5 sm:mb-2 font-semibold">DIGITAL OWNERSHIP CERTIFICATE</p>
-                                                <h3 className="text-sm sm:text-lg lg:text-xl font-bold text-[var(--header-text)] mb-2 sm:mb-3">{cert.assetTitle || cert.asset?.title || cert.asset?.name || "Property"}</h3>
-                                                <p className="font-bold text-[var(--header-text)] flex items-center justify-center gap-1.5 sm:gap-2"><span className="text-2xl sm:text-3xl">{cert.fractionsOwned || cert.fractions || cert.investment?.fractions || 1}</span> <span className="text-[11px] sm:text-[13px] font-normal text-[var(--color-text-muted)]">Fractions</span></p>
+                                                <p className="text-[8px] sm:text-[9px] text-[var(--color-text-muted)] uppercase tracking-[1.5px] sm:tracking-[2px] mb-1.5 sm:mb-2 font-semibold">{t("DIGITAL OWNERSHIP CERTIFICATE")}</p>
+                                                <h3 className="text-sm sm:text-lg lg:text-xl font-bold text-[var(--header-text)] mb-2 sm:mb-3">{cert.assetTitle || cert.asset?.title || cert.asset?.name || t("Property")}</h3>
+                                                <p className="font-bold text-[var(--header-text)] flex items-center justify-center gap-1.5 sm:gap-2"><span className="text-2xl sm:text-3xl">{cert.fractionsOwned || cert.fractions || cert.investment?.fractions || 1}</span> <span className="text-[11px] sm:text-[13px] font-normal text-[var(--color-text-muted)]">{t("Fractions")}</span></p>
                                             </div>
                                         </div>
 
                                         <div className="space-y-2 sm:space-y-3 mb-4 sm:mb-6">
                                             {cert.network && (
                                                 <div className="flex justify-between items-center text-[11px] sm:text-[13px]">
-                                                    <span className="text-[var(--color-text-muted)]">Network</span>
+                                                    <span className="text-[var(--color-text-muted)]">{t("Network")}</span>
                                                     <span className="text-[var(--color-primary-300)] font-bold tracking-wide">{cert.network}</span>
                                                 </div>
                                             )}
                                             {cert.issuedAt && (
                                                 <div className="flex justify-between items-center text-[11px] sm:text-[13px]">
-                                                    <span className="text-[var(--color-text-muted)]">Issued At</span>
+                                                    <span className="text-[var(--color-text-muted)]">{t("Issued At")}</span>
                                                     <span className="text-[var(--header-text)] font-mono">
                                                         {new Date(cert.issuedAt).toLocaleDateString()}
                                                     </span>
@@ -550,7 +552,7 @@ ${code ? `Referral Code: ${code}\n` : ""}Start building your property portfolio 
                                                     <polyline points="7 11 12 16 17 11" />
                                                     <line x1="12" y1="4" x2="12" y2="16" />
                                                 </svg>
-                                                Download Docs
+                                                {t("Download Docs")}
                                             </button>
                                             <button
                                                 onClick={() => cert.pdfUrl && window.open(cert.pdfUrl.startsWith('http') ? cert.pdfUrl : `${API_URL}/${cert.pdfUrl.replace(/^\//, '')}`, '_blank')}
@@ -561,7 +563,7 @@ ${code ? `Referral Code: ${code}\n` : ""}Start building your property portfolio 
                                                     <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
                                                     <circle cx="12" cy="12" r="3" />
                                                 </svg>
-                                                View Docs
+                                                {t("View Docs")}
                                             </button>
                                         </div>
                                     </div>
@@ -569,8 +571,8 @@ ${code ? `Referral Code: ${code}\n` : ""}Start building your property portfolio 
                             ) : (
                                 <div className="col-span-1 md:col-span-2 bg-[var(--card-surface)] border border-[var(--sidebar-border)] rounded-md sm:rounded-2xl p-12 flex flex-col items-center justify-center text-center">
                                     <svg className="w-12 h-12 text-[var(--color-text-muted)]/20 mb-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
-                                    <h3 className="text-lg font-bold text-[var(--header-text)] mb-1">No certificates found</h3>
-                                    <p className="text-sm text-[var(--color-text-muted)]">Your digital ownership certificates will appear here once issued.</p>
+                                    <h3 className="text-lg font-bold text-[var(--header-text)] mb-1">{t("No certificates found")}</h3>
+                                    <p className="text-sm text-[var(--color-text-muted)]">{t("Your digital ownership certificates will appear here once issued.")}</p>
                                 </div>
                             )}
                         </div>
@@ -580,7 +582,7 @@ ${code ? `Referral Code: ${code}\n` : ""}Start building your property portfolio 
                         <div className="bg-[var(--card-surface)] border border-[var(--sidebar-border)] rounded-xl sm:rounded-2xl p-4 sm:p-6 lg:p-10 max-w-[900px] shadow-sm">
                             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6 sm:mb-8">
                                 <div>
-                                    <h2 className="text-base sm:text-[22px] font-bold text-[var(--header-text)] mb-1">Invite &amp; Earn</h2>
+                                    <h2 className="text-base sm:text-[22px] font-bold text-[var(--header-text)] mb-1">{t("Invite & Earn")}</h2>
                                     <p className="text-xs sm:text-sm text-[var(--color-text-muted)] font-medium">
                                         Earn {referralInfo?.reward?.percentage ?? 2.5}% reward on your referrals&apos; investments
                                     </p>
@@ -589,7 +591,7 @@ ${code ? `Referral Code: ${code}\n` : ""}Start building your property portfolio 
                                     href="/dashboard/investor/referrals"
                                     className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-[var(--color-primary-300)] text-black text-xs font-bold uppercase tracking-wider no-underline shadow-sm hover:opacity-90 transition-all shrink-0 w-max"
                                 >
-                                    <span>Full Referrals Page</span>
+                                    <span>{t("Full Referrals Page")}</span>
                                     <span>→</span>
                                 </a>
                             </div>
@@ -617,12 +619,12 @@ ${code ? `Referral Code: ${code}\n` : ""}Start building your property portfolio 
                                         {copiedLink ? (
                                             <>
                                                 <svg className="w-4 h-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                                                <span>Copied Link</span>
+                                                <span>{t("Copied Link")}</span>
                                             </>
                                         ) : (
                                             <>
                                                 <svg className="w-4 h-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-                                                <span>Copy Link</span>
+                                                <span>{t("Copy Link")}</span>
                                             </>
                                         )}
                                     </button>
@@ -644,7 +646,7 @@ ${code ? `Referral Code: ${code}\n` : ""}Start building your property portfolio 
                                         title="Share invite message"
                                     >
                                         <svg className="w-4 h-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg>
-                                        <span>{copiedMessage ? "Copied Message!" : "Share Invite"}</span>
+                                        <span>{copiedMessage ? t("Copied Message!") : t("Share Invite")}</span>
                                     </button>
                                 </div>
                             </div>
@@ -652,7 +654,7 @@ ${code ? `Referral Code: ${code}\n` : ""}Start building your property portfolio 
                             <div className="grid grid-cols-1 min-[480px]:grid-cols-3 gap-2.5 sm:gap-4 lg:gap-6">
                                 <div className="relative group bg-[var(--card-surface)] border border-[var(--sidebar-border)] rounded-xl sm:rounded-[16px] p-3 sm:p-4 lg:p-5 hover:border-[var(--sidebar-active-text)]/30 transition-all cursor-default shadow-sm flex flex-col justify-between">
                                     <div className="flex items-center justify-between gap-1.5 mb-2 sm:mb-3">
-                                        <p className="text-[9px] sm:text-[11px] uppercase font-bold text-[var(--color-text-muted)] tracking-wider truncate">TOTAL REFERRED</p>
+                                        <p className="text-[9px] sm:text-[11px] uppercase font-bold text-[var(--color-text-muted)] tracking-wider truncate">{t("TOTAL REFERRED")}</p>
                                         <div className="shrink-0 text-[var(--sidebar-active-text)] w-6 h-6 sm:w-7 sm:h-7 lg:w-8 lg:h-8 flex items-center justify-center bg-[var(--sidebar-active-text)]/10 rounded-full">
                                             <svg className="w-3 h-3 sm:w-3.5 sm:h-3.5 lg:w-4 lg:h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
                                         </div>
@@ -664,7 +666,7 @@ ${code ? `Referral Code: ${code}\n` : ""}Start building your property portfolio 
 
                                 <div className="relative group bg-[var(--card-surface)] border border-[var(--sidebar-border)] rounded-xl sm:rounded-[16px] p-3 sm:p-4 lg:p-5 hover:border-[var(--sidebar-active-text)]/30 transition-all cursor-default shadow-sm flex flex-col justify-between">
                                     <div className="flex items-center justify-between gap-1.5 mb-2 sm:mb-3">
-                                        <p className="text-[9px] sm:text-[11px] uppercase font-bold text-[var(--color-text-muted)] tracking-wider truncate">ACTIVE INVESTORS</p>
+                                        <p className="text-[9px] sm:text-[11px] uppercase font-bold text-[var(--color-text-muted)] tracking-wider truncate">{t("ACTIVE INVESTORS")}</p>
                                         <div className="shrink-0 text-[var(--sidebar-active-text)] w-6 h-6 sm:w-7 sm:h-7 lg:w-8 lg:h-8 flex items-center justify-center bg-[var(--sidebar-active-text)]/10 rounded-full">
                                             <svg className="w-3 h-3 sm:w-3.5 sm:h-3.5 lg:w-4 lg:h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
                                         </div>
@@ -676,7 +678,7 @@ ${code ? `Referral Code: ${code}\n` : ""}Start building your property portfolio 
 
                                 <div className="relative group bg-[var(--card-surface)] border border-[var(--sidebar-border)] rounded-xl sm:rounded-[16px] p-3 sm:p-4 lg:p-5 hover:border-[var(--sidebar-active-text)]/30 transition-all cursor-default shadow-sm flex flex-col justify-between">
                                     <div className="flex items-center justify-between gap-1.5 mb-2 sm:mb-3">
-                                        <p className="text-[9px] sm:text-[11px] uppercase font-bold text-[var(--color-text-muted)] tracking-wider truncate">TOTAL EARNED</p>
+                                        <p className="text-[9px] sm:text-[11px] uppercase font-bold text-[var(--color-text-muted)] tracking-wider truncate">{t("TOTAL EARNED")}</p>
                                         <div className="shrink-0 text-[var(--sidebar-active-text)] w-6 h-6 sm:w-7 sm:h-7 lg:w-8 lg:h-8 flex items-center justify-center bg-[var(--sidebar-active-text)]/10 rounded-full">
                                             <svg className="w-3 h-3 sm:w-3.5 sm:h-3.5 lg:w-4 lg:h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 12 20 22 4 22 4 12"></polyline><rect x="2" y="7" width="20" height="5"></rect><line x1="12" y1="22" x2="12" y2="7"></line><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"></path><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"></path></svg>
                                         </div>

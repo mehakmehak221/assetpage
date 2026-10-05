@@ -10,6 +10,7 @@ import { EditLeadModal } from '@/components/dashboard/agent/crm/EditLeadModal';
 import { DeleteLeadModal } from '@/components/dashboard/agent/crm/DeleteLeadModal';
 import { LeadDetailsDrawer } from '@/components/dashboard/agent/crm/LeadDetailsDrawer';
 import { Users, UserPlus, CheckCircle2, Clock, ChevronLeft, ChevronRight } from 'lucide-react';
+import { useI18n } from '@/providers/LocaleProvider';
 
 interface LeadStats {
   totalAssigned: number;
@@ -19,6 +20,7 @@ interface LeadStats {
 }
 
 export default function AgentLeadsPage() {
+  const { t } = useI18n();
   const [leads, setLeads] = useState<Lead[]>([]);
   const [total, setTotal] = useState(0);
   const [totalPages, setTotalPages] = useState(1);
@@ -128,15 +130,15 @@ export default function AgentLeadsPage() {
       <div>
         <div className="flex items-center gap-2 mb-1.5 sm:mb-2">
           <span className="px-2.5 py-1 rounded-md bg-[var(--badge-bg)] border border-[var(--badge-border)] text-[var(--badge-text)] text-[10px] font-bold uppercase tracking-widest">
-            Agent Workspace
+            {t("Agent Panel")}
           </span>
-          <span className="text-xs text-[var(--sidebar-text)] opacity-60">• Lead Pipeline</span>
+          <span className="text-xs text-[var(--sidebar-text)] opacity-60">• {t("Lead Pipeline")}</span>
         </div>
         <h1 className="text-2xl sm:text-3xl font-bold text-[var(--foreground)] tracking-tight">
-          Assigned Leads & CRM
+          {t("Assigned Leads & CRM")}
         </h1>
         <p className="text-xs sm:text-sm text-[var(--sidebar-text)] opacity-60 mt-1">
-          Manage your investor prospects, track status transitions, add notes, and schedule follow-ups.
+          {t("Manage your investor prospects, track status transitions, add notes, and schedule follow-ups.")}
         </p>
       </div>
 
@@ -149,7 +151,7 @@ export default function AgentLeadsPage() {
           </div>
           <div className="min-w-0 flex-1">
             <p className="text-xl sm:text-2xl font-bold text-[var(--foreground)] leading-tight">{stats.totalAssigned}</p>
-            <p className="text-[9px] sm:text-xs font-semibold text-[var(--sidebar-text)] opacity-60 uppercase tracking-wider truncate">Total Leads</p>
+            <p className="text-[9px] sm:text-xs font-semibold text-[var(--sidebar-text)] opacity-60 uppercase tracking-wider truncate">{t("Total Leads")}</p>
           </div>
         </div>
 
@@ -160,7 +162,7 @@ export default function AgentLeadsPage() {
           </div>
           <div className="min-w-0 flex-1">
             <p className="text-xl sm:text-2xl font-bold text-[var(--foreground)] leading-tight">{stats.newLeads}</p>
-            <p className="text-[9px] sm:text-xs font-semibold text-[var(--sidebar-text)] opacity-60 uppercase tracking-wider truncate">New Leads</p>
+            <p className="text-[9px] sm:text-xs font-semibold text-[var(--sidebar-text)] opacity-60 uppercase tracking-wider truncate">{t("New Leads")}</p>
           </div>
         </div>
 
@@ -171,7 +173,7 @@ export default function AgentLeadsPage() {
           </div>
           <div className="min-w-0 flex-1">
             <p className="text-xl sm:text-2xl font-bold text-[var(--foreground)] leading-tight">{stats.inContact}</p>
-            <p className="text-[9px] sm:text-xs font-semibold text-[var(--sidebar-text)] opacity-60 uppercase tracking-wider truncate">In Contact</p>
+            <p className="text-[9px] sm:text-xs font-semibold text-[var(--sidebar-text)] opacity-60 uppercase tracking-wider truncate">{t("In Contact")}</p>
           </div>
         </div>
 
@@ -182,7 +184,7 @@ export default function AgentLeadsPage() {
           </div>
           <div className="min-w-0 flex-1">
             <p className="text-xl sm:text-2xl font-bold text-[var(--foreground)] leading-tight">{stats.converted}</p>
-            <p className="text-[9px] sm:text-xs font-semibold text-[var(--sidebar-text)] opacity-60 uppercase tracking-wider truncate">Converted</p>
+            <p className="text-[9px] sm:text-xs font-semibold text-[var(--sidebar-text)] opacity-60 uppercase tracking-wider truncate">{t("Converted")}</p>
           </div>
         </div>
       </div>
@@ -209,7 +211,7 @@ export default function AgentLeadsPage() {
       {totalPages > 1 && (
         <div className="flex items-center justify-between px-5 py-3 bg-[var(--card-surface)] border border-[var(--sidebar-border)] rounded-md text-xs">
           <span className="text-[var(--sidebar-text)] opacity-60 font-medium">
-            Page {filters.page || 1} of {totalPages} ({total} total leads)
+            {t("Page {page} of {totalPages} ({total} total leads)", { page: filters.page || 1, totalPages, total })}
           </span>
           <div className="flex items-center gap-2">
             <button

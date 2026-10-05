@@ -8,6 +8,7 @@ import {
     staggerContainer,
     useLandingMotion,
 } from '@/lib/landingAnimations';
+import { useI18n } from '@/providers/LocaleProvider';
 
 const STATS = [
     { value: '20,000+', label: 'Retail Waitlist Signups' },
@@ -17,6 +18,7 @@ const STATS = [
 
 export default function ValueSection() {
     const { viewProps } = useLandingMotion();
+    const { t } = useI18n();
 
     return (
         <section
@@ -39,7 +41,7 @@ export default function ValueSection() {
                                 {STATS[0].value}
                             </span>
                             <span className="text-xs sm:text-sm md:text-[15px] text-white/90 mt-1.5 font-normal block tracking-normal">
-                                {STATS[0].label}
+                                {t(STATS[0].label)}
                             </span>
                         </motion.div>
                     </motion.div>
@@ -61,7 +63,7 @@ export default function ValueSection() {
                                 {STATS[1].value}
                             </span>
                             <span className="text-xs sm:text-sm md:text-[15px] text-white/90 mt-1.5 font-normal block tracking-normal">
-                                {STATS[1].label}
+                                {t(STATS[1].label)}
                             </span>
                         </motion.div>
                     </motion.div>
@@ -83,7 +85,7 @@ export default function ValueSection() {
                                 {STATS[2].value}
                             </span>
                             <span className="text-xs sm:text-sm md:text-[15px] text-white/90 mt-1.5 font-normal block tracking-normal">
-                                {STATS[2].label}
+                                {t(STATS[2].label)}
                             </span>
                         </motion.div>
                     </motion.div>

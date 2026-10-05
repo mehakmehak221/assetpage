@@ -11,7 +11,7 @@ export function middleware(request: NextRequest) {
     return NextResponse.redirect(redirectUrl);
   }
 
-  const hasForceClear = request.nextUrl.searchParams.get("clear") === "true";
+  const hasForceClear = request.nextUrl.searchParams.has("clear") || request.nextUrl.searchParams.has("expired");
 
   if (hasForceClear) {
     const response = NextResponse.next();
@@ -30,7 +30,7 @@ export function middleware(request: NextRequest) {
     pathname.startsWith("/sign-up") ||
     pathname.startsWith("/forgot-password");
 
-  if (isAuthPage && isAuthenticated) {
+  if (isAuthPage && isAuthenticated && !hasForceClear) {
     return NextResponse.redirect(new URL("/dashboard", request.url));
   }
 

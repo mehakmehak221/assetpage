@@ -8,9 +8,11 @@ import {
     staggerContainer,
     useLandingMotion,
 } from '@/lib/landingAnimations';
+import { useI18n } from '@/providers/LocaleProvider';
 
 export default function UAEOperatingArmsSection() {
     const { viewProps } = useLandingMotion();
+    const { t } = useI18n();
 
     return (
         <section
@@ -29,16 +31,16 @@ export default function UAEOperatingArmsSection() {
                         className="text-[#000000] font-montserrat font-bold text-[26px] sm:text-3xl md:text-4xl lg:text-[46px] leading-[1.18] tracking-tight text-center"
                         variants={fadeUp}
                     >
-                        One UAE Company.
+                        {t('One UAE Company.')}
                         <br />
-                        Two Operating Arms.
+                        {t('Two Operating Arms.')}
                     </motion.h2>
 
                     <motion.p
                         className="mt-3 sm:mt-3.5 text-[#414141] font-montserrat font-normal text-sm sm:text-[15px] md:text-base leading-relaxed text-center max-w-[860px] mx-auto"
                         variants={fadeUpSubtle}
                     >
-                        GloFi Estates UAE bridges sovereign real estate brokerage with institutional technology - driven fractionalisation beneath a single unified operating umbrella.
+                        {t('GloFi Estates UAE bridges sovereign real estate brokerage with institutional technology - driven fractionalisation beneath a single unified operating umbrella.')}
                     </motion.p>
                 </motion.div>
 
@@ -58,19 +60,18 @@ export default function UAEOperatingArmsSection() {
                             </div>
 
                             <div className="text-[10.5px] sm:text-[11.5px] tracking-[0.14em] uppercase text-white/95 font-semibold mb-1.5 font-montserrat">
-                                DIFC INSTITUTIONAL FRAMEWORK
+                                {t('DIFC INSTITUTIONAL FRAMEWORK')}
                             </div>
                             <h3 className="text-2xl sm:text-3xl md:text-[34px] font-bold text-white tracking-tight font-montserrat leading-tight">
-                                GloFi Estates UAE
+                                {t('GloFi Estates UAE')}
                             </h3>
                             <p className="mt-2 text-white/95 text-xs sm:text-[13.5px] leading-relaxed max-w-md mx-auto font-montserrat font-normal">
-                                Direct operational holding controlling localized brokerage execution desks
-                                and next-generation asset tokenization protocol engines.
+                                {t('Direct operational holding controlling localized brokerage execution desks and next-generation asset tokenization protocol engines.')}
                             </p>
 
                             <div className="mt-5 flex justify-center">
                                 <span className="inline-block px-5 py-2 rounded-full bg-[#052119] text-white text-[9.5px] sm:text-[10.5px] font-bold tracking-wider uppercase shadow-md font-montserrat">
-                                    MULTI-JURISDICTIONAL REAL-ESTATE &amp; DIGITAL ASSET VEHICLE
+                                    {t('MULTI-JURISDICTIONAL REAL-ESTATE & DIGITAL ASSET VEHICLE')}
                                 </span>
                             </div>
                         </div>
@@ -105,7 +106,7 @@ export default function UAEOperatingArmsSection() {
                         <motion.div className="flex flex-col" variants={fadeUp}>
                             <div className="flex justify-center mb-4 sm:mb-5">
                                 <span className="inline-block px-4 py-1.5 rounded-full bg-[#00110C] text-[#99CBBA] text-[10px] sm:text-[11px] font-bold tracking-wider uppercase shadow-md font-montserrat">
-                                    REAL ESTATE BROKERAGE &rarr; GLOFI BROKERS
+                                    {t('REAL ESTATE BROKERAGE → GLOFI BROKERS')}
                                 </span>
                             </div>
 
@@ -118,22 +119,19 @@ export default function UAEOperatingArmsSection() {
                                             </svg>
                                         </div>
                                         <span className="inline-block px-3.5 py-1.5 rounded-full bg-[#032B20] text-white text-[10px] sm:text-[11px] font-bold tracking-wider uppercase font-montserrat">
-                                            REGULATED RERA / DED BROKERAGE
+                                            {t('REGULATED RERA / DED BROKERAGE')}
                                         </span>
                                     </div>
 
                                     <div className="mt-5 text-[10.5px] sm:text-[11px] font-bold tracking-[0.14em] uppercase text-[#121212] font-montserrat">
-                                        REAL ESTATE BROKERAGE ARM
+                                        {t('REAL ESTATE BROKERAGE ARM')}
                                     </div>
                                     <h4 className="mt-1 text-2xl sm:text-[28px] font-bold text-[#007E5F] tracking-tight font-montserrat">
-                                        GloFi Brokers
+                                        {t('GloFi Brokers')}
                                     </h4>
 
                                     <p className="mt-2.5 text-[#505151] text-xs sm:text-[13px] leading-relaxed font-montserrat font-normal">
-                                        Tier-1 prime residential and trophy commercial advisory, off-market
-                                        institutional acquisitions, master tenant syndication, and private
-                                        mandate transactions across Dubai, Abu Dhabi, and prime emirate
-                                        corridors.
+                                        {t('Tier-1 prime residential and trophy commercial advisory, off-market institutional acquisitions, master tenant syndication, and private mandate transactions across Dubai, Abu Dhabi, and prime emirate corridors.')}
                                     </p>
 
                                     <ul className="mt-5 space-y-2.5 text-xs sm:text-[13px] text-[#209181] font-medium font-montserrat">
@@ -142,21 +140,21 @@ export default function UAEOperatingArmsSection() {
                                                 <path d="M5.06667 14L3.8 11.8667L1.4 11.3333L1.63333 8.86667L0 7L1.63333 5.13333L1.4 2.66667L3.8 2.13333L5.06667 0L7.33333 0.966667L9.6 0L10.8667 2.13333L13.2667 2.66667L13.0333 5.13333L14.6667 7L13.0333 8.86667L13.2667 11.3333L10.8667 11.8667L9.6 14L7.33333 13.0333L5.06667 14ZM5.63333 12.3L7.33333 11.5667L9.06667 12.3L10 10.7L11.8333 10.2667L11.6667 8.4L12.9 7L11.6667 5.56667L11.8333 3.7L10 3.3L9.03333 1.7L7.33333 2.43333L5.6 1.7L4.66667 3.3L2.83333 3.7L3 5.56667L1.76667 7L3 8.4L2.83333 10.3L4.66667 10.7L5.63333 12.3ZM6.63333 9.36667L10.4 5.6L9.46667 4.63333L6.63333 7.46667L5.2 6.06667L4.26667 7L6.63333 9.36667Z" fill="#209181" />
                                             </svg>
 
-                                            <span>Trophy Asset Brokerage &amp; Private Mandates</span>
+                                            <span>{t('Trophy Asset Brokerage & Private Mandates')}</span>
                                         </li>
                                         <li className="flex items-center gap-2.5">
                                             <svg width="15" height="14" viewBox="0 0 15 14" fill="none" xmlns="http://www.w3.org/2000/svg">
                                                 <path d="M5.06667 14L3.8 11.8667L1.4 11.3333L1.63333 8.86667L0 7L1.63333 5.13333L1.4 2.66667L3.8 2.13333L5.06667 0L7.33333 0.966667L9.6 0L10.8667 2.13333L13.2667 2.66667L13.0333 5.13333L14.6667 7L13.0333 8.86667L13.2667 11.3333L10.8667 11.8667L9.6 14L7.33333 13.0333L5.06667 14ZM5.63333 12.3L7.33333 11.5667L9.06667 12.3L10 10.7L11.8333 10.2667L11.6667 8.4L12.9 7L11.6667 5.56667L11.8333 3.7L10 3.3L9.03333 1.7L7.33333 2.43333L5.6 1.7L4.66667 3.3L2.83333 3.7L3 5.56667L1.76667 7L3 8.4L2.83333 10.3L4.66667 10.7L5.63333 12.3ZM6.63333 9.36667L10.4 5.6L9.46667 4.63333L6.63333 7.46667L5.2 6.06667L4.26667 7L6.63333 9.36667Z" fill="#209181" />
                                             </svg>
 
-                                            <span>Institutional Placement &amp; Acquisition Desk</span>
+                                            <span>{t('Institutional Placement & Acquisition Desk')}</span>
                                         </li>
                                         <li className="flex items-center gap-2.5">
                                             <svg width="15" height="14" viewBox="0 0 15 14" fill="none" xmlns="http://www.w3.org/2000/svg">
                                                 <path d="M5.06667 14L3.8 11.8667L1.4 11.3333L1.63333 8.86667L0 7L1.63333 5.13333L1.4 2.66667L3.8 2.13333L5.06667 0L7.33333 0.966667L9.6 0L10.8667 2.13333L13.2667 2.66667L13.0333 5.13333L14.6667 7L13.0333 8.86667L13.2667 11.3333L10.8667 11.8667L9.6 14L7.33333 13.0333L5.06667 14ZM5.63333 12.3L7.33333 11.5667L9.06667 12.3L10 10.7L11.8333 10.2667L11.6667 8.4L12.9 7L11.6667 5.56667L11.8333 3.7L10 3.3L9.03333 1.7L7.33333 2.43333L5.6 1.7L4.66667 3.3L2.83333 3.7L3 5.56667L1.76667 7L3 8.4L2.83333 10.3L4.66667 10.7L5.63333 12.3ZM6.63333 9.36667L10.4 5.6L9.46667 4.63333L6.63333 7.46667L5.2 6.06667L4.26667 7L6.63333 9.36667Z" fill="#209181" />
                                             </svg>
 
-                                            <span>Exclusive Master Developer Off-Plan Allocations</span>
+                                            <span>{t('Exclusive Master Developer Off-Plan Allocations')}</span>
                                         </li>
                                     </ul>
                                 </div>
@@ -164,14 +162,14 @@ export default function UAEOperatingArmsSection() {
                                 <div className="mt-7 rounded-2xl bg-[#15382D] text-white p-3.5 sm:p-4 flex items-center justify-between">
                                     <div>
                                         <div className="text-[9px] sm:text-[10px] tracking-wider text-white/90 font-semibold uppercase font-montserrat">
-                                            DIRECT DESK
+                                            {t('DIRECT DESK')}
                                         </div>
                                         <div className="text-xs sm:text-[13px] font-bold text-white mt-0.5 font-montserrat">
-                                            Downtown Dubai • DIFC Tower
+                                            {t('Downtown Dubai • DIFC Tower')}
                                         </div>
                                     </div>
                                     <div className="text-[10px] sm:text-[11px] uppercase tracking-wider text-[#9DD0BE] font-bold font-montserrat">
-                                        ACTIVE PIPELINE
+                                        {t('ACTIVE PIPELINE')}
                                     </div>
                                 </div>
                             </div>
@@ -180,7 +178,7 @@ export default function UAEOperatingArmsSection() {
                         <motion.div className="flex flex-col" variants={fadeUp}>
                             <div className="flex justify-center mb-4 sm:mb-5">
                                 <span className="inline-block px-4 py-1.5 rounded-full bg-[#00110C] text-[#99CBBA] text-[10px] sm:text-[11px] font-bold tracking-wider uppercase shadow-md font-montserrat">
-                                    FRACTIONALISATION PLATFORM &rarr; GLOFI TECH
+                                    {t('FRACTIONALISATION PLATFORM → GLOFI TECH')}
                                 </span>
                             </div>
 
@@ -193,21 +191,19 @@ export default function UAEOperatingArmsSection() {
                                             </svg>
                                         </div>
                                         <span className="inline-block px-3.5 py-1.5 rounded-full bg-[#032B20] text-white text-[10px] sm:text-[11px] font-bold tracking-wider uppercase font-montserrat">
-                                            FINTECH &amp; DIGITAL ASSET SANDBOX
+                                            {t('FINTECH & DIGITAL ASSET SANDBOX')}
                                         </span>
                                     </div>
 
                                     <div className="mt-5 text-[10.5px] sm:text-[11px] font-bold tracking-[0.14em] uppercase text-[#121212] font-montserrat">
-                                        FRACTIONALISATION PLATFORM
+                                        {t('FRACTIONALISATION PLATFORM')}
                                     </div>
                                     <h4 className="mt-1 text-2xl sm:text-[28px] font-bold text-[#007E5F] tracking-tight font-montserrat">
-                                        GloFi Estates Technology
+                                        {t('GloFi Estates Technology')}
                                     </h4>
 
                                     <p className="mt-2.5 text-[#505151] text-xs sm:text-[13px] leading-relaxed font-montserrat font-normal">
-                                        Next-generation institutional tokenization and fractional ownership
-                                        rails. Powers algorithmic liquidity distribution, smart-contract SPV
-                                        automated yields, and secondary cross-border transfer protocols.
+                                        {t('Next-generation institutional tokenization and fractional ownership rails. Powers algorithmic liquidity distribution, smart-contract SPV automated yields, and secondary cross-border transfer protocols.')}
                                     </p>
 
                                     <ul className="mt-5 space-y-2.5 text-xs sm:text-[13px] text-[#209181] font-medium font-montserrat">
@@ -216,21 +212,21 @@ export default function UAEOperatingArmsSection() {
                                                 <path d="M5.06667 14L3.8 11.8667L1.4 11.3333L1.63333 8.86667L0 7L1.63333 5.13333L1.4 2.66667L3.8 2.13333L5.06667 0L7.33333 0.966667L9.6 0L10.8667 2.13333L13.2667 2.66667L13.0333 5.13333L14.6667 7L13.0333 8.86667L13.2667 11.3333L10.8667 11.8667L9.6 14L7.33333 13.0333L5.06667 14ZM5.63333 12.3L7.33333 11.5667L9.06667 12.3L10 10.7L11.8333 10.2667L11.6667 8.4L12.9 7L11.6667 5.56667L11.8333 3.7L10 3.3L9.03333 1.7L7.33333 2.43333L5.6 1.7L4.66667 3.3L2.83333 3.7L3 5.56667L1.76667 7L3 8.4L2.83333 10.3L4.66667 10.7L5.63333 12.3ZM6.63333 9.36667L10.4 5.6L9.46667 4.63333L6.63333 7.46667L5.2 6.06667L4.26667 7L6.63333 9.36667Z" fill="#209181" />
                                             </svg>
 
-                                            <span>Smart-Contract SPV Digital Share Issuance</span>
+                                            <span>{t('Smart-Contract SPV Digital Share Issuance')}</span>
                                         </li>
                                         <li className="flex items-center gap-2.5">
                                             <svg width="15" height="14" viewBox="0 0 15 14" fill="none" xmlns="http://www.w3.org/2000/svg">
                                                 <path d="M5.06667 14L3.8 11.8667L1.4 11.3333L1.63333 8.86667L0 7L1.63333 5.13333L1.4 2.66667L3.8 2.13333L5.06667 0L7.33333 0.966667L9.6 0L10.8667 2.13333L13.2667 2.66667L13.0333 5.13333L14.6667 7L13.0333 8.86667L13.2667 11.3333L10.8667 11.8667L9.6 14L7.33333 13.0333L5.06667 14ZM5.63333 12.3L7.33333 11.5667L9.06667 12.3L10 10.7L11.8333 10.2667L11.6667 8.4L12.9 7L11.6667 5.56667L11.8333 3.7L10 3.3L9.03333 1.7L7.33333 2.43333L5.6 1.7L4.66667 3.3L2.83333 3.7L3 5.56667L1.76667 7L3 8.4L2.83333 10.3L4.66667 10.7L5.63333 12.3ZM6.63333 9.36667L10.4 5.6L9.46667 4.63333L6.63333 7.46667L5.2 6.06667L4.26667 7L6.63333 9.36667Z" fill="#209181" />
                                             </svg>
 
-                                            <span>Sovereign Secondary Liquidity Engine</span>
+                                            <span>{t('Sovereign Secondary Liquidity Engine')}</span>
                                         </li>
                                         <li className="flex items-center gap-2.5">
                                             <svg width="15" height="14" viewBox="0 0 15 14" fill="none" xmlns="http://www.w3.org/2000/svg">
                                                 <path d="M5.06667 14L3.8 11.8667L1.4 11.3333L1.63333 8.86667L0 7L1.63333 5.13333L1.4 2.66667L3.8 2.13333L5.06667 0L7.33333 0.966667L9.6 0L10.8667 2.13333L13.2667 2.66667L13.0333 5.13333L14.6667 7L13.0333 8.86667L13.2667 11.3333L10.8667 11.8667L9.6 14L7.33333 13.0333L5.06667 14ZM5.63333 12.3L7.33333 11.5667L9.06667 12.3L10 10.7L11.8333 10.2667L11.6667 8.4L12.9 7L11.6667 5.56667L11.8333 3.7L10 3.3L9.03333 1.7L7.33333 2.43333L5.6 1.7L4.66667 3.3L2.83333 3.7L3 5.56667L1.76667 7L3 8.4L2.83333 10.3L4.66667 10.7L5.63333 12.3ZM6.63333 9.36667L10.4 5.6L9.46667 4.63333L6.63333 7.46667L5.2 6.06667L4.26667 7L6.63333 9.36667Z" fill="#209181" />
                                             </svg>
 
-                                            <span>Multi-Currency Institutional Treasury Ledger</span>
+                                            <span>{t('Multi-Currency Institutional Treasury Ledger')}</span>
                                         </li>
                                     </ul>
                                 </div>
@@ -238,14 +234,14 @@ export default function UAEOperatingArmsSection() {
                                 <div className="mt-7 rounded-2xl bg-[#15382D] text-white p-3.5 sm:p-4 flex items-center justify-between">
                                     <div>
                                         <div className="text-[9px] sm:text-[10px] tracking-wider text-white/90 font-semibold uppercase font-montserrat">
-                                            SMART PROTOCOL
+                                            {t('SMART PROTOCOL')}
                                         </div>
                                         <div className="text-xs sm:text-[13px] font-bold text-white mt-0.5 font-montserrat">
-                                            ERC-3643 Sovereign Standard
+                                            {t('ERC-3643 Sovereign Standard')}
                                         </div>
                                     </div>
                                     <div className="text-[10px] sm:text-[11px] uppercase tracking-wider text-[#9DD0BE] font-bold font-montserrat">
-                                        PRODUCTION READY
+                                        {t('PRODUCTION READY')}
                                     </div>
                                 </div>
                             </div>
