@@ -53,7 +53,7 @@ export default function EstatesProcess() {
           <div className="relative flex flex-col lg:flex-row items-center justify-center gap-10 lg:gap-16 my-16 sm:my-28">
 
             <div className="relative w-64 h-64 sm:w-80 sm:h-80 md:w-[340px] md:h-[340px] lg:w-[400px] lg:h-[400px] shrink-0 z-10 lg:translate-x-4">
-              <div className="w-full h-full rounded-full overflow-hidden border-[6px] border-white shadow-[0_0_0_3px_#3BA083,0_0_60px_15px_rgba(255,255,255,0.9)] relative z-10">
+              <div className="w-full h-full rounded-full overflow-hidden shadow-[0_0_0_3px_#3BA083,0_0_60px_15px_rgba(255,255,255,0.9)] relative z-10">
                 <Image
                   src="/assets/images/estates/globe.webp"
                   alt="Fractional Estate Ownership Process Villa"
