@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
+import Link from "next/link";
 import { motion, AnimatePresence, type Variants } from "framer-motion";
 import { MapPinIcon, ShareIcon, StarIcon } from "@/components/VectorImages";
 
@@ -11,6 +12,9 @@ import { useGetAssetsQuery } from "@/store/api/assetApi";
 import { CATEGORIES } from "@/data/propertyData";
 import { useCurrency } from "@/providers/CurrencyProvider";
 import { useI18n } from "@/providers/LocaleProvider";
+import { useWishlist } from "@/providers/WishlistProvider";
+import WishlistHeartButton from "@/components/dashboard/investor/WishlistHeartButton";
+
 import { API_URL } from "@/constants";
 
 const CATEGORY_MAP: Record<string, string> = {
@@ -131,6 +135,8 @@ export default function MarketplacePage() {
     const [searchQuery, setSearchQuery] = useState("");
     const [debouncedSearch, setDebouncedSearch] = useState("");
     const [copiedId, setCopiedId] = useState<string | null>(null);
+
+    const { wishlistCount, isLoggedInInvestor } = useWishlist();
 
     useEffect(() => {
         const t = setTimeout(() => setDebouncedSearch(searchQuery), 400);
@@ -379,6 +385,23 @@ export default function MarketplacePage() {
                                 {t("Clear")}
                             </button>
                         )}
+
+                        {isLoggedInInvestor && (
+                            <Link
+                                href="/dashboard/investor/wishlist"
+                                className="flex items-center gap-1.5 px-3 py-2 rounded-md text-xs font-bold text-[var(--header-text)] bg-[var(--field-surface)] border border-[var(--sidebar-border)] hover:border-[var(--sidebar-active-text)]/40 transition-all shrink-0 no-underline"
+                            >
+                                <svg className="w-3.5 h-3.5 text-[#FF4D6D]" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M19.5 12.572l-7.5 7.428l-7.5 -7.428a5 5 0 1 1 7.5 -6.566a5 5 0 1 1 7.5 6.572" />
+                                </svg>
+                                <span>Saved</span>
+                                {wishlistCount > 0 && (
+                                    <span className="px-1.5 py-0.2 rounded-full text-[10px] font-extrabold bg-[#FF4D6D]/20 text-[#FF4D6D]">
+                                        {wishlistCount}
+                                    </span>
+                                )}
+                            </Link>
+                        )}
                     </div>
 
                     {!isLoading && (
@@ -446,6 +469,7 @@ export default function MarketplacePage() {
                                 const total = property.totalFractions || 1;
                                 const available = property.availableFractions ?? total;
                                 const fundedPct = Math.max(0, Math.min(100, Math.round(((total - available) / total) * 100)));
+                                const isSoldOut = available <= 0 || fundedPct >= 100;
 
                                 const riskColor =
                                     property.riskRating === "LOW"
@@ -489,17 +513,32 @@ export default function MarketplacePage() {
                                                 {t("{risk} RISK", { risk: t(property.riskRating || "") })}
                                             </span>
 
-                                            <button
-                                                onClick={(e) => handleCardShare(e, property.id)}
-                                                className="absolute top-3 right-3 edit-icon-btn z-30 pointer-events-auto p-2 rounded-full bg-black/50 text-white hover:bg-neutral-800 transition-all border border-white/10 backdrop-blur-md shadow-sm flex items-center justify-center cursor-pointer group"
-                                                aria-label="Share property"
-                                            >
-                                                {copiedId === property.id ? (
-                                                    <span className="text-[10px] font-bold px-1.5 text-[#00DAAF]">{t("Copied!")}</span>
-                                                ) : (
-                                                    <ShareIcon className="w-4 h-4 text-white group-hover:text-[#00DAAF] transition-colors" />
-                                                )}
-                                            </button>
+                                            <div className="absolute top-3 right-3 flex items-center gap-1.5 z-30 pointer-events-auto">
+                                                <WishlistHeartButton
+                                                    assetId={property.id}
+                                                    assetTitle={property.title}
+                                                    size="md"
+                                                />
+                                                <button
+                                                    onClick={(e) => handleCardShare(e, property.id)}
+                                                    className="edit-icon-btn p-2 rounded-full bg-black/50 text-white hover:bg-neutral-800 transition-all border border-white/10 backdrop-blur-md shadow-sm flex items-center justify-center cursor-pointer group"
+                                                    aria-label="Share property"
+                                                >
+                                                    {copiedId === property.id ? (
+                                                        <span className="text-[10px] font-bold px-1.5 text-[#00DAAF]">{t("Copied!")}</span>
+                                                    ) : (
+                                                        <ShareIcon className="w-4 h-4 text-white group-hover:text-[#00DAAF] transition-colors" />
+                                                    )}
+                                                </button>
+                                            </div>
+
+                                            {isSoldOut && (
+                                                <div className="absolute inset-0 bg-black/40 backdrop-blur-[1px] flex items-center justify-center z-10 pointer-events-none">
+                                                    <span className="px-3.5 py-1.5 rounded-full text-xs font-black uppercase tracking-wider bg-red-600 text-white shadow-xl border border-red-400/40">
+                                                        {t("Sold Out")}
+                                                    </span>
+                                                </div>
+                                            )}
                                         </div>
 
                                         <div className="p-5 sm:p-6">
@@ -553,7 +592,7 @@ export default function MarketplacePage() {
                                             <div className="mb-5">
                                                 <div className="flex justify-between items-center mb-2 text-[12px] font-bold text-[var(--color-text-muted)]">
                                                     <span>{fundedPct}% {t("funded")}</span>
-                                                    <span>{available?.toLocaleString()} {t("left")}</span>
+                                                    <span>{isSoldOut ? t("Sold Out") : `${available?.toLocaleString()} ${t("left")}`}</span>
                                                 </div>
                                                 <div className="w-full h-2 bg-[var(--sidebar-active-text)]/15 rounded-full overflow-hidden">
                                                     <motion.div

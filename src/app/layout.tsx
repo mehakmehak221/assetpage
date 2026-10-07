@@ -54,6 +54,7 @@ import { LocaleProvider } from "@/providers/LocaleProvider";
 import GlobalToast from "@/components/GlobalToast";
 import Script from "next/script";
 import TrackingBootstrap from "@/components/TrackingBootstrap";
+import { WishlistProvider } from "@/providers/WishlistProvider";
 
 export default async function RootLayout({ children }: { children: ReactNode }) {
   const locale = await getServerLocale();
@@ -78,11 +79,13 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
         <LocaleProvider initialLocale={locale}>
           <CurrencyProvider>
             <StoreProvider>
-              <GlobalToast />
-              <Suspense fallback={null}>
-                <TrackingBootstrap />
-              </Suspense>
-              {children}
+              <WishlistProvider>
+                <GlobalToast />
+                <Suspense fallback={null}>
+                  <TrackingBootstrap />
+                </Suspense>
+                {children}
+              </WishlistProvider>
             </StoreProvider>
           </CurrencyProvider>
         </LocaleProvider>

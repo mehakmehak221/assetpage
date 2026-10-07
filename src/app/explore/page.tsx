@@ -10,6 +10,7 @@ import { Country, State, City } from "country-state-city";
 import { API_URL } from "@/constants";
 import { MapPinIcon, TrendingUpIcon, VerifiedIcon, SecondaryMarketplaceIcon, ShareIcon, StarIcon } from "@/components/VectorImages";
 import Link from "next/link";
+import WishlistHeartButton from "@/components/dashboard/investor/WishlistHeartButton";
 
 import { useCurrency } from "@/providers/CurrencyProvider";
 import { useI18n } from "@/providers/LocaleProvider";
@@ -351,6 +352,7 @@ export default function ExplorePage() {
                                 const total = property.totalFractions || 1;
                                 const available = property.availableFractions || 0;
                                 const fundedPercentage = Math.max(0, Math.min(100, Math.round(((total - available) / total) * 100)));
+                                const isSoldOut = available <= 0 || fundedPercentage >= 100;
                                 const riskLevel = (property.riskRating || "MEDIUM").toString().toUpperCase();
 
                                 const detailHref = `/assets/${property.id}`;
@@ -403,24 +405,39 @@ export default function ExplorePage() {
                                                     {t("{risk} RISK", { risk: t(riskLevel) })}
                                                 </span>
 
-                                                <button
-                                                    onClick={(e) => {
-                                                        e.preventDefault();
-                                                        e.stopPropagation();
-                                                        const url = `${window.location.origin}/assets/${property.id}`;
-                                                        navigator.clipboard.writeText(url);
-                                                        setCopiedId(property.id);
-                                                        setTimeout(() => setCopiedId(null), 2000);
-                                                    }}
-                                                    className="absolute top-3 right-3 edit-icon-btn z-30 pointer-events-auto p-2 rounded-full bg-black/50 text-white hover:bg-neutral-800 transition-all border border-white/10 backdrop-blur-md shadow-sm flex items-center justify-center cursor-pointer group"
-                                                    aria-label="Share property"
-                                                >
-                                                    {copiedId === property.id ? (
-                                                        <span className="text-[10px] font-bold px-1.5 text-[#00DAAF]">Copied!</span>
-                                                    ) : (
-                                                        <ShareIcon className="w-4 h-4 text-white group-hover:text-[#00DAAF] transition-colors" />
-                                                    )}
-                                                </button>
+                                                <div className="absolute top-3 right-3 flex items-center gap-1.5 z-30 pointer-events-auto">
+                                                    <WishlistHeartButton
+                                                        assetId={property.id}
+                                                        assetTitle={property.title}
+                                                        size="md"
+                                                    />
+                                                    <button
+                                                        onClick={(e) => {
+                                                            e.preventDefault();
+                                                            e.stopPropagation();
+                                                            const url = `${window.location.origin}/assets/${property.id}`;
+                                                            navigator.clipboard.writeText(url);
+                                                            setCopiedId(property.id);
+                                                            setTimeout(() => setCopiedId(null), 2000);
+                                                        }}
+                                                        className="edit-icon-btn p-2 rounded-full bg-black/50 text-white hover:bg-neutral-800 transition-all border border-white/10 backdrop-blur-md shadow-sm flex items-center justify-center cursor-pointer group"
+                                                        aria-label="Share property"
+                                                    >
+                                                        {copiedId === property.id ? (
+                                                            <span className="text-[10px] font-bold px-1.5 text-[#00DAAF]">Copied!</span>
+                                                        ) : (
+                                                            <ShareIcon className="w-4 h-4 text-white group-hover:text-[#00DAAF] transition-colors" />
+                                                        )}
+                                                    </button>
+                                                </div>
+
+                                                {isSoldOut && (
+                                                    <div className="absolute inset-0 bg-black/40 backdrop-blur-[1px] flex items-center justify-center z-10 pointer-events-none">
+                                                        <span className="px-3.5 py-1.5 rounded-full text-xs font-black uppercase tracking-wider bg-red-600 text-white shadow-xl border border-red-400/40">
+                                                            Sold Out
+                                                        </span>
+                                                    </div>
+                                                )}
                                             </div>
 
 
@@ -467,7 +484,7 @@ export default function ExplorePage() {
                                                 <div className="mb-6">
                                                     <div className="flex justify-between items-center mb-2 text-[12px] font-bold text-neutral-400">
                                                         <span>{t("{percent}% funded", { percent: fundedPercentage })}</span>
-                                                        <span>{t("{count} left", { count: property.availableFractions?.toLocaleString() })}</span>
+                                                        <span>{isSoldOut ? t("Sold Out") : t("{count} left", { count: property.availableFractions?.toLocaleString() })}</span>
                                                     </div>
                                                     <div className="w-full h-2.5 bg-[#00DAAF]/20 rounded-full overflow-hidden">
                                                         <motion.div

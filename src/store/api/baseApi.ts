@@ -82,7 +82,11 @@ const baseQueryWithAuth: BaseQueryFn<
               localStorage.removeItem('access_token');
               localStorage.removeItem('isLoggedIn');
               localStorage.removeItem('userType');
-              window.location.href = '/sign-in?clear=true';
+              const currentPath = window.location.pathname;
+              const isAlreadyAuth = currentPath.includes('/sign-in') || currentPath.includes('/sign-up') || currentPath.includes('/forgot-password');
+              if (!isAlreadyAuth) {
+                window.location.href = '/sign-in?clear=true';
+              }
               setTimeout(() => { isHandlingAuthError = false; }, 3000);
             }
           }
@@ -102,7 +106,7 @@ export const baseApi = createApi({
     'User', 'Post', 'Kyb', 'Kyc', 'Investment', 'SecondaryMarketplace',
     'MySecondaryListings', 'PendingApprovals', 'Certificates', 'Commission',
     'PartnerFinance', 'Payout', 'Asset', 'AssetShare', 'Lead', 'LeadNote', 'FollowUp', 'LeadActivity',
-    'Support', 'Rewards', 'ReferralLink', 'InvestorReferral', 'Wallet',
+    'Support', 'Rewards', 'ReferralLink', 'InvestorReferral', 'Wallet', 'Wishlist',
   ],
   endpoints: () => ({}),
 });

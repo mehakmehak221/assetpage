@@ -12,6 +12,7 @@ import KYCModal from "@/components/dashboard/KYCModal";
 import ConfirmationModal from "@/components/dashboard/ConfirmationModal";
 import PaymentModal from "@/components/dashboard/PaymentModal";
 import PropertyShareModal from "@/components/dashboard/investor/PropertyShareModal";
+import WishlistHeartButton from "@/components/dashboard/investor/WishlistHeartButton";
 
 import {
     useGetAssetByIdQuery,
@@ -165,6 +166,7 @@ export default function PropertyDetailPage() {
         : "/assets/images/content/img_ext_0.jpeg";
 
     const fundedPercentage = Math.round(((property.totalFractions - property.availableFractions) / property.totalFractions) * 100);
+    const isSoldOut = (property.availableFractions ?? 1) <= 0 || fundedPercentage >= 100;
 
     const documents = [
         { name: t("Ownership Proof / Backing Document"), url: property.titleDeedUrl },
@@ -425,11 +427,17 @@ export default function PropertyDetailPage() {
                                 <span className="min-w-0 break-words">{property.location}</span>
                             </div>
                         </div>
-                        {/* Share Button & Modal */}
-                        <div className="w-full sm:w-auto">
+                        {/* Action Buttons: Wishlist & Share */}
+                        <div className="w-full sm:w-auto flex items-center justify-end gap-2.5">
+                            <WishlistHeartButton
+                                assetId={assetId}
+                                assetTitle={property.title}
+                                size="md"
+                                variant="button"
+                            />
                             <button
                                 onClick={() => setIsShareDropdownOpen(true)}
-                                className="flex w-full sm:w-auto items-center justify-center gap-2 px-4 py-2 rounded-xl bg-[var(--sidebar-bg)] border border-[var(--sidebar-border)] text-sm font-semibold text-[var(--header-text)] hover:bg-[var(--card-surface)] transition-all cursor-pointer shadow-sm"
+                                className="flex-1 sm:flex-initial flex items-center justify-center gap-2 px-4 py-2 rounded-xl bg-[var(--sidebar-bg)] border border-[var(--sidebar-border)] text-sm font-semibold text-[var(--header-text)] hover:bg-[var(--card-surface)] transition-all cursor-pointer shadow-sm"
                             >
                                 <ShareIcon className="w-4 h-4 text-[var(--sidebar-active-text)]" />
                                 {t("Share")}
@@ -492,7 +500,7 @@ export default function PropertyDetailPage() {
                     <div className="bg-[var(--sidebar-bg)] border border-[var(--sidebar-border)] rounded-[24px] p-5 sm:p-6 mb-6 shadow-sm">
                         <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2 mb-4">
                             <span className="text-[11px] font-bold uppercase tracking-[1.5px] text-[var(--color-text-muted)]">{t("Funding Progress")}</span>
-                            <span className="text-sm font-bold text-[var(--sidebar-active-text)]">{t("{percent}% funded", { percent: fundedPercentage })}</span>
+                            <span className="text-sm font-bold text-[var(--sidebar-active-text)]">{isSoldOut ? `100% ${t("funded")} (${t("Sold Out")})` : t("{percent}% funded", { percent: fundedPercentage })}</span>
                         </div>
                         <div className="w-full h-2.5 bg-[var(--card-surface)] border border-[var(--sidebar-border)] rounded-full overflow-hidden mb-4">
                             <motion.div
@@ -503,7 +511,7 @@ export default function PropertyDetailPage() {
                             />
                         </div>
                         <div className="flex justify-between items-center text-[13px] font-bold">
-                            <span className="text-[var(--color-text-muted)]">{t("{count} fractions remaining", { count: property.availableFractions?.toLocaleString() })}</span>
+                            <span className="text-[var(--color-text-muted)]">{isSoldOut ? t("Sold Out") : t("{count} fractions remaining", { count: property.availableFractions?.toLocaleString() })}</span>
                             <span className="text-[var(--sidebar-active-text)]">
                                 {(
                                     parseFloat(property.expectedYield || 0) +
@@ -596,7 +604,7 @@ export default function PropertyDetailPage() {
                                         </div>
                                         <div>
                                             <span className="text-[10px] uppercase tracking-wider text-[var(--color-text-muted)]/60 font-semibold block mb-0.5">{t("Available Fractions")}</span>
-                                            <span className="text-sm font-bold text-[var(--header-text)]">{property.availableFractions?.toLocaleString()}</span>
+                                            <span className="text-sm font-bold text-[var(--header-text)]">{isSoldOut ? t("Sold Out") : property.availableFractions?.toLocaleString()}</span>
                                         </div>
                                     </div>
                                 </div>
