@@ -197,8 +197,8 @@ export default function ExplorePage() {
                                         key={type}
                                         onClick={() => setSaleTypeFilter(type)}
                                         className={`relative flex-1 sm:flex-initial px-3.5 sm:px-5 py-2 rounded-md text-xs font-bold transition-colors duration-300 cursor-pointer border-0 bg-transparent z-10 flex items-center justify-center gap-1.5 whitespace-nowrap ${isSelected
-                                                ? "text-[#00B28F]"
-                                                : "text-neutral-500 hover:text-neutral-900"
+                                            ? "text-[#00B28F]"
+                                            : "text-neutral-500 hover:text-neutral-900"
                                             }`}
                                     >
                                         {isSelected && (
@@ -213,8 +213,8 @@ export default function ExplorePage() {
                                             : type === "PREMIUM"
                                                 ? (
                                                     <span className="inline-flex items-center gap-1.5">
-                                                        <StarIcon className="w-3.5 h-3.5 fill-current" />
-                                                        GloFi Premium
+                                                        <StarIcon className="w-3.5 h-3.5 fill-amber-400 text-amber-400 shrink-0" />
+                                                        {t("Premium")}
                                                     </span>
                                                 )
                                                 : t("Whole Properties")}
@@ -362,7 +362,7 @@ export default function ExplorePage() {
                                         key={property.id}
                                         variants={cardVariants}
                                         whileHover={{ y: -6 }}
-                                        className="bg-white border border-neutral-200/60 rounded-md overflow-hidden hover:border-[#00DAAF]/30 transition-all duration-500 group shadow-sm hover:shadow-md relative"
+                                        className="bg-white border border-neutral-200/60 rounded-md overflow-hidden hover:border-[#00DAAF]/30 transition-all duration-500 group shadow-sm hover:shadow-md relative isolate"
                                     >
                                         <Link
                                             href={detailHref}

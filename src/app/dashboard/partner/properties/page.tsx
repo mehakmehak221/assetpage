@@ -460,8 +460,8 @@ export default function PartnerPropertiesPage() {
                                         key={type}
                                         onClick={() => setSaleTypeFilter(type)}
                                         className={`relative px-4 py-1.5 rounded-md text-xs font-bold transition-all duration-200 cursor-pointer border ${isSelected
-                                                ? "bg-[var(--sidebar-active-bg)] text-[var(--sidebar-active-text)] border-[var(--sidebar-active-text)]/30 shadow-sm"
-                                                : "bg-[var(--card-surface)] text-[var(--color-text-muted)] border-[var(--sidebar-border)] hover:text-[var(--foreground)] hover:border-[var(--sidebar-border)]/80"
+                                            ? "bg-[var(--sidebar-active-bg)] text-[var(--sidebar-active-text)] border-[var(--sidebar-active-text)]/30 shadow-sm"
+                                            : "bg-[var(--card-surface)] text-[var(--color-text-muted)] border-[var(--sidebar-border)] hover:text-[var(--foreground)] hover:border-[var(--sidebar-border)]/80"
                                             }`}
                                     >
                                         {type === "ALL"
@@ -471,7 +471,7 @@ export default function PartnerPropertiesPage() {
                                                 : type === "PREMIUM"
                                                     ? (
                                                         <span className="inline-flex items-center gap-1">
-                                                            <StarIcon className="w-3 h-3 fill-current" />
+                                                            <StarIcon className="w-3 h-3 fill-amber-400 text-amber-400 shrink-0" />
                                                             Premium
                                                         </span>
                                                     )

@@ -25,8 +25,8 @@ export const HeartIcon = ({
       <svg
         className={className}
         viewBox="0 0 24 24"
-        fill="#FF4D6D"
-        stroke="#FF4D6D"
+        fill="#EF4444"
+        stroke="#EF4444"
         strokeWidth="1.5"
         strokeLinecap="round"
         strokeLinejoin="round"
@@ -118,11 +118,10 @@ export default function WishlistHeartButton({
         whileHover={{ scale: 1.02 }}
         onClick={handleClick}
         disabled={isToggling}
-        className={`flex items-center justify-center gap-2 px-4 py-2 rounded-xl transition-all duration-200 cursor-pointer shadow-sm border ${
-          wishlisted
-            ? "bg-[#FF4D6D]/15 border-[#FF4D6D]/40 text-[#FF4D6D] hover:bg-[#FF4D6D]/25"
-            : "bg-[var(--sidebar-bg)] border-[var(--sidebar-border)] text-[var(--header-text)] hover:bg-[var(--card-surface)]"
-        } ${className}`}
+        className={`flex items-center justify-center gap-2 px-4 py-2 rounded-xl transition-all duration-200 cursor-pointer shadow-sm border ${wishlisted
+          ? "bg-[#EF4444]/15 border-[#EF4444]/40 text-[#EF4444] hover:bg-[#EF4444]/25"
+          : "bg-[var(--sidebar-bg)] border-[var(--sidebar-border)] text-[var(--header-text)] hover:bg-[var(--card-surface)]"
+          } ${className}`}
         aria-label={wishlisted ? "Remove from wishlist" : "Add to wishlist"}
         title={wishlisted ? "Remove from saved properties" : "Save property to wishlist"}
       >
@@ -132,9 +131,8 @@ export default function WishlistHeartButton({
         >
           <HeartIcon
             filled={wishlisted}
-            className={`${iconSizes[size]} ${
-              wishlisted ? "text-[#FF4D6D]" : "text-[var(--sidebar-active-text)]"
-            }`}
+            className={`${iconSizes[size]} ${wishlisted ? "text-[#EF4444]" : "text-[var(--sidebar-active-text)]"
+              }`}
           />
         </motion.div>
         <span className="text-sm font-semibold">
@@ -157,11 +155,10 @@ export default function WishlistHeartButton({
       whileHover={{ scale: 1.1 }}
       onClick={handleClick}
       disabled={isToggling}
-      className={`rounded-full transition-all duration-200 flex items-center justify-center cursor-pointer pointer-events-auto backdrop-blur-md shadow-md border ${
-        wishlisted
-          ? "bg-black/75 text-[#FF4D6D] border-[#FF4D6D]/50 hover:bg-black/90 shadow-[0_0_12px_rgba(255,77,109,0.35)]"
-          : "bg-black/60 text-white border-white/20 hover:bg-black/80 hover:text-[#FF4D6D] hover:border-[#FF4D6D]/40"
-      } ${buttonDimensions[size]} ${className}`}
+      className={`rounded-full transition-all duration-200 flex items-center justify-center cursor-pointer pointer-events-auto backdrop-blur-md shadow-md border ${wishlisted
+        ? "bg-black/75 text-[#EF4444] border-[#EF4444]/50 hover:bg-black/90 shadow-[0_0_12px_rgba(239,68,68,0.4)]"
+        : "bg-black/60 text-white border-white/20 hover:bg-black/80 hover:text-[#EF4444] hover:border-[#EF4444]/40"
+        } ${buttonDimensions[size]} ${className}`}
       aria-label={wishlisted ? "Remove from wishlist" : "Add to wishlist"}
       title={wishlisted ? "Remove from saved properties" : "Save property to wishlist"}
     >

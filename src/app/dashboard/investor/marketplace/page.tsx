@@ -75,12 +75,12 @@ function FilterDropdown({
     const selected = options.find((o) => o.value === value);
 
     return (
-        <div className="relative w-full sm:w-auto" ref={ref}>
+        <div className={`relative w-full sm:w-auto ${open ? "z-50" : "z-10"}`} ref={ref}>
             <button
                 onClick={() => setOpen((p) => !p)}
                 className={`w-full sm:w-auto flex items-center justify-between sm:justify-start gap-2 px-3.5 sm:px-4 py-2 rounded-md text-xs font-bold border transition-all cursor-pointer ${value
-                        ? "bg-[var(--sidebar-active-bg)] text-[var(--sidebar-active-text)] border-[var(--sidebar-active-text)]/30"
-                        : "bg-[var(--field-surface)] text-[var(--color-text-muted)] border-[var(--sidebar-border)] hover:border-[var(--sidebar-active-text)]/30 hover:text-[var(--header-text)]"
+                    ? "bg-[var(--sidebar-active-bg)] text-[var(--sidebar-active-text)] border-[var(--sidebar-active-text)]/30"
+                    : "bg-[var(--field-surface)] text-[var(--color-text-muted)] border-[var(--sidebar-border)] hover:border-[var(--sidebar-active-text)]/30 hover:text-[var(--header-text)]"
                     }`}
             >
                 <span className="truncate">{selected ? selected.label : placeholder}</span>
@@ -99,7 +99,7 @@ function FilterDropdown({
                         animate={{ opacity: 1, y: 0, scale: 1 }}
                         exit={{ opacity: 0, y: -6, scale: 0.97 }}
                         transition={{ duration: 0.15 }}
-                        className={`absolute z-50 top-[calc(100%+6px)] ${align === "right" ? "right-0" : "left-0"} min-w-[160px] sm:min-w-[180px] w-full sm:w-auto bg-[var(--card-surface)] border border-[var(--sidebar-border)] rounded-md shadow-2xl overflow-hidden`}
+                        className={`absolute z-[100] top-[calc(100%+6px)] ${align === "right" ? "right-0" : "left-0"} min-w-[160px] sm:min-w-[180px] w-full sm:w-auto bg-[var(--card-surface)] border border-[var(--sidebar-border)] rounded-md shadow-2xl overflow-hidden`}
                     >
                         {options.map((opt) => (
                             <button
@@ -264,8 +264,8 @@ export default function MarketplacePage() {
                                 key={type}
                                 onClick={() => setSaleTypeFilter(type)}
                                 className={`relative flex-1 sm:flex-initial px-3.5 sm:px-6 py-2 sm:py-2.5 rounded-md text-xs font-bold transition-colors duration-300 cursor-pointer border-0 bg-transparent z-10 flex items-center justify-center gap-1.5 whitespace-nowrap ${isSelected
-                                        ? "text-[var(--sidebar-active-text)]"
-                                        : "text-[var(--color-text-muted)] hover:text-[var(--header-text)]"
+                                    ? "text-[var(--sidebar-active-text)]"
+                                    : "text-[var(--color-text-muted)] hover:text-[var(--header-text)]"
                                     }`}
                             >
                                 {isSelected && (
@@ -280,8 +280,8 @@ export default function MarketplacePage() {
                                     : type === "PREMIUM"
                                         ? (
                                             <span className="inline-flex items-center gap-1.5">
-                                                <StarIcon className="w-3.5 h-3.5 fill-current" />
-                                                GloFi Premium
+                                                <StarIcon className="w-3.5 h-3.5 fill-amber-400 text-amber-400 shrink-0" />
+                                                {t("Premium")}
                                             </span>
                                         )
                                         : t("Whole Properties")}
@@ -296,7 +296,7 @@ export default function MarketplacePage() {
                 initial={{ opacity: 0, y: -12 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.4 }}
-                className="max-w-6xl mx-auto mb-6 bg-[var(--card-surface)] border border-[var(--sidebar-border)] rounded-md p-4 sm:p-6 shadow-sm backdrop-blur-md relative z-20"
+                className="max-w-6xl mx-auto mb-6 bg-[var(--card-surface)] border border-[var(--sidebar-border)] rounded-md p-4 sm:p-6 shadow-sm backdrop-blur-md relative z-40"
             >
                 {/* Category tabs */}
                 <div className="flex overflow-x-auto no-scrollbar sm:flex-wrap gap-1.5 sm:gap-2 mb-4 relative z-10 pb-1 sm:pb-0">
@@ -307,8 +307,8 @@ export default function MarketplacePage() {
                                 key={cat}
                                 onClick={() => setActiveCategory(cat)}
                                 className={`relative px-3.5 sm:px-4 py-1.5 rounded-md text-xs font-semibold whitespace-nowrap shrink-0 transition-colors duration-200 cursor-pointer border-0 bg-transparent ${isSelected
-                                        ? "text-[var(--sidebar-active-text)]"
-                                        : "text-[var(--color-text-muted)] hover:text-[var(--header-text)]"
+                                    ? "text-[var(--sidebar-active-text)]"
+                                    : "text-[var(--color-text-muted)] hover:text-[var(--header-text)]"
                                     }`}
                             >
                                 {isSelected && (
@@ -391,12 +391,12 @@ export default function MarketplacePage() {
                                 href="/dashboard/investor/wishlist"
                                 className="flex items-center gap-1.5 px-3 py-2 rounded-md text-xs font-bold text-[var(--header-text)] bg-[var(--field-surface)] border border-[var(--sidebar-border)] hover:border-[var(--sidebar-active-text)]/40 transition-all shrink-0 no-underline"
                             >
-                                <svg className="w-3.5 h-3.5 text-[#FF4D6D]" viewBox="0 0 24 24" fill="currentColor">
+                                <svg className="w-3.5 h-3.5 text-[#EF4444]" viewBox="0 0 24 24" fill="currentColor">
                                     <path d="M19.5 12.572l-7.5 7.428l-7.5 -7.428a5 5 0 1 1 7.5 -6.566a5 5 0 1 1 7.5 6.572" />
                                 </svg>
                                 <span>Saved</span>
                                 {wishlistCount > 0 && (
-                                    <span className="px-1.5 py-0.2 rounded-full text-[10px] font-extrabold bg-[#FF4D6D]/20 text-[#FF4D6D]">
+                                    <span className="px-1.5 py-0.2 rounded-full text-[10px] font-extrabold bg-[#EF4444]/20 text-[#EF4444]">
                                         {wishlistCount}
                                     </span>
                                 )}
@@ -484,7 +484,7 @@ export default function MarketplacePage() {
                                         variants={cardVariants}
                                         layout
                                         onClick={() => router.push(`/dashboard/investor/marketplace/${property.id}`)}
-                                        className="bg-[var(--marketplace-card-bg)] border border-[var(--marketplace-card-border)] rounded-md overflow-hidden hover:border-[var(--sidebar-active-text)]/25 transition-all duration-300 group cursor-pointer shadow-sm hover:shadow-md"
+                                        className="relative isolate bg-[var(--marketplace-card-bg)] border border-[var(--marketplace-card-border)] rounded-md overflow-hidden hover:border-[var(--sidebar-active-text)]/25 transition-all duration-300 group cursor-pointer shadow-sm hover:shadow-md"
                                     >
                                         <div className="relative h-64 sm:h-72 overflow-hidden">
                                             <Image
@@ -574,7 +574,7 @@ export default function MarketplacePage() {
                                                         </p>
                                                     </div>
                                                     <div className="min-w-0 px-2 relative group/tip flex flex-col justify-center">
-                                                        <p 
+                                                        <p
                                                             className="text-[10px] sm:text-[11px] font-bold text-[var(--color-text-muted)] mb-1 truncate cursor-default"
                                                             title={t("Potential Annual Return")}
                                                         >

@@ -258,9 +258,7 @@ export default function InvestorReferralsPage() {
         ) : !referralCode ? (
           <div className="rounded-xl border border-[var(--sidebar-border)] bg-[var(--background)] p-5 text-center text-sm text-[var(--color-text-muted)]">
             <p className="font-semibold text-[var(--foreground)]">Referral code not available</p>
-            <p className="text-xs mt-1">
-              Your account does not have a referral code assigned yet. Please contact support to generate an active code.
-            </p>
+
           </div>
         ) : (
           <div className="space-y-4">

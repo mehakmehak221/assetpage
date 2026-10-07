@@ -392,11 +392,11 @@ export default function NewListingForm({ onBack, editId, initialProperty = null 
             const fractionPrice = valuationNum / totalFractionsNum;
 
             if (valuationNum < 20000000) {
-                setErrorMsg("GloFi Premium listings require a minimum property valuation of ₹2,00,00,000 (₹2 Crore).");
+                setErrorMsg("Premium listings require a minimum property valuation of ₹2,00,00,000 (₹2 Crore).");
                 return;
             }
             if (fractionPrice < 100000) {
-                setErrorMsg("GloFi Premium listings require a minimum share price of ₹1,00,000 (₹1 Lakh). Please adjust valuation or total fractions.");
+                setErrorMsg("Premium listings require a minimum share price of ₹1,00,000 (₹1 Lakh). Please adjust valuation or total fractions.");
                 return;
             }
         }
@@ -644,12 +644,12 @@ export default function NewListingForm({ onBack, editId, initialProperty = null 
                                 >
                                     <option value="FRACTIONAL" className="bg-[var(--form-surface)] text-[var(--foreground)]">{t("Fractional")}</option>
                                     <option value="WHOLE" className="bg-[var(--form-surface)] text-[var(--foreground)]">{t("Whole")}</option>
-                                    <option value="PREMIUM" className="bg-[var(--form-surface)] text-[var(--foreground)]">{t("Premium (GloFi Premium)")}</option>
+                                    <option value="PREMIUM" className="bg-[var(--form-surface)] text-[var(--foreground)]">{t("Premium")}</option>
                                 </select>
                                 {formData.saleType === "PREMIUM" && (
                                     <p className="text-[11px] text-amber-500 font-semibold bg-amber-500/10 border border-amber-500/20 rounded px-2.5 py-1.5 mt-0.5 flex items-center gap-1.5">
                                         <StarIcon className="w-3.5 h-3.5 fill-amber-500 shrink-0" />
-                                        <span><strong>GloFi Premium:</strong> Requires minimum valuation of ₹2,00,00,000 (₹2 Cr) and minimum share/fraction price of ₹1,00,000 (₹1 Lakh).</span>
+                                        <span><strong>{t("Premium")}:</strong> Requires minimum valuation of ₹2,00,00,000 (₹2 Cr) and minimum share/fraction price of ₹1,00,000 (₹1 Lakh).</span>
                                     </p>
                                 )}
                             </div>
@@ -791,7 +791,7 @@ export default function NewListingForm({ onBack, editId, initialProperty = null 
                             </div>
                         </div>
 
-                                                <div className="flex flex-wrap gap-4 mb-8">
+                        <div className="flex flex-wrap gap-4 mb-8">
                             <UploadArea
                                 label="Ownership Proof / Backing Document"
                                 onUpload={(file) => handleFileUpload(file, 'titleDeedUrl')}
