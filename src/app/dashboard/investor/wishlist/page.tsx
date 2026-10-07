@@ -120,14 +120,15 @@ export default function WishlistPage() {
     setTimeout(() => setCopiedId(null), 2000);
   };
 
+
   return (
     <div className="p-4 sm:p-6 lg:p-8 bg-[var(--background)] min-h-screen text-[var(--color-text)]">
       <div className="max-w-6xl mx-auto">
-        {/* Header section */}
+
         <div className="mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
             <div className="flex items-center gap-2.5 mb-1">
-              <h1 className="text-2xl sm:text-3xl font-black text-[var(--header-text)] tracking-tight">
+              <h1 className="text-2xl sm:text-3xl font-bold text-[var(--header-text)] tracking-tight">
                 Saved Properties
               </h1>
               {wishlistCount > 0 && (

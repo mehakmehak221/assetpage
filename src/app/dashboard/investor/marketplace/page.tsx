@@ -244,7 +244,7 @@ export default function MarketplacePage() {
             </div>
 
             <div className="max-w-6xl mx-auto mb-5">
-                <h1 className="text-2xl sm:text-3xl font-black text-[var(--header-text)] tracking-tight mb-1">
+                <h1 className="text-2xl sm:text-3xl font-bold text-[var(--header-text)] tracking-tight mb-1">
                     {t("Discover Assets")}
                 </h1>
                 <p className="text-sm text-[var(--color-text-muted)] font-medium">
