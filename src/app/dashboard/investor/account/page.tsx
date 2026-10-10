@@ -4,9 +4,11 @@ import { useState, useMemo, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useGetProfileQuery, useUpdateProfileMutation } from "@/store/api/authApi";
 import { useGetMyCertificatesQuery } from "@/store/api/certificatesApi";
+import { useGetMyAgreementsQuery, useLazyGetAgreementDownloadUrlQuery } from "@/store/api/agreementApi";
 import { useGetKycStatusQuery } from "@/store/api/kycApi";
 import { useUploadFileMutation } from "@/store/api/fileApi";
 import SupportTicketComposer from "@/components/dashboard/SupportTicketComposer";
+import AgreementModal from "@/components/dashboard/investor/AgreementModal";
 import { useI18n } from "@/providers/LocaleProvider";
 import { API_URL } from "@/constants";
 import { Country } from "country-state-city";
@@ -16,8 +18,10 @@ import {
     useGetInvestorReferralQuery,
     useGetInvestorReferralSummaryQuery,
 } from "@/store/api/investorReferralApi";
+import { Agreement } from "@/types/agreement";
+import { SearchIcon } from "@/components/VectorImages";
 
-const TABS = ["Profile", "Wallet", "KYC", "Certificates", "Referrals", "Support"];
+const TABS = ["Profile", "Wallet", "KYC", "Certificates", "Agreements", "Referrals", "Support"];
 
 const tabContentVariants = {
     hidden: { opacity: 0, y: 10 },
@@ -32,9 +36,17 @@ export default function AccountPage() {
     const [copiedMessage, setCopiedMessage] = useState(false);
     const [copiedCode, setCopiedCode] = useState(false);
     const [isShareModalOpen, setIsShareModalOpen] = useState(false);
+    const [selectedAgreementId, setSelectedAgreementId] = useState<string | null>(null);
+    const [isAgreementModalOpen, setIsAgreementModalOpen] = useState(false);
+    const [activeDownloadingAgreement, setActiveDownloadingAgreement] = useState<{ id: string; action: "view" | "download" } | null>(null);
+    const [agreementSearchQuery, setAgreementSearchQuery] = useState("");
+    const [agreementStatusFilter, setAgreementStatusFilter] = useState("ALL");
+    const [copiedAgreementId, setCopiedAgreementId] = useState<string | null>(null);
 
     const { data: profileData, isLoading: profileLoading } = useGetProfileQuery();
     const { data: certsResponse, isLoading: certsLoading } = useGetMyCertificatesQuery();
+    const { data: agreementsData, isLoading: agreementsLoading } = useGetMyAgreementsQuery();
+    const [triggerAgreementDownload] = useLazyGetAgreementDownloadUrlQuery();
     const { data: kycData, isLoading: kycLoading } = useGetKycStatusQuery();
     const { data: referralInfo } = useGetInvestorReferralQuery();
     const { data: referralSummary } = useGetInvestorReferralSummaryQuery();
@@ -83,8 +95,93 @@ export default function AccountPage() {
         }
     };
 
-    const isLoading = profileLoading || (activeTab === "Certificates" && certsLoading) || (activeTab === "KYC" && kycLoading);
+    const isLoading = profileLoading || (activeTab === "Certificates" && certsLoading) || (activeTab === "KYC" && kycLoading) || (activeTab === "Agreements" && agreementsLoading);
     const certificates = certsResponse?.data || [];
+    const agreements: Agreement[] = Array.isArray(agreementsData) ? agreementsData : (agreementsData as any)?.data || [];
+
+    const filteredAgreements = useMemo(() => {
+        return agreements.filter((agr) => {
+            const matchesStatus =
+                agreementStatusFilter === "ALL" ||
+                (agreementStatusFilter === "ACTIVE" && agr.status === "GENERATED") ||
+                (agreementStatusFilter === "SIGNED" && agr.status === "SIGNED") ||
+                (agreementStatusFilter === "EXPIRED" && agr.status === "EXPIRED");
+
+            const assetTitle = agr.investment?.asset?.title || agr.investment?.asset?.name || "";
+            const agrNumber = agr.agreementNumber || "";
+            const invId = agr.investmentId || "";
+            const q = agreementSearchQuery.trim().toLowerCase();
+            const matchesSearch =
+                !q ||
+                agrNumber.toLowerCase().includes(q) ||
+                assetTitle.toLowerCase().includes(q) ||
+                invId.toLowerCase().includes(q);
+
+            return matchesStatus && matchesSearch;
+        });
+    }, [agreements, agreementStatusFilter, agreementSearchQuery]);
+
+    const handleCopyAgreementNumber = (agrNumber: string, e: React.MouseEvent) => {
+        e.stopPropagation();
+        navigator.clipboard.writeText(agrNumber);
+        setCopiedAgreementId(agrNumber);
+        setTimeout(() => setCopiedAgreementId(null), 2000);
+    };
+
+    const formatAgreementDate = (dateStr?: string) => {
+        if (!dateStr) return "-";
+        try {
+            const d = new Date(dateStr);
+            const day = d.toLocaleDateString("en-GB", { day: "2-digit" });
+            const month = d.toLocaleDateString("en-GB", { month: "short" });
+            const year = d.getFullYear();
+            const time = d.toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit", hour12: true });
+            return `${day} ${month} ${year}, ${time}`;
+        } catch {
+            return dateStr;
+        }
+    };
+
+    const handleAgreementPdfAction = async (agreement: Agreement, action: "view" | "download") => {
+        setActiveDownloadingAgreement({ id: agreement.id, action });
+        try {
+            const res = await triggerAgreementDownload(agreement.id).unwrap();
+            const url = res?.downloadUrl;
+            if (!url) throw new Error(t("Could not generate download link."));
+
+            if (action === "view") {
+                window.open(url, "_blank", "noopener,noreferrer");
+            } else {
+                const fileName = `${agreement.agreementNumber || "agreement"}-v${agreement.version || 1}.pdf`;
+                try {
+                    const fileRes = await fetch(url);
+                    if (!fileRes.ok) throw new Error("Failed to fetch file content");
+                    const blob = await fileRes.blob();
+                    const blobUrl = window.URL.createObjectURL(blob);
+                    const link = document.createElement("a");
+                    link.href = blobUrl;
+                    link.download = fileName;
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                    setTimeout(() => window.URL.revokeObjectURL(blobUrl), 1000);
+                } catch (fetchErr) {
+                    const link = document.createElement("a");
+                    link.href = url;
+                    link.download = fileName;
+                    link.target = "_blank";
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                }
+            }
+        } catch (err: any) {
+            console.error("Failed to download agreement:", err);
+            alert(err?.data?.message || err?.message || t("Failed to get agreement PDF."));
+        } finally {
+            setActiveDownloadingAgreement(null);
+        }
+    };
 
     const getShareUrl = () => {
         if (referralInfo?.referralLink) return referralInfo.referralLink;
@@ -578,6 +675,207 @@ ${code ? `Referral Code: ${code}\n` : ""}Start building your property portfolio 
                         </div>
                     )}
 
+                    {activeTab === "Agreements" && (
+                        <div className="max-w-4xl space-y-4">
+                            {/* Top Informational Banner */}
+                            <div className="bg-[var(--card-surface)] border border-[var(--sidebar-border)] rounded-2xl p-4 sm:p-5 flex items-start sm:items-center gap-4 shadow-sm">
+                                <div className="w-11 h-11 sm:w-12 sm:h-12 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center shrink-0 text-emerald-400">
+                                    <svg className="w-5 h-5 sm:w-6 sm:h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                                        <polyline points="9 12 11 14 15 10"></polyline>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <h3 className="text-sm sm:text-base font-bold text-[var(--header-text)] mb-1">
+                                        {t("Legal Investment Contracts")}
+                                    </h3>
+                                    <p className="text-xs text-[var(--color-text-muted)] leading-relaxed font-normal">
+                                        {t("Every completed purchase generates an investment agreement PDF, verifiable and downloadable.")}
+                                    </p>
+                                </div>
+                            </div>
+
+                            {/* Search Bar */}
+                            <div className="relative">
+                                <SearchIcon className="w-4 h-4 text-[var(--color-text-muted)] absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+                                <input
+                                    type="text"
+                                    placeholder={t("Search by property name or agreement ID...")}
+                                    value={agreementSearchQuery}
+                                    onChange={(e) => setAgreementSearchQuery(e.target.value)}
+                                    className="w-full pl-10 pr-4 py-3 rounded-xl bg-[var(--field-surface)] border border-[var(--sidebar-border)] text-xs text-[var(--foreground)] placeholder:text-[var(--color-text-muted)] focus:outline-none focus:border-[var(--sidebar-active-text)]/40 transition-colors"
+                                />
+                            </div>
+
+                            {/* Status Filter Pills */}
+                            <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none">
+                                {[
+                                    { key: "ALL", label: t("All") },
+                                    { key: "ACTIVE", label: t("Active") },
+                                    { key: "SIGNED", label: t("Signed") },
+                                    { key: "EXPIRED", label: t("Expired / Superseded") },
+                                ].map((tab) => (
+                                    <button
+                                        key={tab.key}
+                                        type="button"
+                                        onClick={() => setAgreementStatusFilter(tab.key)}
+                                        className={`px-4 py-2 rounded-full text-xs font-semibold whitespace-nowrap transition-all border cursor-pointer ${agreementStatusFilter === tab.key
+                                            ? "bg-[#00DAAF] text-black border-[#00DAAF] shadow-sm"
+                                            : "bg-[var(--field-surface)] text-[var(--color-text-muted)] border-[var(--sidebar-border)] hover:text-[var(--header-text)]"
+                                            }`}
+                                    >
+                                        {tab.label}
+                                    </button>
+                                ))}
+                            </div>
+
+                            {/* Agreements List / Loading / Empty */}
+                            {agreementsLoading ? (
+                                <div className="flex justify-center py-12">
+                                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[var(--color-primary-300)]"></div>
+                                </div>
+                            ) : filteredAgreements.length > 0 ? (
+                                <div className="space-y-4">
+                                    {filteredAgreements.map((agr) => {
+                                        const assetTitle = agr.investment?.asset?.title || agr.investment?.asset?.name || t("Property Asset");
+                                        const isViewing = activeDownloadingAgreement?.id === agr.id && activeDownloadingAgreement.action === "view";
+                                        const isDownloading = activeDownloadingAgreement?.id === agr.id && activeDownloadingAgreement.action === "download";
+                                        const agrNumber = agr.agreementNumber || `AGR-${agr.id.slice(0, 8).toUpperCase()}`;
+                                        const isCopied = copiedAgreementId === agrNumber;
+                                        const isActive = agr.status === "GENERATED";
+                                        const isSigned = agr.status === "SIGNED";
+
+                                        return (
+                                            <div
+                                                key={agr.id}
+                                                className="bg-[var(--card-surface)] border border-[var(--sidebar-border)] hover:border-[var(--sidebar-active-text)]/30 rounded-2xl p-4 sm:p-6 transition-all shadow-sm flex flex-col gap-3.5"
+                                            >
+                                                {/* Header Row: Agreement ID + Copy Button, Status Badge */}
+                                                <div className="flex items-center justify-between gap-2">
+                                                    <div className="flex items-center gap-2">
+                                                        <span className="text-sm sm:text-base font-bold font-mono text-[var(--header-text)] tracking-wide">
+                                                            {agrNumber}
+                                                        </span>
+                                                        <button
+                                                            type="button"
+                                                            onClick={(e) => handleCopyAgreementNumber(agrNumber, e)}
+                                                            className="p-1 text-[var(--color-text-muted)] hover:text-[var(--header-text)] transition-colors bg-transparent border-0 cursor-pointer"
+                                                            title={isCopied ? t("Copied!") : t("Copy Agreement ID")}
+                                                        >
+                                                            {isCopied ? (
+                                                                <svg className="w-4 h-4 text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                                                                    <polyline points="20 6 9 17 4 12"></polyline>
+                                                                </svg>
+                                                            ) : (
+                                                                <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                                                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                                                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                                                                </svg>
+                                                            )}
+                                                        </button>
+                                                    </div>
+
+                                                    <div>
+                                                        {isActive ? (
+                                                            <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-semibold tracking-wide bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                                                                <svg className="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
+                                                                    <polyline points="20 6 9 17 4 12"></polyline>
+                                                                </svg>
+                                                                {t("ACTIVE")}
+                                                            </span>
+                                                        ) : isSigned ? (
+                                                            <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-semibold tracking-wide bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                                                                <svg className="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
+                                                                    <polyline points="20 6 9 17 4 12"></polyline>
+                                                                </svg>
+                                                                {t("SIGNED")}
+                                                            </span>
+                                                        ) : (
+                                                            <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-medium bg-neutral-500/15 text-neutral-400 border border-neutral-500/20">
+                                                                {t("EXPIRED")}
+                                                            </span>
+                                                        )}
+                                                    </div>
+                                                </div>
+
+                                                {/* Version Chip */}
+                                                <div>
+                                                    <span className="text-[11px] font-medium bg-[var(--field-surface)] text-[var(--color-text-muted)] px-2.5 py-1 rounded-md border border-[var(--sidebar-border)] inline-block">
+                                                        {t("Version")} {agr.version || 1}
+                                                    </span>
+                                                </div>
+
+                                                {/* Property & Date Details */}
+                                                <div className="space-y-2 py-1">
+                                                    <div className="flex justify-between items-center text-xs sm:text-sm">
+                                                        <span className="text-[var(--color-text-muted)] font-normal">{t("Property Asset")}</span>
+                                                        <span className="font-semibold text-[var(--header-text)] text-right">{assetTitle}</span>
+                                                    </div>
+                                                    <div className="flex justify-between items-center text-xs sm:text-sm">
+                                                        <span className="text-[var(--color-text-muted)] font-normal">{t("Generated")}</span>
+                                                        <span className="font-normal text-[var(--color-text-muted)] text-right">
+                                                            {formatAgreementDate(agr.generatedAt || agr.createdAt)}
+                                                        </span>
+                                                    </div>
+                                                </div>
+
+                                                {/* Action Buttons */}
+                                                <div className="grid grid-cols-2 gap-3 pt-2">
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => handleAgreementPdfAction(agr, "view")}
+                                                        disabled={isViewing || isDownloading}
+                                                        className="w-full py-2.5 sm:py-3 px-3 rounded-xl bg-[var(--field-surface)] hover:bg-[var(--sidebar-active-bg)] border border-[var(--sidebar-border)] text-emerald-400 text-xs sm:text-sm font-semibold transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
+                                                    >
+                                                        {isViewing ? (
+                                                            <div className="w-4 h-4 border-2 border-emerald-400 border-t-transparent rounded-full animate-spin" />
+                                                        ) : (
+                                                            <svg className="w-4 h-4 text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                                                <circle cx="12" cy="12" r="3"></circle>
+                                                            </svg>
+                                                        )}
+                                                        <span>{t("View PDF")}</span>
+                                                    </button>
+
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => handleAgreementPdfAction(agr, "download")}
+                                                        disabled={isDownloading || isViewing}
+                                                        className="w-full py-2.5 sm:py-3 px-3 rounded-xl bg-[#00DAAF] hover:bg-[#00DAAF]/90 text-black text-xs sm:text-sm font-bold transition-all flex items-center justify-center gap-2 border-0 cursor-pointer shadow-sm disabled:opacity-50"
+                                                    >
+                                                        {isDownloading ? (
+                                                            <div className="w-4 h-4 border-2 border-black border-t-transparent rounded-full animate-spin" />
+                                                        ) : (
+                                                            <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                                                <polyline points="7 10 12 15 17 10"></polyline>
+                                                                <line x1="12" y1="15" x2="12" y2="3"></line>
+                                                            </svg>
+                                                        )}
+                                                        <span>{t("Download")}</span>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        );
+                                    })}
+                                </div>
+                            ) : (
+                                <div className="bg-[var(--card-surface)] border border-[var(--sidebar-border)] rounded-2xl p-10 flex flex-col items-center justify-center text-center">
+                                    <svg className="w-12 h-12 text-[var(--color-text-muted)]/30 mb-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                        <polyline points="14 2 14 8 20 8"></polyline>
+                                        <line x1="16" y1="13" x2="8" y2="13"></line>
+                                        <line x1="16" y1="17" x2="8" y2="17"></line>
+                                        <polyline points="10 9 9 9 8 9"></polyline>
+                                    </svg>
+                                    <h3 className="text-base font-bold text-[var(--header-text)] mb-1">{t("No agreements found")}</h3>
+                                    <p className="text-xs text-[var(--color-text-muted)]">{t("Your legal investment agreements will appear here once generated.")}</p>
+                                </div>
+                            )}
+                        </div>
+                    )}
+
                     {activeTab === "Referrals" && (
                         <div className="bg-[var(--card-surface)] border border-[var(--sidebar-border)] rounded-xl sm:rounded-2xl p-4 sm:p-6 lg:p-10 max-w-[900px] shadow-sm">
                             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6 sm:mb-8">
@@ -887,6 +1185,16 @@ ${code ? `Referral Code: ${code}\n` : ""}Start building your property portfolio 
                     </div>
                 )}
             </AnimatePresence>
+
+            {/* Agreement Details Modal */}
+            <AgreementModal
+                isOpen={isAgreementModalOpen}
+                onClose={() => {
+                    setIsAgreementModalOpen(false);
+                    setSelectedAgreementId(null);
+                }}
+                agreementId={selectedAgreementId}
+            />
         </div>
     );
 }

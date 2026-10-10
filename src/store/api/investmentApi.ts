@@ -42,7 +42,7 @@ export const investmentApi = baseApi.injectEndpoints({
         method: 'POST',
         body,
       }),
-      invalidatesTags: ['Investment', 'Asset', 'Certificates', 'InvestorReferral', 'Wallet'],
+      invalidatesTags: ['Investment', 'Asset', 'Certificates', 'InvestorReferral', 'Wallet', 'Agreements'],
     }),
     getInvestmentById: builder.query<any, string | number>({
       query: (id) => ({

@@ -11,6 +11,24 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: 'https',
+        hostname: 'api.glofiestates.com',
+        port: '',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'glofiestates.com',
+        port: '',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: '*.glofiestates.com',
+        port: '',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
         hostname: 'cdn-images-1.medium.com',
         port: '',
         pathname: '/**',
@@ -24,6 +42,18 @@ const nextConfig: NextConfig = {
       {
         protocol: 'https',
         hostname: 'aws-glofi-uploads.s3.ap-south-1.amazonaws.com',
+        port: '',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: '*.amazonaws.com',
+        port: '',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'images.unsplash.com',
         port: '',
         pathname: '/**',
       },

@@ -8,7 +8,9 @@ import ResaleModal from "@/components/dashboard/ResaleModal";
 import { useGetInvestmentsQuery, useGetPortfolioQuery } from "@/store/api/investmentApi";
 import { useGetKycStatusQuery } from "@/store/api/kycApi";
 import { useGetMyCertificatesQuery } from "@/store/api/certificatesApi";
+import { useGetMyAgreementsQuery } from "@/store/api/agreementApi";
 import { useGetMySecondaryListingsQuery, useDeleteSecondaryListingMutation } from "@/store/api/secondaryMarketApi";
+import AgreementModal from "@/components/dashboard/investor/AgreementModal";
 import { useI18n } from "@/providers/LocaleProvider";
 import { API_URL } from "@/constants";
 
@@ -35,10 +37,13 @@ const formatNumber = (val) => {
 
 export default function PortfolioPage() {
     const [selectedAsset, setSelectedAsset] = useState(null);
+    const [selectedAgreementId, setSelectedAgreementId] = useState(null);
+    const [isAgreementModalOpen, setIsAgreementModalOpen] = useState(false);
     const { data: investmentsData, isLoading: invLoading } = useGetInvestmentsQuery();
     const { data: portfolioData, isLoading: portLoading } = useGetPortfolioQuery();
     const { data: kycData, isLoading: kycLoading } = useGetKycStatusQuery();
     const { data: certsData, isLoading: certsLoading } = useGetMyCertificatesQuery();
+    const { data: agreementsData, isLoading: agreementsLoading } = useGetMyAgreementsQuery();
     const { data: listingsResponse, isLoading: listingsLoading } = useGetMySecondaryListingsQuery();
     const [deleteListing] = useDeleteSecondaryListingMutation();
     const [toast, setToast] = useState({ show: false, message: "", type: "success" });
@@ -56,6 +61,7 @@ export default function PortfolioPage() {
 
     const investmentsArray = Array.isArray(investmentsData) ? investmentsData : (investmentsData?.data || []);
     const certsArray = Array.isArray(certsData) ? certsData : (certsData?.data || []);
+    const agreementsArray = Array.isArray(agreementsData) ? agreementsData : ((agreementsData as any)?.data || []);
     const assetsList = portfolioData?.investments || investmentsArray;
     const secondaryListings = listingsResponse?.data || [];
 
@@ -75,8 +81,6 @@ export default function PortfolioPage() {
         }
     };
 
-
-
     const stats = [
         { label: t("Invested"), value: formatNumber(portfolioData?.totalInvested), change: "+₹0 this month", icon: DollarIcon },
         { label: t("Current Value"), value: formatNumber(portfolioData?.currentValue), change: "+0% overall", icon: TrendingUpIcon },
@@ -91,7 +95,6 @@ export default function PortfolioPage() {
             ? (propertyImage.startsWith('http') ? propertyImage : `${API_URL}/${propertyImage.replace(/^\//, '')}`)
             : "/assets/images/content/img_ext_0.jpeg";
 
-
         const certificate = certsArray?.find(c =>
             c.investmentId === inv.id ||
             c.assetId === asset.id ||
@@ -101,8 +104,15 @@ export default function PortfolioPage() {
         const certUrl = certificate?.pdfUrl || certificate?.fileUrl || certificate?.url || inv.certificateUrl || asset.certificateUrl;
         const fullCertUrl = certUrl ? (certUrl.startsWith('http') ? certUrl : `${API_URL}/${certUrl.replace(/^\//, '')}`) : null;
 
+        const agreement = agreementsArray?.find(a =>
+            a.investmentId === inv.id ||
+            a.investmentId === inv._id ||
+            a.investment?.id === inv.id
+        );
+
         return {
             id: inv.id || asset.id,
+            investmentId: inv.id,
             name: inv.assetTitle || asset.title || "Unknown Asset",
             image: imageUrl,
             fractions: inv.fractionsOwned || inv.fractions || 0,
@@ -113,6 +123,8 @@ export default function PortfolioPage() {
             status: inv.status,
             totalFractions: inv.totalFractions || asset.totalFractions || 100,
             certificateUrl: fullCertUrl,
+            agreementId: agreement?.id,
+            agreementNumber: agreement?.agreementNumber,
             saleType: asset.saleType || inv.saleType || 'FRACTIONAL'
         };
     });
@@ -233,6 +245,10 @@ export default function PortfolioPage() {
                                     key={asset.id}
                                     asset={asset}
                                     onResale={() => setSelectedAsset(asset)}
+                                    onOpenAgreement={(agrId) => {
+                                        setSelectedAgreementId(agrId);
+                                        setIsAgreementModalOpen(true);
+                                    }}
                                 />
                             ))
                         ) : (
@@ -261,6 +277,15 @@ export default function PortfolioPage() {
                 isOpen={!!selectedAsset}
                 onClose={() => setSelectedAsset(null)}
                 asset={selectedAsset}
+            />
+
+            <AgreementModal
+                isOpen={isAgreementModalOpen}
+                onClose={() => {
+                    setIsAgreementModalOpen(false);
+                    setSelectedAgreementId(null);
+                }}
+                agreementId={selectedAgreementId}
             />
         </div>
     );
@@ -361,7 +386,7 @@ function SecondaryListingCard({ item, onDelete }) {
     );
 }
 
-function AssetCard({ asset, onResale }) {
+function AssetCard({ asset, onResale, onOpenAgreement }) {
     const { t } = useI18n();
     const totalFractions = asset.totalFractions || 100;
 
@@ -430,6 +455,17 @@ function AssetCard({ asset, onResale }) {
                     </div>
 
                     <div className="flex flex-wrap items-center gap-3">
+                        {asset.agreementId && (
+                            <motion.button
+                                onClick={() => onOpenAgreement(asset.agreementId)}
+                                whileHover={{ scale: 1.02 }}
+                                whileTap={{ scale: 0.98 }}
+                                className="flex-1 sm:flex-none flex items-center justify-center gap-2 px-4 py-2.5 sm:py-2 rounded-md bg-[var(--color-primary-300)]/15 text-[var(--color-primary-300)] text-[11px] font-bold border border-[var(--color-primary-300)]/30 hover:bg-[var(--color-primary-300)]/20 transition-all cursor-pointer group/btn"
+                            >
+                                <DocumentIcon className="w-3.5 h-3.5 transition-transform group-hover/btn:scale-110" />
+                                {t("Agreement")}
+                            </motion.button>
+                        )}
                         {asset.saleType !== 'WHOLE' ? (
                             <>
                                 <motion.button
