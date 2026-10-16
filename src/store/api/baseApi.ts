@@ -24,7 +24,8 @@ const baseQuery = fetchBaseQuery({
       'getAssetProjectedValuation',
       'forgotPassword',
       'verifyForgotPasswordOtp',
-      'resetPassword'
+      'resetPassword',
+      'getListingRequestOptions'
     ];
 
     if (!publicEndpoints.includes(endpoint)) {
@@ -56,7 +57,7 @@ const baseQueryWithAuth: BaseQueryFn<
 
     if (httpStatus === 401 || httpStatus === '401' || httpStatus === 403 || httpStatus === '403') {
       const url = typeof args === 'string' ? args : (args.url || '');
-      const isAuthExemptRequest = url.includes('auth/login') || url.includes('auth/register');
+      const isAuthExemptRequest = url.includes('auth/login') || url.includes('auth/register') || url.includes('listing-requests');
 
       if (!isAuthExemptRequest) {
         const errorMessage = typeof result.error.data === 'object' && result.error.data !== null
@@ -106,7 +107,7 @@ export const baseApi = createApi({
     'User', 'Post', 'Kyb', 'Kyc', 'Investment', 'SecondaryMarketplace',
     'MySecondaryListings', 'PendingApprovals', 'Certificates', 'Commission',
     'PartnerFinance', 'Payout', 'Asset', 'AssetShare', 'Lead', 'LeadNote', 'FollowUp', 'LeadActivity',
-    'Support', 'Rewards', 'ReferralLink', 'InvestorReferral', 'Wallet', 'Wishlist', 'Agreements',
+    'Support', 'Rewards', 'ReferralLink', 'InvestorReferral', 'Wallet', 'Wishlist', 'Agreements', 'ListingRequest',
   ],
   endpoints: () => ({}),
 });

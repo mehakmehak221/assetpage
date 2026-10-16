@@ -2,7 +2,11 @@
 
 import { ArrowRight } from 'lucide-react';
 
-export default function EstatesPartnerCta() {
+interface EstatesPartnerCtaProps {
+  onOpenModal?: () => void;
+}
+
+export default function EstatesPartnerCta({ onOpenModal }: EstatesPartnerCtaProps) {
   return (
     <section className="relative w-full bg-white py-14 sm:py-20 px-6 sm:px-10 lg:px-16">
       <div className="max-w-5xl mx-auto">
@@ -20,7 +24,9 @@ export default function EstatesPartnerCta() {
               </p>
 
               <button
-                className="group bg-white hover:bg-emerald-50 text-[#00694B] border-[2px] border-[#00694B] font-bold text-sm sm:text-base px-6 sm:px-8 py-3 sm:py-3.5 rounded-full flex items-center gap-3 shadow-md hover:shadow-lg transition-all duration-300"
+                type="button"
+                onClick={onOpenModal}
+                className="group bg-white hover:bg-emerald-50 text-[#00694B] border-[2px] border-[#00694B] font-bold text-sm sm:text-base px-6 sm:px-8 py-3 sm:py-3.5 rounded-full flex items-center gap-3 shadow-md hover:shadow-lg transition-all duration-300 cursor-pointer"
               >
                 <span>Get in Touch</span>
                 <ArrowRight size={18} className="stroke-[2.5] text-[#00694B] group-hover:translate-x-1 transition-transform" />

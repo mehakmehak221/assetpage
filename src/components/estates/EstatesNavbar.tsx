@@ -5,7 +5,11 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { Menu, X } from 'lucide-react';
 
-export default function EstatesNavbar() {
+interface EstatesNavbarProps {
+  onOpenModal?: () => void;
+}
+
+export default function EstatesNavbar({ onOpenModal }: EstatesNavbarProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const navLinks = [
@@ -55,7 +59,9 @@ export default function EstatesNavbar() {
 
         <div className="hidden md:flex items-center">
           <button
-            className="bg-[#00694B] hover:bg-[#036247] text-white font-medium text-sm lg:text-[15px] px-6 lg:px-7 py-2.5 rounded-full transition-all duration-300 shadow-sm hover:shadow-md hover:-translate-y-0.5 active:translate-y-0"
+            type="button"
+            onClick={onOpenModal}
+            className="bg-[#00694B] hover:bg-[#036247] text-white font-medium text-sm lg:text-[15px] px-6 lg:px-7 py-2.5 rounded-full transition-all duration-300 shadow-sm hover:shadow-md hover:-translate-y-0.5 active:translate-y-0 cursor-pointer"
           >
             Partner with us
           </button>
@@ -83,10 +89,12 @@ export default function EstatesNavbar() {
             </a>
           ))}
           <button
+            type="button"
             onClick={() => {
               setMobileMenuOpen(false);
+              onOpenModal?.();
             }}
-            className="w-full bg-[#00694B] hover:bg-[#036247] text-white font-medium text-sm py-3 rounded-full mt-2 shadow-sm text-center"
+            className="w-full bg-[#00694B] hover:bg-[#036247] text-white font-medium text-sm py-3 rounded-full mt-2 shadow-sm text-center cursor-pointer"
           >
             Partner with us
           </button>

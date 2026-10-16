@@ -930,17 +930,56 @@ textarea:-webkit-autofill:focus,
 select:-webkit-autofill,
 select:-webkit-autofill:hover,
 select:-webkit-autofill:focus {
-  -webkit-text-fill-color: var(--color-text-primary, var(--foreground)) !important;
-  -webkit-box-shadow: 0 0 0px 1000px var(--field-surface, var(--background)) inset !important;
+  -webkit-text-fill-color: #0F172A !important;
+  -webkit-box-shadow: 0 0 0px 1000px #FFFFFF inset !important;
+  box-shadow: 0 0 0px 1000px #FFFFFF inset !important;
   transition: background-color 5000s ease-in-out 0s;
 }
 
-/* Global Form Inputs, Selects, and Textareas Sizing and Border Styles */
+.dark input:-webkit-autofill,
+.dark input:-webkit-autofill:hover,
+.dark input:-webkit-autofill:focus,
+.dark textarea:-webkit-autofill,
+.dark textarea:-webkit-autofill:hover,
+.dark textarea:-webkit-autofill:focus,
+.dark select:-webkit-autofill,
+.dark select:-webkit-autofill:hover,
+.dark select:-webkit-autofill:focus {
+  -webkit-text-fill-color: #FFFFFF !important;
+  -webkit-box-shadow: 0 0 0px 1000px var(--field-surface, var(--background)) inset !important;
+  box-shadow: 0 0 0px 1000px var(--field-surface, var(--background)) inset !important;
+  transition: background-color 5000s ease-in-out 0s;
+}
+
+.property-modal-input,
+input.property-modal-input,
+select.property-modal-input {
+  color: #0F172A !important;
+  -webkit-text-fill-color: #0F172A !important;
+  caret-color: #00694B !important;
+}
+
+.property-modal-input:-webkit-autofill,
+.property-modal-input:-webkit-autofill:hover,
+.property-modal-input:-webkit-autofill:focus,
+.property-modal-input:-webkit-autofill:active {
+  -webkit-text-fill-color: #0F172A !important;
+  -webkit-box-shadow: 0 0 0px 1000px #FFFFFF inset !important;
+  box-shadow: 0 0 0px 1000px #FFFFFF inset !important;
+  color: #0F172A !important;
+  caret-color: #00694B !important;
+}
+
+.property-modal-input::placeholder {
+  color: #94A3B8 !important;
+  -webkit-text-fill-color: #94A3B8 !important;
+  opacity: 1 !important;
+}
+
 input:not(.border-0):not(.border-none),
 select:not(.border-0):not(.border-none),
 textarea:not(.border-0):not(.border-none) {
   border-radius: 0.5rem;
-  /* rounded-lg */
   border: 1px solid var(--sidebar-border);
   outline: none;
   transition: all 0.2s ease;
@@ -952,7 +991,6 @@ textarea:not(.border-0):not(.border-none) {
   select,
   textarea {
     font-size: 0.875rem !important;
-    /* text-sm for desktop */
   }
 }
 
@@ -962,18 +1000,15 @@ textarea:not(.border-0):not(.border-none) {
   select,
   textarea {
     font-size: 1rem !important;
-    /* Prevent auto-zoom on mobile (16px) */
   }
 }
 
-/* Ensure consistent focus rings */
 input:not(.border-0):not(.border-none):focus,
 select:not(.border-0):not(.border-none):focus,
 textarea:not(.border-0):not(.border-none):focus {
   border-color: var(--color-primary-300);
 }
 
-/* Global Button Micro-animations */
 button,
 .btn,
 .button {

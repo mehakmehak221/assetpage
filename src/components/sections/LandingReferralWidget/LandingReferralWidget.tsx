@@ -19,10 +19,10 @@ export default function LandingReferralWidget() {
       onClick={() => router.push("/sign-in")}
       animate={{ y: [0, -8, 0] }}
       transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-      className="fixed bottom-8 right-8 z-[90] bg-[#056346] text-white px-5 py-3.5 rounded-full shadow-2xl flex items-center gap-2 hover:bg-[#044c36] hover:scale-105 transition-all group"
+      className="fixed bottom-6 right-6 sm:bottom-8 sm:right-8 z-30 bg-[#056346] text-white px-4 py-3 sm:px-5 sm:py-3.5 rounded-full shadow-2xl flex items-center gap-2 hover:bg-[#044c36] hover:scale-105 transition-all group"
     >
       <GiftIcon className="w-5 h-5 animate-pulse" />
-      <span className="font-semibold text-[15px]">{t('Refer & Earn')}</span>
+      <span className="font-semibold text-xs sm:text-[15px]">{t('Refer & Earn')}</span>
     </motion.button>
   );
 }
