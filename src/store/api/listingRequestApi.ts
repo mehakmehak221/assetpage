@@ -20,6 +20,7 @@ export const listingRequestApi = baseApi.injectEndpoints({
         url: 'listing-requests',
         method: 'POST',
         body,
+        credentials: 'include',
       }),
       invalidatesTags: ['ListingRequest'],
     }),

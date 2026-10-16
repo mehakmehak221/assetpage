@@ -57,7 +57,7 @@ const baseQueryWithAuth: BaseQueryFn<
 
     if (httpStatus === 401 || httpStatus === '401' || httpStatus === 403 || httpStatus === '403') {
       const url = typeof args === 'string' ? args : (args.url || '');
-      const isAuthExemptRequest = url.includes('auth/login') || url.includes('auth/register');
+      const isAuthExemptRequest = url.includes('auth/login') || url.includes('auth/register') || url.includes('listing-requests');
 
       if (!isAuthExemptRequest) {
         const errorMessage = typeof result.error.data === 'object' && result.error.data !== null

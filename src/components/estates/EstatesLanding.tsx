@@ -8,7 +8,6 @@ import EstatesSecurity from './EstatesSecurity';
 import EstatesProcess from './EstatesProcess';
 import EstatesPartnerCta from './EstatesPartnerCta';
 import GlofiCopyrightSection from '@/components/sections/GlofiCopyrightSection/GlofiCopyrightSection';
-import LandingReferralWidget from '@/components/sections/LandingReferralWidget/LandingReferralWidget';
 import PropertyListingRequestModal from './PropertyListingRequestModal';
 
 export default function EstatesLanding() {
@@ -32,8 +31,6 @@ export default function EstatesLanding() {
         <EstatesPartnerCta onOpenModal={() => setModalOpen(true)} />
 
         <GlofiCopyrightSection />
-
-        <LandingReferralWidget />
       </main>
 
       <PropertyListingRequestModal

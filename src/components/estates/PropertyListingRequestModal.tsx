@@ -1,7 +1,6 @@
 'use client';
 
 import { useState, useEffect, useMemo } from 'react';
-import { useRouter } from 'next/navigation';
 import {
   X,
   CheckCircle,
@@ -21,6 +20,7 @@ import {
   ExternalLink,
   RefreshCw,
 } from 'lucide-react';
+import { getCookie } from '@/utils/cookieUtils';
 import { useGetProfileQuery } from '@/store/api/authApi';
 import {
   useGetListingRequestOptionsQuery,
@@ -40,13 +40,12 @@ interface PropertyListingRequestModalProps {
 }
 
 const initialForm = {
-  // Step 1 – Contact
   fullName: '',
   phone: '',
   email: '',
   ownerType: '',
 
-  // Step 2 – Property
+
   category: '',
   constructionStatus: '',
   streetAddress: '',
@@ -59,7 +58,6 @@ const initialForm = {
 type FormState = typeof initialForm;
 type FieldErrors = Partial<Record<keyof FormState, string>>;
 
-// Fallbacks in case options API is still loading or offline
 const FALLBACK_OWNER_TYPES: ListingRequestOption[] = [
   { value: 'INDIVIDUAL', label: 'Individual' },
   { value: 'COMPANY', label: 'Company' },
@@ -86,13 +84,14 @@ const FALLBACK_LISTING_PREFERENCES: ListingRequestOption[] = [
   { value: 'FRACTIONAL', label: 'Fractional', description: 'Retain partial stake' },
 ];
 
-/* ── tiny helpers ── */
 function Label({ children, optional }: { children: React.ReactNode; optional?: boolean }) {
   return (
-    <label className="block text-xs font-semibold text-[#443D3D] uppercase tracking-wider mb-1.5">
+    <label className="block text-xs font-semibold text-[#1E293B] uppercase tracking-wider mb-2">
       {children}
-      {optional && (
-        <span className="ml-1 text-[10px] font-normal normal-case text-[#83918D] tracking-normal">
+      {!optional ? (
+        <span className="text-red-500 font-bold ml-1">*</span>
+      ) : (
+        <span className="ml-1 text-[10px] font-medium normal-case text-[#475569] tracking-normal">
           (optional)
         </span>
       )}
@@ -103,25 +102,51 @@ function Label({ children, optional }: { children: React.ReactNode; optional?: b
 function Input({
   icon: Icon,
   error,
+  style,
+  onFocus,
+  onBlur,
+  className = '',
   ...props
 }: React.InputHTMLAttributes<HTMLInputElement> & {
   icon?: React.ComponentType<{ size?: number; className?: string }>;
   error?: string;
 }) {
+  const [isFocused, setIsFocused] = useState(false);
+
   return (
-    <div>
+    <div className="w-full">
       <div className="relative">
         {Icon && (
-          <Icon size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#83918D]" />
+          <Icon size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#475569] pointer-events-none" />
         )}
         <input
           {...props}
-          className={`w-full ${Icon ? 'pl-10' : 'pl-4'} pr-4 py-2.5 text-sm rounded-xl border ${
-            error ? 'border-red-400 focus:border-red-500 focus:ring-red-200' : 'border-[#83918D]/40 focus:border-[#00694B] focus:ring-[#00694B]/20'
-          } focus:ring-1 outline-none transition-all text-[#443D3D] bg-white placeholder:text-[#83918D]/50 disabled:bg-[#F7F8F6] disabled:cursor-not-allowed`}
+          onFocus={(e) => {
+            setIsFocused(true);
+            onFocus?.(e);
+          }}
+          onBlur={(e) => {
+            setIsFocused(false);
+            onBlur?.(e);
+          }}
+          style={{
+            color: '#0F172A',
+            WebkitTextFillColor: '#0F172A',
+            caretColor: '#00694B',
+            borderWidth: '1.5px',
+            borderStyle: 'solid',
+            borderColor: error ? '#EF4444' : isFocused ? '#00694B' : '#94A3B8',
+            boxShadow: isFocused
+              ? '0 0 0 3px rgba(0, 105, 75, 0.15)'
+              : error
+                ? '0 0 0 3px rgba(239, 68, 68, 0.15)'
+                : '0 1px 2px 0 rgba(0, 0, 0, 0.05)',
+            ...style,
+          }}
+          className={`property-modal-input w-full ${Icon ? 'pl-10' : 'pl-4'} pr-4 py-2.5 sm:py-3 text-base sm:text-sm font-medium rounded-xl transition-all text-[#0F172A] bg-white placeholder:text-[#94A3B8] placeholder:opacity-100 outline-none disabled:bg-gray-100 disabled:cursor-not-allowed ${className}`}
         />
       </div>
-      {error && <p className="text-red-500 text-[11px] mt-1 font-medium">{error}</p>}
+      {error && <p className="text-red-500 text-[11px] mt-1.5 font-medium">{error}</p>}
     </div>
   );
 }
@@ -130,35 +155,60 @@ function Select({
   icon: Icon,
   error,
   children,
+  style,
+  onFocus,
+  onBlur,
+  className = '',
   ...props
 }: React.SelectHTMLAttributes<HTMLSelectElement> & {
   icon?: React.ComponentType<{ size?: number; className?: string }>;
   error?: string;
   children: React.ReactNode;
 }) {
+  const [isFocused, setIsFocused] = useState(false);
+
   return (
-    <div>
+    <div className="w-full">
       <div className="relative">
         {Icon && (
           <Icon
-            size={15}
-            className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#83918D] pointer-events-none"
+            size={16}
+            className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#64748B] pointer-events-none"
           />
         )}
         <select
           {...props}
-          className={`w-full ${Icon ? 'pl-10' : 'pl-4'} pr-8 py-2.5 text-sm rounded-xl border ${
-            error ? 'border-red-400 focus:border-red-500 focus:ring-red-200' : 'border-[#83918D]/40 focus:border-[#00694B] focus:ring-[#00694B]/20'
-          } focus:ring-1 outline-none transition-all text-[#443D3D] bg-white appearance-none disabled:bg-[#F7F8F6] disabled:cursor-not-allowed`}
+          onFocus={(e) => {
+            setIsFocused(true);
+            onFocus?.(e);
+          }}
+          onBlur={(e) => {
+            setIsFocused(false);
+            onBlur?.(e);
+          }}
+          style={{
+            color: props.value ? '#0F172A' : '#94A3B8',
+            WebkitTextFillColor: props.value ? '#0F172A' : '#94A3B8',
+            borderWidth: '1.5px',
+            borderStyle: 'solid',
+            borderColor: error ? '#EF4444' : isFocused ? '#00694B' : '#94A3B8',
+            boxShadow: isFocused
+              ? '0 0 0 3px rgba(0, 105, 75, 0.15)'
+              : error
+                ? '0 0 0 3px rgba(239, 68, 68, 0.15)'
+                : '0 1px 2px 0 rgba(0, 0, 0, 0.05)',
+            ...style,
+          }}
+          className={`property-modal-input w-full ${Icon ? 'pl-10' : 'pl-4'} pr-9 py-2.5 sm:py-3 text-base sm:text-sm font-medium rounded-xl transition-all text-[#0F172A] bg-white appearance-none outline-none disabled:bg-gray-100 disabled:cursor-not-allowed ${className}`}
         >
           {children}
         </select>
         <ChevronRight
-          size={13}
-          className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-[#83918D] rotate-90"
+          size={14}
+          className="pointer-events-none absolute right-3.5 top-1/2 -translate-y-1/2 text-[#475569] rotate-90"
         />
       </div>
-      {error && <p className="text-red-500 text-[11px] mt-1 font-medium">{error}</p>}
+      {error && <p className="text-red-500 text-[11px] mt-1.5 font-medium">{error}</p>}
     </div>
   );
 }
@@ -178,46 +228,72 @@ export default function PropertyListingRequestModal({
   isOpen,
   onClose,
 }: PropertyListingRequestModalProps) {
-  const router = useRouter();
-
-  // Active view tab: Form or My Requests
   const [activeTab, setActiveTab] = useState<'form' | 'my-requests'>('form');
 
-  // Form states
+
+  const [hasToken, setHasToken] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const token = getCookie('access_token') || localStorage.getItem('access_token');
+      setHasToken(Boolean(token));
+    }
+  }, [isOpen]);
+
   const [step, setStep] = useState<1 | 2>(1);
   const [form, setForm] = useState<FormState>(initialForm);
   const [errors, setErrors] = useState<FieldErrors>({});
   const [generalError, setGeneralError] = useState<string | null>(null);
   const [copiedRef, setCopiedRef] = useState(false);
 
-  // Success response
+
   const [submitSuccess, setSubmitSuccess] = useState<CreateListingRequestResponse | null>(null);
 
-  // RTK Query: Profile for pre-filling contact details
-  const { data: profileData } = useGetProfileQuery(undefined, { skip: !isOpen });
+  const { data: profileData } = useGetProfileQuery(undefined, {
+    skip: !isOpen || !hasToken,
+  });
 
-  // RTK Query: Options from GET /listing-requests/options
+
+  const userRole = (
+    profileData?.role ||
+    (typeof window !== 'undefined' ? localStorage.getItem('userType') : '') ||
+    getCookie('userType') ||
+    ''
+  ).toUpperCase();
+
+  const isAdmin =
+    hasToken &&
+    (userRole === 'ADMIN' ||
+      userRole === 'SUPER_ADMIN' ||
+      profileData?.isAdmin === true);
+
+
+  const isLoggedIn = hasToken && !isAdmin;
+
   const {
     data: optionsData,
     isLoading: isOptionsLoading,
   } = useGetListingRequestOptionsQuery(undefined, {
-    skip: !isOpen,
+    skip: !isOpen || isAdmin,
   });
 
-  // RTK Query: Submit mutation POST /listing-requests
   const [createListingRequest, { isLoading: isSubmitting }] = useCreateListingRequestMutation();
 
-  // RTK Query: My listing requests GET /listing-requests/my
   const {
     data: myRequestsData,
     isLoading: isMyRequestsLoading,
     refetch: refetchMyRequests,
   } = useGetMyListingRequestsQuery(
     { page: 1, limit: 20 },
-    { skip: !isOpen || activeTab !== 'my-requests' }
+    { skip: !isOpen || !isLoggedIn || activeTab !== 'my-requests' }
   );
 
-  // Resolved option lists (using API data or fallbacks)
+  useEffect(() => {
+    if (!isLoggedIn && activeTab === 'my-requests') {
+      setActiveTab('form');
+    }
+  }, [isLoggedIn, activeTab]);
+
   const ownerTypes = useMemo(
     () => (optionsData?.ownerTypes?.length ? optionsData.ownerTypes : FALLBACK_OWNER_TYPES),
     [optionsData]
@@ -235,7 +311,6 @@ export default function PropertyListingRequestModal({
     [optionsData]
   );
 
-  // Pre-fill Full Name, Phone, Email from logged-in user profile while keeping editable
   useEffect(() => {
     if (isOpen && profileData) {
       const p = profileData.partnerProfile || profileData.investorProfile || profileData.agentProfile || {};
@@ -252,7 +327,7 @@ export default function PropertyListingRequestModal({
     }
   }, [isOpen, profileData]);
 
-  // Reset form when modal closes
+
   useEffect(() => {
     if (!isOpen) {
       const t = setTimeout(() => {
@@ -268,7 +343,7 @@ export default function PropertyListingRequestModal({
     }
   }, [isOpen]);
 
-  // Scroll lock
+
   useEffect(() => {
     document.body.style.overflow = isOpen ? 'hidden' : '';
     return () => {
@@ -282,11 +357,16 @@ export default function PropertyListingRequestModal({
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
     setForm((prev) => ({ ...prev, [field]: e.target.value }));
-    if (errors[field]) setErrors((prev) => ({ ...prev, [field]: undefined }));
+    if (errors[field]) {
+      setErrors((prev) => {
+        const next = { ...prev };
+        delete next[field];
+        return next;
+      });
+    }
     if (generalError) setGeneralError(null);
   };
 
-  /* ── Client Validation ── */
   const validate = (s: 1 | 2): FieldErrors => {
     const e: FieldErrors = {};
     if (s === 1) {
@@ -299,11 +379,10 @@ export default function PropertyListingRequestModal({
       if (!form.phone.trim()) {
         e.phone = 'Phone number is required';
       } else {
-        // Indian mobile check: "+91 98765 43210" or "9876543210"
         const clean = form.phone.replace(/[\s\-\(\)]/g, '');
         const indianPhoneRegex = /^(\+?91)?[6789]\d{9}$/;
         if (!indianPhoneRegex.test(clean)) {
-          e.phone = 'Enter a valid Indian mobile number (e.g. +91 98765 43210 or 9876543210)';
+          e.phone = 'Enter a valid mobile number (e.g. +91 98765 43210 or 9876543210)';
         }
       }
 
@@ -350,21 +429,27 @@ export default function PropertyListingRequestModal({
       setErrors(e);
       return;
     }
+    setErrors({});
+    setGeneralError(null);
     setStep(2);
   };
 
-  /* ── Submit Handler ── */
   const handleSubmit = async (ev: React.FormEvent) => {
     ev.preventDefault();
     setGeneralError(null);
+
+    if (step === 1) {
+      handleNext();
+      return;
+    }
 
     const e = validate(2);
     if (Object.keys(e).length) {
       setErrors(e);
       return;
+
     }
 
-    // Prepare payload conforming to API specification
     const payload: CreateListingRequestDto = {
       fullName: form.fullName.trim(),
       phone: form.phone.trim(),
@@ -377,7 +462,6 @@ export default function PropertyListingRequestModal({
       state: form.state.trim(),
     };
 
-    // Send optional fields only if filled; don't send ""
     if (form.expectedPrice && form.expectedPrice.trim()) {
       const cleanNum = Number(form.expectedPrice.replace(/,/g, ''));
       payload.expectedPrice = !isNaN(cleanNum) && cleanNum > 0 ? cleanNum : form.expectedPrice.trim();
@@ -395,12 +479,11 @@ export default function PropertyListingRequestModal({
       const data = err?.data;
 
       if (status === 400) {
-        // Validation failed: message is an array of strings, e.g. ["City is required", "Please select a category"]
         const messages: string[] = Array.isArray(data?.message)
           ? data.message
           : typeof data?.message === 'string'
-          ? [data.message]
-          : ['Validation failed. Please verify your fields.'];
+            ? [data.message]
+            : ['Validation failed. Please verify your fields.'];
 
         const serverErrors: FieldErrors = {};
         const unmapped: string[] = [];
@@ -439,7 +522,6 @@ export default function PropertyListingRequestModal({
           setGeneralError(unmapped.join('. '));
         }
 
-        // If step 1 fields failed validation, return to step 1
         if (
           serverErrors.fullName ||
           serverErrors.phone ||
@@ -449,30 +531,34 @@ export default function PropertyListingRequestModal({
           setStep(1);
         }
       } else if (status === 401) {
-        // Not logged in / session expired -> Redirect to login
+        const msg = data?.message || 'Unauthorized. Please try again or submit directly.';
+        setGeneralError(msg);
         window.dispatchEvent(
           new CustomEvent('show-toast', {
             detail: {
-              message: 'Please log in to submit a property listing request.',
+              message: msg,
               type: 'error',
             },
           })
         );
-        router.push('/sign-in');
       } else if (status === 403) {
-        // Admin account -> "Not available for this account"
-        setGeneralError('Not available for this account');
+        const msg = data?.message || 'Property listing requests are not available for admin accounts.';
+        setGeneralError(msg);
         window.dispatchEvent(
           new CustomEvent('show-toast', {
             detail: {
-              message: 'Not available for this account',
+              message: msg,
               type: 'error',
             },
           })
         );
       } else if (status === 429) {
-        // More than 5 submissions in an hour, or 3 requests already under review
-        const msg = data?.message || 'More than 5 submissions in an hour or 3 requests already under review.';
+        const msg =
+          (typeof data?.message === 'string' && data.message.trim())
+            ? data.message
+            : Array.isArray(data?.message) && data.message.length > 0
+              ? data.message.join('. ')
+              : 'Too many requests. You can submit up to 5 listing requests per hour.';
         setGeneralError(msg);
         window.dispatchEvent(
           new CustomEvent('show-toast', {
@@ -497,22 +583,48 @@ export default function PropertyListingRequestModal({
 
   return (
     <div
-      className="fixed inset-0 z-[60] flex items-center justify-center p-3 sm:p-4 bg-black/55 backdrop-blur-sm"
+      className="fixed inset-0 z-[100] flex items-center justify-center p-2.5 sm:p-4 md:p-6 bg-black/60 backdrop-blur-sm overflow-y-auto"
       onClick={onClose}
     >
       <div
-        className="relative w-full max-w-lg max-h-[92vh] bg-white rounded-3xl shadow-2xl overflow-hidden flex flex-col border border-[#83918D]/20 animate-in fade-in zoom-in-95 duration-200"
+        className="relative w-full max-w-lg max-h-[calc(100dvh-1.25rem)] sm:max-h-[88vh] bg-white rounded-2xl sm:rounded-3xl shadow-2xl overflow-hidden flex flex-col border border-gray-200 my-auto animate-in fade-in zoom-in-95 duration-200"
         onClick={(ev) => ev.stopPropagation()}
       >
-        {/* ── HEADER ── */}
-        <div className="bg-gradient-to-br from-[#00694B] to-[#025C42] px-6 sm:px-8 pt-6 pb-5 flex-shrink-0">
-          <div className="flex items-start justify-between">
-            <div>
-              <div className="flex items-center gap-2">
-                <span className="text-[10px] font-bold tracking-widest uppercase text-white/70 bg-white/10 px-2.5 py-1 rounded-full">
+        <style dangerouslySetInnerHTML={{
+          __html: `
+          .property-modal-input,
+          input.property-modal-input,
+          select.property-modal-input {
+            color: #0F172A !important;
+            -webkit-text-fill-color: #0F172A !important;
+            caret-color: #00694B !important;
+          }
+          .property-modal-input:-webkit-autofill,
+          .property-modal-input:-webkit-autofill:hover,
+          .property-modal-input:-webkit-autofill:focus,
+          .property-modal-input:-webkit-autofill:active {
+            -webkit-text-fill-color: #0F172A !important;
+            -webkit-box-shadow: 0 0 0 1000px #FFFFFF inset !important;
+            box-shadow: 0 0 0 1000px #FFFFFF inset !important;
+            color: #0F172A !important;
+            caret-color: #00694B !important;
+          }
+          .property-modal-input::placeholder,
+          input.property-modal-input::placeholder {
+            color: #94A3B8 !important;
+            -webkit-text-fill-color: #94A3B8 !important;
+            opacity: 1 !important;
+          }
+        ` }} />
+
+        <div className="bg-gradient-to-br from-[#00694B] to-[#025C42] px-4 sm:px-6 md:px-8 pt-4 sm:pt-6 pb-3.5 sm:pb-5 flex-shrink-0">
+          <div className="flex items-start justify-between gap-3">
+            <div className="min-w-0 flex-1">
+              <div className="flex items-center gap-2 flex-wrap">
+                <span className="text-[10px] font-bold tracking-widest uppercase text-white/80 bg-white/10 px-2.5 py-1 rounded-full">
                   Property Listing Request
                 </span>
-                {profileData && (
+                {isLoggedIn && !submitSuccess && (
                   <button
                     type="button"
                     onClick={() => {
@@ -526,36 +638,39 @@ export default function PropertyListingRequestModal({
                 )}
               </div>
 
-              <h2 className="text-xl sm:text-[22px] font-bold text-white mt-2.5 leading-tight">
-                {activeTab === 'my-requests'
-                  ? 'My Listing Requests'
-                  : submitSuccess
-                  ? 'Listing Request Received'
-                  : step === 1
-                  ? 'Your Contact Details'
-                  : 'Property Information'}
+              <h2 className="text-base sm:text-lg md:text-[22px] font-bold text-white mt-1.5 sm:mt-2.5 leading-snug">
+                {isAdmin
+                  ? 'Listing Request'
+                  : activeTab === 'my-requests'
+                    ? 'My Listing Requests'
+                    : submitSuccess
+                      ? 'Listing Request Received'
+                      : step === 1
+                        ? 'Your Contact Details'
+                        : 'Property Information'}
               </h2>
-              <p className="text-white/70 text-xs mt-0.5">
-                {activeTab === 'my-requests'
-                  ? 'Track the real-time status of your submitted properties'
-                  : submitSuccess
-                  ? 'We have recorded your details securely'
-                  : `Step ${step} of 2`}
+              <p className="text-white/75 text-[11px] sm:text-xs mt-0.5 line-clamp-1 sm:line-clamp-none">
+                {isAdmin
+                  ? 'Not available for administrator accounts'
+                  : activeTab === 'my-requests'
+                    ? 'Track the real-time status of your submitted properties'
+                    : submitSuccess
+                      ? 'We have recorded your details securely'
+                      : `Step ${step} of 2`}
               </p>
             </div>
             <button
               onClick={onClose}
-              className="w-9 h-9 rounded-full bg-white/15 hover:bg-white/25 text-white flex items-center justify-center transition-colors flex-shrink-0 ml-4 mt-1"
+              className="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-white/15 hover:bg-white/25 text-white flex items-center justify-center transition-colors flex-shrink-0"
               aria-label="Close"
             >
-              <X size={17} />
+              <X size={16} />
             </button>
           </div>
 
-          {activeTab === 'form' && !submitSuccess && (
+          {activeTab === 'form' && !submitSuccess && !isAdmin && (
             <>
-              {/* Step pills */}
-              <div className="flex gap-2 mt-4">
+              <div className="flex gap-2 mt-3 sm:mt-4">
                 {[
                   { id: 1, label: 'Contact Details', icon: User },
                   { id: 2, label: 'Property Info', icon: Building2 },
@@ -568,15 +683,18 @@ export default function PropertyListingRequestModal({
                       key={s.id}
                       type="button"
                       onClick={() => {
-                        if (s.id < step) setStep(s.id as 1 | 2);
+                        if (s.id < step) {
+                          setErrors({});
+                          setGeneralError(null);
+                          setStep(s.id as 1 | 2);
+                        }
                       }}
-                      className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold flex-shrink-0 transition-all ${
-                        active
-                          ? 'bg-white text-[#00694B] shadow'
-                          : done
+                      className={`flex items-center gap-1.5 px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-full text-[11px] sm:text-xs font-semibold flex-shrink-0 transition-all ${active
+                        ? 'bg-white text-[#00694B] shadow'
+                        : done
                           ? 'bg-white/20 text-white cursor-pointer hover:bg-white/30'
                           : 'bg-white/10 text-white/50 cursor-default'
-                      }`}
+                        }`}
                     >
                       {done ? <CheckCircle size={12} /> : <SIcon size={12} />}
                       {s.label}
@@ -585,8 +703,7 @@ export default function PropertyListingRequestModal({
                 })}
               </div>
 
-              {/* Progress bar */}
-              <div className="mt-3.5 h-1 bg-white/20 rounded-full overflow-hidden">
+              <div className="mt-2.5 sm:mt-3.5 h-1 bg-white/20 rounded-full overflow-hidden">
                 <div
                   className="h-full bg-white rounded-full transition-all duration-500 ease-out"
                   style={{ width: step === 1 ? '50%' : '100%' }}
@@ -596,9 +713,8 @@ export default function PropertyListingRequestModal({
           )}
         </div>
 
-        {/* ── BODY ── */}
-        <div className="overflow-y-auto flex-1 px-6 sm:px-8 py-6">
-          {/* General Error Banner */}
+        <div className="overflow-y-auto flex-1 px-4 sm:px-6 md:px-8 py-4 sm:py-6">
+
           {generalError && (
             <div className="mb-5 p-3.5 rounded-xl bg-red-50 border border-red-200 flex items-start gap-2.5 text-red-700 text-xs leading-relaxed animate-in fade-in">
               <AlertCircle size={16} className="text-red-500 flex-shrink-0 mt-0.5" />
@@ -606,10 +722,27 @@ export default function PropertyListingRequestModal({
             </div>
           )}
 
-          {/* VIEW: MY REQUESTS TAB */}
-          {activeTab === 'my-requests' ? (
+
+          {isAdmin ? (
+            <div className="py-8 text-center flex flex-col items-center animate-in fade-in">
+              <div className="w-14 h-14 rounded-full bg-amber-50 text-amber-600 flex items-center justify-center mb-3">
+                <AlertCircle size={28} />
+              </div>
+              <h3 className="text-base font-bold text-[#443D3D]">Not Available for Admin Accounts</h3>
+              <p className="text-xs text-[#83918D] max-w-sm mt-1.5 mb-6 leading-relaxed">
+                Property listing requests cannot be submitted from administrator accounts. Please use an investor, partner, or agent account, or log out to submit anonymously.
+              </p>
+              <button
+                type="button"
+                onClick={onClose}
+                className="px-6 py-2.5 rounded-full bg-[#00694B] text-white text-xs font-semibold hover:bg-[#025C42] transition-colors cursor-pointer"
+              >
+                Close
+              </button>
+            </div>
+          ) : activeTab === 'my-requests' ? (
             <div className="space-y-4">
-              <div className="flex items-center justify-between pb-2 border-b border-[#83918D]/15">
+              <div className="flex items-center justify-between pb-2 border-b border-gray-200">
                 <span className="text-xs font-semibold text-[#443D3D]">
                   Submitted Listing Requests
                 </span>
@@ -638,7 +771,7 @@ export default function PropertyListingRequestModal({
                     return (
                       <div
                         key={req.id || req.referenceNo}
-                        className="p-4 rounded-2xl border border-[#83918D]/20 hover:border-[#00694B]/30 bg-white hover:bg-[#F7F8F6]/40 transition-all shadow-sm"
+                        className="p-4 rounded-2xl border border-gray-200 hover:border-[#00694B]/40 bg-white hover:bg-gray-50/50 transition-all shadow-xs"
                       >
                         <div className="flex items-start justify-between gap-2">
                           <div>
@@ -684,7 +817,7 @@ export default function PropertyListingRequestModal({
                           </div>
                         )}
 
-                        <div className="mt-3 pt-2.5 border-t border-[#83918D]/10 flex items-center justify-between text-[10px] text-[#83918D]">
+                        <div className="mt-3 pt-2.5 border-t border-gray-100 flex items-center justify-between text-[10px] text-gray-500">
                           <span>
                             Submitted on {new Date(req.createdAt).toLocaleDateString('en-IN', {
                               day: 'numeric',
@@ -725,40 +858,37 @@ export default function PropertyListingRequestModal({
               )}
             </div>
           ) : submitSuccess ? (
-            /* ══ SUCCESS SCREEN ══ */
-            <div className="py-6 text-center flex flex-col items-center animate-in fade-in duration-300">
-              <div className="w-16 h-16 rounded-full bg-[#00694B]/10 text-[#00694B] flex items-center justify-center mb-4 ring-4 ring-[#00694B]/15">
-                <CheckCircle size={36} />
+            <div className="py-2 sm:py-4 text-center flex flex-col items-center animate-in fade-in duration-300">
+              <div className="w-12 h-12 sm:w-16 sm:h-16 rounded-full bg-[#00694B]/10 text-[#00694B] flex items-center justify-center mb-2.5 sm:mb-4 ring-4 ring-[#00694B]/15">
+                <CheckCircle size={28} className="sm:w-9 sm:h-9" />
               </div>
 
-              <h3 className="text-xl font-bold text-[#00694B] mb-1.5">
+              <h3 className="text-base sm:text-xl font-bold text-[#00694B] mb-1 sm:mb-1.5">
                 Listing Request Submitted!
               </h3>
 
-              {/* Server Message */}
-              <p className="text-[#443D3D] text-sm max-w-sm mb-4 leading-relaxed font-medium">
+              <p className="text-[#334155] text-xs sm:text-sm max-w-sm mb-3.5 sm:mb-4 leading-relaxed font-medium px-1 sm:px-2">
                 {submitSuccess.message ||
                   'Your listing request has been submitted. Our team will contact you soon.'}
               </p>
 
-              {/* Reference Number Card */}
-              <div className="w-full bg-[#F7F8F6] border border-[#83918D]/25 rounded-2xl p-4 mb-4 text-left">
-                <div className="flex items-center justify-between">
-                  <span className="text-[11px] font-semibold uppercase text-[#83918D] tracking-wider">
+              <div className="w-full bg-[#F7F8F6] border border-gray-200 rounded-xl sm:rounded-2xl p-3 sm:p-4 mb-3.5 sm:mb-4 text-left shadow-xs">
+                <div className="flex items-center justify-between gap-2">
+                  <span className="text-[10px] sm:text-[11px] font-semibold uppercase text-gray-500 tracking-wider">
                     Reference Number
                   </span>
                   <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-blue-100 text-blue-700">
                     {submitSuccess.status || 'NEW'}
                   </span>
                 </div>
-                <div className="flex items-center justify-between mt-1.5">
-                  <span className="font-mono text-base font-bold text-[#00694B] tracking-wide select-all">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 sm:gap-2.5 mt-2 sm:mt-2.5">
+                  <span className="font-mono text-xs sm:text-base font-bold text-[#00694B] tracking-tight sm:tracking-wide select-all break-all">
                     {submitSuccess.referenceNo}
                   </span>
                   <button
                     type="button"
                     onClick={() => copyReferenceNo(submitSuccess.referenceNo)}
-                    className="flex items-center gap-1 text-xs text-[#00694B] hover:text-[#025C42] font-semibold bg-white border border-[#00694B]/20 px-2.5 py-1 rounded-lg hover:bg-[#00694B]/5 transition-all"
+                    className="self-stretch sm:self-auto justify-center flex items-center gap-1.5 text-xs text-[#00694B] hover:text-[#025C42] font-semibold bg-white border border-[#00694B]/30 px-3 py-1.5 rounded-lg hover:bg-[#00694B]/5 transition-all cursor-pointer shadow-2xs"
                   >
                     {copiedRef ? (
                       <>
@@ -775,35 +905,47 @@ export default function PropertyListingRequestModal({
                 </div>
               </div>
 
-              <p className="text-[#83918D] text-xs max-w-xs mb-6">
+              <p className="text-[#475569] text-xs max-w-xs mb-4 sm:mb-6 font-medium px-1 sm:px-2">
                 A confirmation has been recorded for{' '}
-                <span className="font-semibold text-[#443D3D]">{form.email}</span>.
+                <span className="font-semibold text-[#1E293B] break-all">{form.email}</span>.
               </p>
 
-              <div className="flex items-center gap-3 w-full justify-center">
-                <button
-                  type="button"
-                  onClick={() => {
-                    setActiveTab('my-requests');
-                    setSubmitSuccess(null);
-                  }}
-                  className="px-5 py-2.5 rounded-full border border-[#00694B] text-[#00694B] font-semibold text-xs hover:bg-[#00694B]/5 transition-all"
-                >
-                  View My Requests
-                </button>
+              <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:gap-3 w-full justify-center">
+                {isLoggedIn && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setActiveTab('my-requests');
+                      setSubmitSuccess(null);
+                    }}
+                    className="w-full sm:w-auto px-5 py-2.5 rounded-full border border-[#00694B] text-[#00694B] font-semibold text-xs hover:bg-[#00694B]/5 transition-all cursor-pointer text-center"
+                  >
+                    View My Requests
+                  </button>
+                )}
                 <button
                   type="button"
                   onClick={onClose}
-                  className="bg-[#00694B] hover:bg-[#025C42] text-white font-semibold px-8 py-2.5 rounded-full transition-all shadow-md hover:shadow-lg text-xs"
+                  className="w-full sm:w-auto bg-[#00694B] hover:bg-[#025C42] text-white font-semibold px-8 py-2.5 rounded-full transition-all shadow-md hover:shadow-lg text-xs cursor-pointer text-center"
                 >
                   Done
                 </button>
               </div>
             </div>
           ) : (
-            /* ══ FORM WORKFLOW ══ */
-            <form onSubmit={handleSubmit} noValidate>
-              {/* ══ STEP 1 — CONTACT ══ */}
+            <form
+              onSubmit={handleSubmit}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                  e.preventDefault();
+                  if (step === 1) {
+                    handleNext();
+                  }
+                }
+              }}
+              noValidate
+            >
+
               {step === 1 && (
                 <div className="space-y-4">
                   <div>
@@ -866,7 +1008,7 @@ export default function PropertyListingRequestModal({
                 </div>
               )}
 
-              {/* ══ STEP 2 — PROPERTY ══ */}
+
               {step === 2 && (
                 <div className="space-y-4">
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -922,7 +1064,7 @@ export default function PropertyListingRequestModal({
                     />
                   </div>
 
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                     <div>
                       <Label>City</Label>
                       <Input
@@ -966,23 +1108,27 @@ export default function PropertyListingRequestModal({
                         <button
                           type="button"
                           onClick={() => setForm((prev) => ({ ...prev, listingPreference: '' }))}
-                          className="text-[10px] text-[#83918D] hover:text-[#00694B] underline"
+                          className="text-[10px] text-[#475569] font-medium hover:text-[#00694B] underline"
                         >
                           Clear
                         </button>
                       )}
                     </div>
-                    <div className="grid grid-cols-2 gap-3">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 sm:gap-3">
                       {listingPreferences.map((opt) => {
                         const isChecked = form.listingPreference === opt.value;
                         return (
                           <label
                             key={opt.value}
-                            className={`flex items-start gap-2.5 p-3.5 rounded-xl border cursor-pointer transition-all ${
-                              isChecked
-                                ? 'border-[#00694B] bg-[#00694B]/5 ring-1 ring-[#00694B]'
-                                : 'border-[#83918D]/35 hover:border-[#00694B]/40 bg-white'
-                            }`}
+                            style={{
+                              borderWidth: '1.5px',
+                              borderStyle: 'solid',
+                              borderColor: isChecked ? '#00694B' : '#94A3B8',
+                            }}
+                            className={`flex items-start gap-3 p-3 sm:p-3.5 rounded-xl transition-all cursor-pointer shadow-xs ${isChecked
+                              ? 'bg-[#00694B]/5 ring-2 ring-[#00694B]/20'
+                              : 'bg-white hover:bg-gray-50/50'
+                              }`}
                           >
                             <input
                               type="radio"
@@ -999,14 +1145,16 @@ export default function PropertyListingRequestModal({
                             />
                             <div>
                               <div
-                                className={`font-semibold text-xs ${
-                                  isChecked ? 'text-[#00694B]' : 'text-[#443D3D]'
-                                }`}
+                                className={`font-semibold text-xs ${isChecked ? 'text-[#00694B]' : 'text-[#1E293B]'
+                                  }`}
                               >
                                 {opt.label}
                               </div>
                               {opt.description && (
-                                <div className="text-[10px] text-[#83918D] mt-0.5">
+                                <div
+                                  className={`text-[11px] mt-0.5 font-medium ${isChecked ? 'text-[#025C42]' : 'text-[#4B5563]'
+                                    }`}
+                                >
                                   {opt.description}
                                 </div>
                               )}
@@ -1024,14 +1172,18 @@ export default function PropertyListingRequestModal({
                 </div>
               )}
 
-              {/* ── FOOTER NAVIGATION ── */}
-              <div className="flex items-center justify-between pt-6 mt-4 border-t border-[#83918D]/15">
+
+              <div className="flex items-center justify-between pt-4 sm:pt-6 mt-4 border-t border-gray-200 gap-3">
                 {step === 2 ? (
                   <button
                     type="button"
-                    onClick={() => setStep(1)}
+                    onClick={() => {
+                      setErrors({});
+                      setGeneralError(null);
+                      setStep(1);
+                    }}
                     disabled={isSubmitting}
-                    className="flex items-center gap-1.5 px-5 py-2.5 rounded-full border border-[#83918D]/40 text-[#443D3D] text-sm font-medium hover:bg-[#F7F8F6] transition-all disabled:opacity-50"
+                    className="flex items-center gap-1.5 px-4 sm:px-5 py-2.5 rounded-full border border-gray-300 text-gray-700 text-xs sm:text-sm font-medium hover:bg-gray-50 transition-all disabled:opacity-50 cursor-pointer flex-shrink-0"
                   >
                     <ChevronLeft size={16} />
                     Back
@@ -1044,16 +1196,17 @@ export default function PropertyListingRequestModal({
                   <button
                     type="button"
                     onClick={handleNext}
-                    className="flex items-center gap-1.5 px-6 py-2.5 rounded-full bg-[#00694B] hover:bg-[#025C42] text-white text-sm font-semibold transition-all shadow-md hover:shadow-lg cursor-pointer"
+                    className="flex items-center gap-1.5 px-5 sm:px-6 py-2.5 rounded-full bg-[#00694B] hover:bg-[#025C42] text-white text-xs sm:text-sm font-semibold transition-all shadow-md hover:shadow-lg cursor-pointer"
                   >
                     Next
                     <ChevronRight size={16} />
                   </button>
                 ) : (
                   <button
-                    type="submit"
+                    type="button"
+                    onClick={handleSubmit}
                     disabled={isSubmitting}
-                    className="flex items-center gap-2 px-7 py-2.5 rounded-full bg-[#00694B] hover:bg-[#025C42] text-white text-sm font-semibold transition-all shadow-md hover:shadow-lg disabled:opacity-70 cursor-pointer"
+                    className="flex items-center justify-center gap-2 px-5 sm:px-7 py-2.5 rounded-full bg-[#00694B] hover:bg-[#025C42] text-white text-xs sm:text-sm font-semibold transition-all shadow-md hover:shadow-lg disabled:opacity-70 cursor-pointer"
                   >
                     {isSubmitting ? (
                       <>
