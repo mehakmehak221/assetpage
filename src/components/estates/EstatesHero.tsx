@@ -49,15 +49,17 @@ export default function EstatesHero({ onOpenModal }: EstatesHeroProps) {
                 Schedule an Advisory Call
               </button>
 
-              <button
-                onClick={onOpenModal}
-                className="group bg-[#1A785D99]/25 hover:bg-[#1A785D99]/25 text-[#00694B] font-bold text-sm sm:text-base pl-2.5 pr-7 sm:pr-8 py-2 sm:py-2.5 rounded-full border border-[#06866187] transition-all duration-300 shadow-sm hover:shadow hover:-translate-y-0.5 active:translate-y-0 flex items-center gap-3.5"
+              <a
+                href="https://www.glofiestates.com/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group bg-[#1A785D99]/25 hover:bg-[#1A785D99]/25 text-[#00694B] font-bold text-sm sm:text-base pl-2.5 pr-7 sm:pr-8 py-2 sm:py-2.5 rounded-full border border-[#06866187] transition-all duration-300 shadow-sm hover:shadow hover:-translate-y-0.5 active:translate-y-0 inline-flex items-center gap-3.5"
               >
                 <span className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-[#00694B] group-hover:bg-[#036247] text-white flex items-center justify-center transition-all duration-300 group-hover:scale-105 shadow-sm">
                   <ArrowUpRight size={20} className="stroke-[2.5]" />
                 </span>
                 <span>Visit GloFi Estates</span>
-              </button>
+              </a>
             </div>
           </div>
         </div>
