@@ -82,7 +82,7 @@ export default function EstatesBenefits() {
             <span className="text-xs sm:text-[13px] font-bold tracking-[0.25em] uppercase text-[#4B5563] block mb-6 sm:mb-8">
               KEY BENEFITS
             </span>
-            <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-[54px] font-bold text-black tracking-tight leading-[1.18] max-w-3xl mx-auto">
+            <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-[54px] font-bold text-[#00694B] tracking-tight leading-[1.18] max-w-3xl mx-auto">
               More Value. More Flexibility, <br className="hidden sm:inline" />
               A Brighter Future.
             </h2>
