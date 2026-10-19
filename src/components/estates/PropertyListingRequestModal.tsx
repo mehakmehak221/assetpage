@@ -19,6 +19,7 @@ import {
   Clock,
   ExternalLink,
   RefreshCw,
+  UserCheck,
 } from 'lucide-react';
 import { getCookie } from '@/utils/cookieUtils';
 import { useGetProfileQuery } from '@/store/api/authApi';
@@ -44,7 +45,7 @@ const initialForm = {
   phone: '',
   email: '',
   ownerType: '',
-
+  referredBy: '',
 
   category: '',
   constructionStatus: '',
@@ -312,18 +313,37 @@ export default function PropertyListingRequestModal({
   );
 
   useEffect(() => {
-    if (isOpen && profileData) {
-      const p = profileData.partnerProfile || profileData.investorProfile || profileData.agentProfile || {};
-      const prefillName = profileData.fullName || p.fullName || profileData.name || p.name || '';
-      const prefillEmail = profileData.email || p.email || '';
-      const prefillPhone = profileData.phone || profileData.phoneNumber || p.phone || p.phoneNumber || '';
+    if (isOpen) {
+      let initialRef = '';
+      if (typeof window !== 'undefined') {
+        const urlParams = new URLSearchParams(window.location.search);
+        initialRef =
+          urlParams.get('referralCode') ||
+          urlParams.get('ref') ||
+          urlParams.get('referredBy') ||
+          localStorage.getItem('glofi_referral_code') ||
+          '';
+      }
 
-      setForm((prev) => ({
-        ...prev,
-        fullName: prev.fullName || prefillName,
-        email: prev.email || prefillEmail,
-        phone: prev.phone || prefillPhone,
-      }));
+      if (profileData) {
+        const p = profileData.partnerProfile || profileData.investorProfile || profileData.agentProfile || {};
+        const prefillName = profileData.fullName || p.fullName || profileData.name || p.name || '';
+        const prefillEmail = profileData.email || p.email || '';
+        const prefillPhone = profileData.phone || profileData.phoneNumber || p.phone || p.phoneNumber || '';
+
+        setForm((prev) => ({
+          ...prev,
+          fullName: prev.fullName || prefillName,
+          email: prev.email || prefillEmail,
+          phone: prev.phone || prefillPhone,
+          referredBy: prev.referredBy || initialRef,
+        }));
+      } else if (initialRef) {
+        setForm((prev) => ({
+          ...prev,
+          referredBy: prev.referredBy || initialRef,
+        }));
+      }
     }
   }, [isOpen, profileData]);
 
@@ -395,6 +415,10 @@ export default function PropertyListingRequestModal({
       if (!form.ownerType) {
         e.ownerType = 'Please select owner type';
       }
+
+      if (form.referredBy && form.referredBy.trim().length > 100) {
+        e.referredBy = 'Referred by cannot exceed 100 characters';
+      }
     }
 
     if (s === 2) {
@@ -462,6 +486,10 @@ export default function PropertyListingRequestModal({
       state: form.state.trim(),
     };
 
+    if (form.referredBy && form.referredBy.trim()) {
+      payload.referredBy = form.referredBy.trim();
+    }
+
     if (form.expectedPrice && form.expectedPrice.trim()) {
       const cleanNum = Number(form.expectedPrice.replace(/,/g, ''));
       payload.expectedPrice = !isNaN(cleanNum) && cleanNum > 0 ? cleanNum : form.expectedPrice.trim();
@@ -498,6 +526,8 @@ export default function PropertyListingRequestModal({
             serverErrors.email = msg;
           } else if (lower.includes('owner') || lower.includes('ownertype')) {
             serverErrors.ownerType = msg;
+          } else if (lower.includes('refer')) {
+            serverErrors.referredBy = msg;
           } else if (lower.includes('category')) {
             serverErrors.category = msg;
           } else if (lower.includes('construction') || lower.includes('status')) {
@@ -526,7 +556,8 @@ export default function PropertyListingRequestModal({
           serverErrors.fullName ||
           serverErrors.phone ||
           serverErrors.email ||
-          serverErrors.ownerType
+          serverErrors.ownerType ||
+          serverErrors.referredBy
         ) {
           setStep(1);
         }
@@ -811,6 +842,13 @@ export default function PropertyListingRequestModal({
                           </div>
                         )}
 
+                        {req.referredBy && (
+                          <div className="mt-1 text-[11px] text-[#83918D]">
+                            Referred by:{' '}
+                            <span className="font-medium text-[#443D3D]">{req.referredBy}</span>
+                          </div>
+                        )}
+
                         {req.status === 'REJECTED' && req.rejectionReason && (
                           <div className="mt-2.5 p-2 rounded-lg bg-rose-50 border border-rose-200 text-rose-700 text-[11px]">
                             <strong>Reason:</strong> {req.rejectionReason}
@@ -1004,6 +1042,19 @@ export default function PropertyListingRequestModal({
                         </option>
                       ))}
                     </Select>
+                  </div>
+
+                  <div>
+                    <Label optional>Referred By</Label>
+                    <Input
+                      icon={UserCheck}
+                      type="text"
+                      maxLength={100}
+                      placeholder="e.g. Agent name or referral code"
+                      value={form.referredBy}
+                      onChange={set('referredBy')}
+                      error={errors.referredBy}
+                    />
                   </div>
                 </div>
               )}
