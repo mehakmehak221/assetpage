@@ -16,6 +16,7 @@ export interface CreateListingRequestDto {
   phone: string;
   email: string;
   ownerType: string;
+  referredBy?: string;
   category: string;
   constructionStatus: string;
   streetAddress: string;
@@ -48,6 +49,7 @@ export interface ListingRequestItem {
   phone?: string;
   email?: string;
   ownerType?: string;
+  referredBy?: string | null;
   category: string;
   constructionStatus?: string;
   streetAddress?: string;
