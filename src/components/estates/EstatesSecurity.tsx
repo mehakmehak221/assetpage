@@ -71,67 +71,67 @@ export default function EstatesSecurity() {
   return (
     <div className="w-full bg-[#DDEAE4]">
       <section id="security" className="relative z-10 w-full bg-white rounded-b-[40px] sm:rounded-b-[56px] lg:rounded-b-[72px] pt-20 sm:pt-28 pb-24 sm:pb-32 px-6 sm:px-10 lg:px-16 shadow-xl">
-      <div className="max-w-4xl mx-auto">
+        <div className="max-w-4xl mx-auto">
 
-        <div className="text-center mb-14 sm:mb-16">
-          <span className="text-xs sm:text-[13px] font-bold tracking-[0.25em] uppercase text-[#0B1C30] block mb-6 sm:mb-8">
-            YOUR ASSET, PROTECTED
-          </span>
+          <div className="text-center mb-14 sm:mb-16">
+            <span className="text-xs sm:text-[13px] font-bold tracking-[0.25em] uppercase text-[#4B5563] block mb-6 sm:mb-8">
+              YOUR ASSET, PROTECTED
+            </span>
 
-          <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-[54px] font-bold text-[#00694B] tracking-tight leading-[1.18] max-w-2xl mx-auto">
-            Build on Security & <br className="hidden sm:inline" />
-            Transparency
-          </h2>
+            <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-[54px] font-bold text-black tracking-tight leading-[1.18] max-w-2xl mx-auto">
+              Build on Security & <br className="hidden sm:inline" />
+              Transparency
+            </h2>
 
-          <p className="text-[#443D3D] text-sm sm:text-base md:text-lg max-w-2xl mx-auto mt-6 sm:mt-8 leading-relaxed font-normal">
-            Your property is placed in a dedicated legal structure with independent oversight, so you can move forward with confidence
-          </p>
-        </div>
-
-        <div className="relative w-full max-w-2xl mx-auto bg-[#00694B1C] rounded-[28px] sm:rounded-[40px] border border-[#00694B]/20 shadow-[4px_12px_28px_-6px_#00694B] overflow-hidden">
-          <div className="grid grid-cols-1 sm:grid-cols-2">
-
-            <div className="px-6 py-8 sm:px-8 sm:py-10 flex items-center gap-5 sm:border-r border-b border-[#00694B]/20">
-              <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-white flex items-center justify-center shadow-sm shrink-0 border border-[#00694B]/20">
-                {securityFeatures[0].icon}
-              </div>
-              <span className="text-[#00694B] font-medium text-sm sm:text-[15px] leading-snug">
-                {securityFeatures[0].text}
-              </span>
-            </div>
-
-            <div className="px-6 py-8 sm:px-8 sm:py-10 flex items-center gap-5 border-b border-[#00694B]/20">
-              <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-white flex items-center justify-center shadow-sm shrink-0 border border-[#00694B]/20">
-                {securityFeatures[1].icon}
-              </div>
-              <span className="text-[#00694B] font-medium text-sm sm:text-[15px] leading-snug">
-                {securityFeatures[1].text}
-              </span>
-            </div>
-
-            <div className="px-6 py-8 sm:px-8 sm:py-10 flex items-center gap-5 sm:border-r border-b sm:border-b-0 border-[#00694B]/20">
-              <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-white flex items-center justify-center shadow-sm shrink-0 border border-[#00694B]/20">
-                {securityFeatures[2].icon}
-              </div>
-              <span className="text-[#00694B] font-medium text-sm sm:text-[15px] leading-snug">
-                {securityFeatures[2].text}
-              </span>
-            </div>
-
-            <div className="px-6 py-8 sm:px-8 sm:py-10 flex items-center gap-5">
-              <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-white flex items-center justify-center shadow-sm shrink-0 border border-[#00694B]/20">
-                {securityFeatures[3].icon}
-              </div>
-              <span className="text-[#00694B] font-medium text-sm sm:text-[15px] leading-snug">
-                {securityFeatures[3].text}
-              </span>
-            </div>
-
+            <p className="text-[#4B5563] text-sm sm:text-base md:text-lg max-w-2xl mx-auto mt-6 sm:mt-8 leading-relaxed font-normal">
+              Your property is placed in a dedicated legal structure with independent oversight, so you can move forward with confidence
+            </p>
           </div>
-        </div>
 
-      </div>
-    </section>
+          <div className="relative w-full max-w-2xl mx-auto bg-[#00694B1C] rounded-[28px] sm:rounded-[40px] border border-[#00694B]/20 shadow-[4px_12px_28px_-6px_#00694B] overflow-hidden">
+            <div className="grid grid-cols-1 sm:grid-cols-2">
+
+              <div className="px-6 py-8 sm:px-8 sm:py-10 flex items-center gap-5 sm:border-r border-b border-[#00694B]/20">
+                <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-white flex items-center justify-center shadow-sm shrink-0 border border-[#00694B]/20">
+                  {securityFeatures[0].icon}
+                </div>
+                <span className="text-black font-semibold text-sm sm:text-[15px] leading-snug">
+                  {securityFeatures[0].text}
+                </span>
+              </div>
+
+              <div className="px-6 py-8 sm:px-8 sm:py-10 flex items-center gap-5 border-b border-[#00694B]/20">
+                <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-white flex items-center justify-center shadow-sm shrink-0 border border-[#00694B]/20">
+                  {securityFeatures[1].icon}
+                </div>
+                <span className="text-black font-semibold text-sm sm:text-[15px] leading-snug">
+                  {securityFeatures[1].text}
+                </span>
+              </div>
+
+              <div className="px-6 py-8 sm:px-8 sm:py-10 flex items-center gap-5 sm:border-r border-b sm:border-b-0 border-[#00694B]/20">
+                <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-white flex items-center justify-center shadow-sm shrink-0 border border-[#00694B]/20">
+                  {securityFeatures[2].icon}
+                </div>
+                <span className="text-black font-semibold text-sm sm:text-[15px] leading-snug">
+                  {securityFeatures[2].text}
+                </span>
+              </div>
+
+              <div className="px-6 py-8 sm:px-8 sm:py-10 flex items-center gap-5">
+                <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-white flex items-center justify-center shadow-sm shrink-0 border border-[#00694B]/20">
+                  {securityFeatures[3].icon}
+                </div>
+                <span className="text-black font-semibold text-sm sm:text-[15px] leading-snug">
+                  {securityFeatures[3].text}
+                </span>
+              </div>
+
+            </div>
+          </div>
+
+        </div>
+      </section>
     </div>
   );
 }

@@ -26,7 +26,7 @@ export default function EstatesLanding() {
 
         <EstatesSecurity />
 
-        <EstatesProcess />
+        <EstatesProcess onOpenModal={() => setModalOpen(true)} />
 
         <EstatesPartnerCta onOpenModal={() => setModalOpen(true)} />
 

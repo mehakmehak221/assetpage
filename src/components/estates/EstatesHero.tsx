@@ -31,12 +31,12 @@ export default function EstatesHero({ onOpenModal }: EstatesHeroProps) {
 
         <div className="relative z-10 max-w-7xl mx-auto px-6 sm:px-10 lg:px-16 pt-16 sm:pt-24 lg:pt-28 pb-20 sm:pb-32 lg:pb-44 flex flex-col justify-center min-h-[700px] lg:min-h-[880px]">
           <div className="max-w-xl lg:max-w-2xl">
-            <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-[68px] font-bold text-[#00694B] tracking-tight leading-[1.12] mb-6">
+            <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-[68px] font-bold text-black tracking-tight leading-[1.12] mb-6">
               Unlock the Value <br className="hidden sm:inline" />
-              <span className="text-[#00694B]">in your property</span>
+              <span className="text-black">in your property</span>
             </h1>
 
-            <p className="text-[#443D3D] sm:text-lg lg:text-[19px] leading-relaxed max-w-xl mb-10 font-normal">
+            <p className="text-[#4B5563] sm:text-lg lg:text-[19px] leading-relaxed max-w-xl mb-10 font-normal">
               Turn your real estate into a flexible financial opportunity through fractional ownership – without selling the entire asset.
             </p>
 

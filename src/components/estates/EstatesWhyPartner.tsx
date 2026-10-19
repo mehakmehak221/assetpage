@@ -40,7 +40,7 @@ export default function EstatesWhyPartner() {
             Works Hard For You
           </h2>
 
-          <p className="text-emerald-100/90 text-sm sm:text-base md:text-lg max-w-2xl mx-auto mt-6 sm:mt-8 mb-12 sm:mb-14 leading-relaxed font-normal">
+          <p className="text-white text-sm sm:text-base md:text-lg max-w-2xl mx-auto mt-6 sm:mt-8 mb-12 sm:mb-14 leading-relaxed font-normal">
             Whether you want to unlock capital, diversify, or plan for the future, GloFi Estates gives you flexibility to achieve your goals - on your terms.
           </p>
 
@@ -56,7 +56,7 @@ export default function EstatesWhyPartner() {
                     <Check className="text-[#00694B] stroke-[3] w-5 h-5 sm:w-6 sm:h-6" />
                   </div>
                   <div className="bg-white py-3 sm:py-3.5 pr-6 sm:pr-8 pl-8 sm:pl-10 -ml-6 sm:-ml-7 rounded-r-full rounded-l-full shadow-sm relative">
-                    <span className="text-[#036247] font-medium text-sm sm:text-[15px] tracking-wide">
+                    <span className="text-black font-semibold text-sm sm:text-[15px] tracking-wide">
                       {text}
                     </span>
                   </div>
@@ -74,7 +74,7 @@ export default function EstatesWhyPartner() {
                     <Check className="text-[#00694B] stroke-[3] w-5 h-5 sm:w-6 sm:h-6" />
                   </div>
                   <div className="bg-white py-3 sm:py-3.5 pr-6 sm:pr-8 pl-8 sm:pl-10 -ml-6 sm:-ml-7 rounded-r-full rounded-l-full shadow-sm relative">
-                    <span className="text-[#036247] font-medium text-sm sm:text-[15px] tracking-wide">
+                    <span className="text-black font-semibold text-sm sm:text-[15px] tracking-wide">
                       {text}
                     </span>
                   </div>
@@ -92,7 +92,7 @@ export default function EstatesWhyPartner() {
                     <Check className="text-[#00694B] stroke-[3] w-5 h-5 sm:w-6 sm:h-6" />
                   </div>
                   <div className="bg-white py-3 sm:py-3.5 pr-6 sm:pr-8 pl-8 sm:pl-10 -ml-6 sm:-ml-7 rounded-r-full rounded-l-full shadow-sm relative">
-                    <span className="text-[#036247] font-medium text-sm sm:text-[15px] tracking-wide">
+                    <span className="text-black font-semibold text-sm sm:text-[15px] tracking-wide">
                       {text}
                     </span>
                   </div>
