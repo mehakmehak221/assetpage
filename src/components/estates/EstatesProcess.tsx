@@ -3,7 +3,11 @@
 import Image from 'next/image';
 import { ArrowRight } from 'lucide-react';
 
-export default function EstatesProcess() {
+interface EstatesProcessProps {
+  onOpenModal?: () => void;
+}
+
+export default function EstatesProcess({ onOpenModal }: EstatesProcessProps) {
   const steps = [
     {
       num: '01',
@@ -36,16 +40,16 @@ export default function EstatesProcess() {
         <div className="max-w-6xl mx-auto">
 
           <div className="text-center mb-12 sm:mb-16">
-            <span className="text-xs sm:text-[13px] font-bold tracking-[0.25em] uppercase text-[#0B7353] block mb-6 sm:mb-8">
+            <span className="text-xs sm:text-[13px] font-bold tracking-[0.25em] uppercase text-[#4B5563] block mb-6 sm:mb-8">
               PROCESS
             </span>
 
-            <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-[54px] font-bold text-[#0B7353] tracking-tight leading-[1.18] max-w-2xl mx-auto">
+            <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-[54px] font-bold text-black tracking-tight leading-[1.18] max-w-2xl mx-auto">
               A Simpler Way <br />
               Forward
             </h2>
 
-            <p className="text-[#00694B] text-sm sm:text-base md:text-[17px] max-w-2xl mx-auto mt-6 sm:mt-8 leading-relaxed font-medium">
+            <p className="text-[#4B5563] text-sm sm:text-base md:text-[17px] max-w-2xl mx-auto mt-6 sm:mt-8 leading-relaxed font-normal">
               From initial consultation to investor on boarding, we make the process clear, professional, and straightforward
             </p>
           </div>
@@ -65,19 +69,19 @@ export default function EstatesProcess() {
               </div>
 
               <div className="hidden lg:flex absolute -top-16 left-[75%] -translate-x-[24px] items-center gap-6 z-20">
-                <span className="w-12 h-12 rounded-full border-[3px] border-[#3BA083] bg-white text-[#00694B] font-bold text-[15px] flex items-center justify-center shrink-0 shadow-[0_0_16px_rgba(0,105,75,0.55)]">
+                <span className="w-12 h-12 rounded-full border-[3px] border-[#3BA083] bg-white text-black font-bold text-[15px] flex items-center justify-center shrink-0 shadow-[0_0_16px_rgba(0,105,75,0.55)]">
                   01
                 </span>
-                <span className="text-[#00694B] font-bold text-[15px] sm:text-[17px] lg:whitespace-nowrap">
+                <span className="text-black font-bold text-[15px] sm:text-[17px] lg:whitespace-nowrap">
                   Initial Consultation & Asset Review
                 </span>
               </div>
 
               <div className="hidden lg:flex absolute -bottom-16 left-[75%] -translate-x-[24px] items-center gap-6 z-20">
-                <span className="w-12 h-12 rounded-full border-[3px] border-[#3BA083] bg-white text-[#00694B] font-bold text-[15px] flex items-center justify-center shrink-0 shadow-[0_0_16px_rgba(0,105,75,0.55)]">
+                <span className="w-12 h-12 rounded-full border-[3px] border-[#3BA083] bg-white text-black font-bold text-[15px] flex items-center justify-center shrink-0 shadow-[0_0_16px_rgba(0,105,75,0.55)]">
                   05
                 </span>
-                <span className="text-[#00694B] font-bold text-[15px] sm:text-[17px] lg:whitespace-nowrap">
+                <span className="text-black font-bold text-[15px] sm:text-[17px] lg:whitespace-nowrap">
                   Investor Marketing & Fundraising
                 </span>
               </div>
@@ -95,10 +99,10 @@ export default function EstatesProcess() {
                     key={step.num}
                     className={`flex items-center gap-6 group ${isMobileOnly ? 'lg:hidden' : ''} ${marginLeft}`}
                   >
-                    <span className="w-12 h-12 rounded-full border-[3px] border-[#3BA083] bg-white text-[#00694B] font-bold text-[15px] flex items-center justify-center shrink-0 shadow-[0_0_16px_rgba(0,105,75,0.55)]">
+                    <span className="w-12 h-12 rounded-full border-[3px] border-[#3BA083] bg-white text-black font-bold text-[15px] flex items-center justify-center shrink-0 shadow-[0_0_16px_rgba(0,105,75,0.55)]">
                       {step.num}
                     </span>
-                    <span className="text-[#00694B] font-bold text-[15px] sm:text-[17px] leading-snug pr-2 lg:whitespace-nowrap">
+                    <span className="text-black font-bold text-[15px] sm:text-[17px] leading-snug pr-2 lg:whitespace-nowrap">
                       {step.title}
                     </span>
                   </div>
@@ -112,9 +116,11 @@ export default function EstatesProcess() {
 
         <div className="absolute left-1/2 -translate-x-1/2 -bottom-[28px] z-30">
           <button
-            className="group bg-[#DDEAE4] hover:bg-[#00694B] text-[#00694B] hover:text-white border-[3px] border-[#3BA083] font-bold text-sm sm:text-base px-8 sm:px-12 py-3 sm:py-4 rounded-full flex items-center gap-3 transition-all duration-300"
+            type="button"
+            onClick={onOpenModal}
+            className="group bg-[#00694B] hover:bg-[#036247] text-white border-[3px] border-[#00694B] hover:border-[#036247] font-bold text-sm sm:text-base px-8 sm:px-12 py-3 sm:py-4 rounded-full flex items-center gap-3 shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer"
           >
-            <span>Start the Converstation</span>
+            <span>Start the Conversation</span>
             <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
           </button>
         </div>

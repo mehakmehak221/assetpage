@@ -36,7 +36,7 @@ export default function EstatesHero({ onOpenModal }: EstatesHeroProps) {
               <span className="text-[#00694B]">in your property</span>
             </h1>
 
-            <p className="text-[#443D3D] sm:text-lg lg:text-[19px] leading-relaxed max-w-xl mb-10 font-normal">
+            <p className="text-[#4B5563] sm:text-lg lg:text-[19px] leading-relaxed max-w-xl mb-10 font-normal">
               Turn your real estate into a flexible financial opportunity through fractional ownership – without selling the entire asset.
             </p>
 
