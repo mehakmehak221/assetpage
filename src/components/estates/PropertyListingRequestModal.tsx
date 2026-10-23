@@ -1402,6 +1402,44 @@ export default function PropertyListingRequestModal({
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                     <div>
                       <SearchableLocationInput
+                        label="State"
+                        placeholder="Maharashtra"
+                        value={form.state}
+                        options={allStates}
+                        error={errors.state}
+                        onChange={(val) => {
+                          setForm((prev) => ({ ...prev, state: val }));
+                          if (errors.state) {
+                            setErrors((prev) => {
+                              const next = { ...prev };
+                              delete next.state;
+                              return next;
+                            });
+                          }
+                          if (generalError) setGeneralError(null);
+                        }}
+                        onSelect={(stateOpt) => {
+                          if (form.city) {
+                            const stateCities = City.getCitiesOfState(
+                              stateOpt.countryCode || 'IN',
+                              stateOpt.isoCode || ''
+                            );
+                            const cityMatches = stateCities.some(
+                              (c) => c.name.toLowerCase() === form.city.trim().toLowerCase()
+                            );
+                            if (!cityMatches) {
+                              setForm((prev) => ({
+                                ...prev,
+                                state: stateOpt.name,
+                                city: '',
+                              }));
+                            }
+                          }
+                        }}
+                      />
+                    </div>
+                    <div>
+                      <SearchableLocationInput
                         label="City"
                         placeholder="Mumbai"
                         value={form.city}
@@ -1450,44 +1488,6 @@ export default function PropertyListingRequestModal({
                                   return next;
                                 });
                               }
-                            }
-                          }
-                        }}
-                      />
-                    </div>
-                    <div>
-                      <SearchableLocationInput
-                        label="State"
-                        placeholder="Maharashtra"
-                        value={form.state}
-                        options={allStates}
-                        error={errors.state}
-                        onChange={(val) => {
-                          setForm((prev) => ({ ...prev, state: val }));
-                          if (errors.state) {
-                            setErrors((prev) => {
-                              const next = { ...prev };
-                              delete next.state;
-                              return next;
-                            });
-                          }
-                          if (generalError) setGeneralError(null);
-                        }}
-                        onSelect={(stateOpt) => {
-                          if (form.city) {
-                            const stateCities = City.getCitiesOfState(
-                              stateOpt.countryCode || 'IN',
-                              stateOpt.isoCode || ''
-                            );
-                            const cityMatches = stateCities.some(
-                              (c) => c.name.toLowerCase() === form.city.trim().toLowerCase()
-                            );
-                            if (!cityMatches) {
-                              setForm((prev) => ({
-                                ...prev,
-                                state: stateOpt.name,
-                                city: '',
-                              }));
                             }
                           }
                         }}
