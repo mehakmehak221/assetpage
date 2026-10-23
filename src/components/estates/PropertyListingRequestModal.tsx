@@ -1,11 +1,12 @@
 'use client';
 
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useRef } from 'react';
 import {
   X,
   CheckCircle,
   ChevronRight,
   ChevronLeft,
+  ChevronDown,
   User,
   Building2,
   MapPin,
@@ -21,6 +22,7 @@ import {
   RefreshCw,
   UserCheck,
 } from 'lucide-react';
+import { Country, State, City } from 'country-state-city';
 import { getCookie } from '@/utils/cookieUtils';
 import { useGetProfileQuery } from '@/store/api/authApi';
 import {
@@ -214,6 +216,224 @@ function Select({
   );
 }
 
+const POPULAR_GLOBAL_CITIES = [
+  { name: 'Mumbai', stateName: 'Maharashtra', countryName: 'India', countryCode: 'IN', stateCode: 'MH' },
+  { name: 'Delhi', stateName: 'Delhi', countryName: 'India', countryCode: 'IN', stateCode: 'DL' },
+  { name: 'Bengaluru', stateName: 'Karnataka', countryName: 'India', countryCode: 'IN', stateCode: 'KA' },
+  { name: 'Hyderabad', stateName: 'Telangana', countryName: 'India', countryCode: 'IN', stateCode: 'TG' },
+  { name: 'Chennai', stateName: 'Tamil Nadu', countryName: 'India', countryCode: 'IN', stateCode: 'TN' },
+  { name: 'Pune', stateName: 'Maharashtra', countryName: 'India', countryCode: 'IN', stateCode: 'MH' },
+  { name: 'Kolkata', stateName: 'West Bengal', countryName: 'India', countryCode: 'IN', stateCode: 'WB' },
+  { name: 'Ahmedabad', stateName: 'Gujarat', countryName: 'India', countryCode: 'IN', stateCode: 'GJ' },
+  { name: 'Dubai', stateName: 'Dubai', countryName: 'United Arab Emirates', countryCode: 'AE', stateCode: 'DU' },
+  { name: 'Abu Dhabi', stateName: 'Abu Dhabi', countryName: 'United Arab Emirates', countryCode: 'AE', stateCode: 'AZ' },
+  { name: 'London', stateName: 'England', countryName: 'United Kingdom', countryCode: 'GB', stateCode: 'ENG' },
+  { name: 'New York', stateName: 'New York', countryName: 'United States', countryCode: 'US', stateCode: 'NY' },
+  { name: 'Singapore', stateName: 'Singapore', countryName: 'Singapore', countryCode: 'SG', stateCode: 'SG' },
+  { name: 'Toronto', stateName: 'Ontario', countryName: 'Canada', countryCode: 'CA', stateCode: 'ON' },
+  { name: 'Sydney', stateName: 'New South Wales', countryName: 'Australia', countryCode: 'AU', stateCode: 'NSW' },
+  { name: 'Tokyo', stateName: 'Tokyo', countryName: 'Japan', countryCode: 'JP', stateCode: '13' },
+  { name: 'Paris', stateName: 'Île-de-France', countryName: 'France', countryCode: 'FR', stateCode: 'IDF' },
+  { name: 'San Francisco', stateName: 'California', countryName: 'United States', countryCode: 'US', stateCode: 'CA' },
+  { name: 'Chicago', stateName: 'Illinois', countryName: 'United States', countryCode: 'US', stateCode: 'IL' },
+  { name: 'Berlin', stateName: 'Berlin', countryName: 'Germany', countryCode: 'DE', stateCode: 'BE' },
+];
+
+function SearchableLocationInput({
+  label,
+  value,
+  onChange,
+  onSelect,
+  placeholder,
+  options,
+  error,
+  disabled = false,
+}: {
+  label: string;
+  value: string;
+  onChange: (val: string) => void;
+  onSelect?: (item: {
+    name: string;
+    stateCode?: string;
+    isoCode?: string;
+    countryCode?: string;
+    stateName?: string;
+    sublabel?: string;
+  }) => void;
+  placeholder: string;
+  options: Array<{
+    name: string;
+    stateCode?: string;
+    isoCode?: string;
+    countryCode?: string;
+    stateName?: string;
+    sublabel?: string;
+  }>;
+  error?: string;
+  disabled?: boolean;
+}) {
+  const [isOpen, setIsOpen] = useState(false);
+  const [isFocused, setIsFocused] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('');
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
+        setIsOpen(false);
+        setSearchTerm('');
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  const filteredOptions = useMemo(() => {
+    const q = searchTerm.trim().toLowerCase();
+    if (!q) return options.slice(0, 50);
+    return options
+      .filter(
+        (opt) =>
+          opt.name.toLowerCase().includes(q) ||
+          (opt.sublabel && opt.sublabel.toLowerCase().includes(q))
+      )
+      .slice(0, 50);
+  }, [options, searchTerm]);
+
+  return (
+    <div className="w-full relative" ref={containerRef}>
+      <Label>{label}</Label>
+      <div className="relative">
+        <input
+          type="text"
+          disabled={disabled}
+          maxLength={100}
+          value={isOpen ? (searchTerm !== '' ? searchTerm : value) : value}
+          placeholder={placeholder}
+          onFocus={(e) => {
+            setIsFocused(true);
+            setSearchTerm('');
+            setIsOpen(true);
+            e.target.select();
+          }}
+          onBlur={() => {
+            setIsFocused(false);
+          }}
+          onChange={(e) => {
+            const val = e.target.value;
+            setSearchTerm(val);
+            onChange(val);
+            if (!isOpen) setIsOpen(true);
+          }}
+          style={{
+            borderWidth: '1.5px',
+            borderStyle: 'solid',
+            borderColor: error ? '#EF4444' : isFocused || isOpen ? '#00694B' : '#94A3B8',
+            boxShadow:
+              isFocused || isOpen
+                ? '0 0 0 3px rgba(0, 105, 75, 0.15)'
+                : error
+                  ? '0 0 0 3px rgba(239, 68, 68, 0.15)'
+                  : '0 1px 2px 0 rgba(0, 0, 0, 0.05)',
+          }}
+          className="property-modal-input w-full pl-4 pr-16 py-2.5 sm:py-3 text-base sm:text-sm font-medium rounded-xl transition-all text-[#0F172A] bg-white placeholder:text-[#94A3B8] placeholder:opacity-100 outline-none disabled:bg-gray-100 disabled:cursor-not-allowed"
+        />
+        <div className="absolute right-2.5 top-1/2 -translate-y-1/2 flex items-center gap-0.5">
+          {value && (
+            <button
+              type="button"
+              tabIndex={-1}
+              onClick={(e) => {
+                e.stopPropagation();
+                onChange('');
+                setSearchTerm('');
+                setIsOpen(true);
+              }}
+              title="Clear selection"
+              className="text-[#94A3B8] hover:text-[#0F172A] p-1 cursor-pointer transition-colors"
+            >
+              <X size={14} />
+            </button>
+          )}
+          <button
+            type="button"
+            tabIndex={-1}
+            onClick={() => {
+              if (disabled) return;
+              if (!isOpen) {
+                setSearchTerm('');
+              }
+              setIsOpen((prev) => !prev);
+            }}
+            className="text-[#64748B] hover:text-[#0F172A] p-1 cursor-pointer"
+          >
+            <ChevronDown
+              size={16}
+              className={`transition-transform duration-200 ${isOpen ? 'rotate-180 text-[#00694B]' : ''}`}
+            />
+          </button>
+        </div>
+      </div>
+
+      {error && <p className="text-red-500 text-[11px] mt-1.5 font-medium">{error}</p>}
+
+      {isOpen && (
+        <div className="absolute z-50 left-0 right-0 mt-1.5 bg-white border border-[#CBD5E1] rounded-xl shadow-xl max-h-56 overflow-y-auto py-1 divide-y divide-gray-50">
+          {filteredOptions.length > 0 ? (
+            filteredOptions.map((opt) => {
+              const isSelected = value.trim().toLowerCase() === opt.name.toLowerCase();
+              return (
+                <div
+                  key={`${opt.name}-${opt.isoCode || opt.stateCode || ''}-${opt.countryCode || ''}`}
+                  onMouseDown={(e) => {
+                    e.preventDefault();
+                    onChange(opt.name);
+                    onSelect?.(opt);
+                    setSearchTerm('');
+                    setIsOpen(false);
+                  }}
+                  className={`px-4 py-2 text-sm cursor-pointer flex items-center justify-between gap-2 transition-colors ${
+                    isSelected
+                      ? 'bg-[#00694B]/10 text-[#00694B] font-semibold'
+                      : 'text-[#0F172A] hover:bg-[#F1F5F9]'
+                  }`}
+                >
+                  <div className="flex flex-col min-w-0">
+                    <span className="font-medium truncate">{opt.name}</span>
+                    {opt.sublabel && (
+                      <span className="text-[11px] text-[#64748B] font-normal truncate">
+                        {opt.sublabel}
+                      </span>
+                    )}
+                  </div>
+                  {isSelected && <Check size={14} className="text-[#00694B] flex-shrink-0" />}
+                </div>
+              );
+            })
+          ) : (
+            <div className="px-4 py-3 text-xs text-[#64748B] text-center">
+              No matching {label.toLowerCase()} found.
+              {searchTerm.trim() && (
+                <div
+                  onMouseDown={(e) => {
+                    e.preventDefault();
+                    onChange(searchTerm.trim());
+                    setSearchTerm('');
+                    setIsOpen(false);
+                  }}
+                  className="mt-1 text-[#00694B] font-semibold cursor-pointer hover:underline"
+                >
+                  Use &quot;{searchTerm.trim()}&quot;
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
+
 function formatINR(val: string | number | null | undefined): string {
   if (val === null || val === undefined || val === '') return '—';
   const num = typeof val === 'string' ? Number(val.replace(/,/g, '')) : val;
@@ -312,6 +532,70 @@ export default function PropertyListingRequestModal({
     [optionsData]
   );
 
+  const allStates = useMemo(() => {
+    const indian = State.getStatesOfCountry('IN').map((s) => ({
+      name: s.name,
+      isoCode: s.isoCode,
+      countryCode: s.countryCode,
+      sublabel: 'India',
+    }));
+    const others = State.getAllStates()
+      .filter((s) => s.countryCode !== 'IN')
+      .map((s) => ({
+        name: s.name,
+        isoCode: s.isoCode,
+        countryCode: s.countryCode,
+        sublabel: s.countryCode,
+      }));
+    return [...indian, ...others];
+  }, []);
+
+  const selectedStateObj = useMemo(() => {
+    if (!form.state) return null;
+    const sTerm = form.state.trim().toLowerCase();
+    return (
+      allStates.find(
+        (s) => s.name.toLowerCase() === sTerm || s.isoCode.toLowerCase() === sTerm
+      ) || null
+    );
+  }, [allStates, form.state]);
+
+  const availableCities = useMemo(() => {
+    if (selectedStateObj) {
+      return City.getCitiesOfState(
+        selectedStateObj.countryCode || 'IN',
+        selectedStateObj.isoCode
+      ).map((c) => ({
+        name: c.name,
+        stateCode: c.stateCode,
+        countryCode: c.countryCode,
+        sublabel: `${selectedStateObj.name}, ${selectedStateObj.sublabel || selectedStateObj.countryCode}`,
+      }));
+    }
+
+    const popularNames = new Set(POPULAR_GLOBAL_CITIES.map((p) => p.name.toLowerCase()));
+    const all = City.getAllCities();
+    const otherCities = all
+      .filter((c) => !popularNames.has(c.name.toLowerCase()))
+      .map((c) => ({
+        name: c.name,
+        stateCode: c.stateCode,
+        countryCode: c.countryCode,
+        sublabel: c.countryCode,
+      }));
+
+    return [
+      ...POPULAR_GLOBAL_CITIES.map((p) => ({
+        name: p.name,
+        stateCode: p.stateCode,
+        countryCode: p.countryCode,
+        stateName: p.stateName,
+        sublabel: `${p.stateName}, ${p.countryName}`,
+      })),
+      ...otherCities,
+    ];
+  }, [selectedStateObj]);
+
   useEffect(() => {
     if (isOpen) {
       let initialRef = '';
@@ -399,10 +683,10 @@ export default function PropertyListingRequestModal({
       if (!form.phone.trim()) {
         e.phone = 'Phone number is required';
       } else {
-        const clean = form.phone.replace(/[\s\-\(\)]/g, '');
-        const indianPhoneRegex = /^(\+?91)?[6789]\d{9}$/;
-        if (!indianPhoneRegex.test(clean)) {
-          e.phone = 'Enter a valid mobile number (e.g. +91 98765 43210 or 9876543210)';
+        const clean = form.phone.replace(/[\s\-\(\)\.\u2013\u2014]/g, '');
+        const internationalPhoneRegex = /^\+?[0-9]{7,16}$/;
+        if (!internationalPhoneRegex.test(clean)) {
+          e.phone = 'Enter a valid phone number (e.g. +1 555-010-0199 or +91 98765 43210)';
         }
       }
 
@@ -1005,7 +1289,7 @@ export default function PropertyListingRequestModal({
                       <Input
                         icon={Phone}
                         type="tel"
-                        placeholder="+91 98765 43210"
+                        placeholder="e.g. +1 (555) 010-0199"
                         value={form.phone}
                         onChange={set('phone')}
                         error={errors.phone}
@@ -1117,25 +1401,96 @@ export default function PropertyListingRequestModal({
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                     <div>
-                      <Label>City</Label>
-                      <Input
-                        type="text"
-                        maxLength={100}
+                      <SearchableLocationInput
+                        label="City"
                         placeholder="Mumbai"
                         value={form.city}
-                        onChange={set('city')}
+                        options={availableCities}
                         error={errors.city}
+                        onChange={(val) => {
+                          setForm((prev) => ({ ...prev, city: val }));
+                          if (errors.city) {
+                            setErrors((prev) => {
+                              const next = { ...prev };
+                              delete next.city;
+                              return next;
+                            });
+                          }
+                          if (generalError) setGeneralError(null);
+                        }}
+                        onSelect={(cityOpt) => {
+                          if (cityOpt.stateName) {
+                            setForm((prev) => ({
+                              ...prev,
+                              city: cityOpt.name,
+                              state: cityOpt.stateName!,
+                            }));
+                            if (errors.state) {
+                              setErrors((prev) => {
+                                const next = { ...prev };
+                                delete next.state;
+                                return next;
+                              });
+                            }
+                          } else if (cityOpt.stateCode && cityOpt.countryCode) {
+                            const matchedState = State.getStateByCodeAndCountry(
+                              cityOpt.stateCode,
+                              cityOpt.countryCode
+                            );
+                            if (matchedState && form.state !== matchedState.name) {
+                              setForm((prev) => ({
+                                ...prev,
+                                city: cityOpt.name,
+                                state: matchedState.name,
+                              }));
+                              if (errors.state) {
+                                setErrors((prev) => {
+                                  const next = { ...prev };
+                                  delete next.state;
+                                  return next;
+                                });
+                              }
+                            }
+                          }
+                        }}
                       />
                     </div>
                     <div>
-                      <Label>State</Label>
-                      <Input
-                        type="text"
-                        maxLength={100}
+                      <SearchableLocationInput
+                        label="State"
                         placeholder="Maharashtra"
                         value={form.state}
-                        onChange={set('state')}
+                        options={allStates}
                         error={errors.state}
+                        onChange={(val) => {
+                          setForm((prev) => ({ ...prev, state: val }));
+                          if (errors.state) {
+                            setErrors((prev) => {
+                              const next = { ...prev };
+                              delete next.state;
+                              return next;
+                            });
+                          }
+                          if (generalError) setGeneralError(null);
+                        }}
+                        onSelect={(stateOpt) => {
+                          if (form.city) {
+                            const stateCities = City.getCitiesOfState(
+                              stateOpt.countryCode || 'IN',
+                              stateOpt.isoCode || ''
+                            );
+                            const cityMatches = stateCities.some(
+                              (c) => c.name.toLowerCase() === form.city.trim().toLowerCase()
+                            );
+                            if (!cityMatches) {
+                              setForm((prev) => ({
+                                ...prev,
+                                state: stateOpt.name,
+                                city: '',
+                              }));
+                            }
+                          }
+                        }}
                       />
                     </div>
                   </div>
